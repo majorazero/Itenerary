@@ -9,5 +9,5 @@
 
 # Authors
 - [Daniel Hsu](https://github.com/majorazero)
-- [Andrea](https://github.com/andreatmez)
-- [David M. Huh](https://github.com/davidmhuh)
+- [Andrea Tamez](https://github.com/andreatmez)
+- [David Huh](https://github.com/davidmhuh)
