@@ -10,11 +10,135 @@
 </head>
 <body>
 
-<script
-  src="https://code.jquery.com/jquery-3.3.1.js"
-  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-  crossorigin="anonymous"></script>
+  <!-- CONTAINER ONE -->
+  <div class="container" id="containerOne">
+    <div class="row">   
+        <div class="col-md-12" id="title">Where are you going?</div>
+    </div>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4" id="containerText">Destination</div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Destination" aria-label="Destination" aria-describedby="basic-addon1" id="destinationInput">
+<!-- Destination input, with "destinationInput" ID 
+---- the user has to type the destination and that will connect it with the API key for flights and things to do/see/eat -->
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-3" id="containerText">Start Date</div>
+        <div class="col-md-2"></div>
+        <div class="col-md-3" id="containerText">End Date</div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-3">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Start date" aria-label="Start date" aria-describedby="basic-addon1" id="startDateInput">
+              </div>
+<!-- Start date input, with "startDateInput" ID 
+----- the user will type the start date and this will connect with the flights API-->
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-3">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="End date" aria-label="End date" aria-describedby="basic-addon1" id="endDateInput">
+              </div>
+<!-- End date input, with "endDateInput" ID 
+----- the user will type the start date and this will connect with the flights API and to see how many days the user will be at the destination -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-secondary btn-lg btn-block" id="submitBtn">Submit</button>
+        </div>
+<!-- Submit button sends the user to the next page, where the flights will be shown. this has a "submitbtn" ID -->
+    </div>
+</div>
+
+<!-- CONTAINER TWO -->
+<div class="container" id="containerTwo">
+    <div class="row">
+        <div class="col-md-12" id="title">Flights</div>
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-4" id="containerText">Flying from: </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-4" id="containerText">Flying to: </div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Flying From" aria-label="Flying From" aria-describedby="basic-addon1" id="flyingFromInput">
+<!-- The user will type in where they leave to get the flights to their destination -->
+              </div>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-4">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Flying To" aria-label="Flying To" aria-describedby="basic-addon1" id="flyingToInput">
+              </div>
+<!-- The user will type in where they want to go to get the flights to their destination -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md 12" id="flight">
+<!-- The API will show the flights to the destination, and back  -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-secondary btn-lg btn-block" id="submitButton">Submit</button>
+        </div>
+<!-- submit button with "submitButton" ID sends the user to the next page -->
+    </div>
+</div>
+
+<!-- CONTAINER THREE -->
+<div class="container" id="containerThree">
+    <div class="row" id="topContainerThree">
+        <div class="col-md-1"></div>
+        <div class="col-md-2" id="titleMust">Must</div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-12" id="containerTxt">Do</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" id="containerTxt">See</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" id="containerTxt">Eat</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7" id="map">maps go here
+<!-- The maps from the API goes here -->
+        </div>
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-12">attractions</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">restaurants</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 <script src="assets/javascript/globalVar.js"></script>
 <script src="assets/javascript/app.js"></script>
+
 </body>
 </html>

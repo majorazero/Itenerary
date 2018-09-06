@@ -1,0 +1,47 @@
+.container {
+    background-color: lightblue;
+    margin-bottom: 50px;
+    height: 800px;
+}
+
+#containerText {
+    margin-top: 30px;
+    font-size: 50px;
+    text-align: center;
+}
+ 
+#containerTxt {
+    font-size: 30px;
+    margin-left: 35px;
+}
+
+#title {
+    font-size: 100px;
+    text-align: center;
+}
+
+#titleMust {
+    font-size: 100px;
+
+}
+
+#submitBtn {
+    background-color: #565656;
+    margin-top: 250px;
+}
+
+#submitButton {
+    margin-top: 400px;
+}
+
+#containerTwo {
+    display: none;
+}
+
+#containerThree {
+    display: none;
+}
+
+#topContainerThree {
+    margin-bottom: 50px;
+}
