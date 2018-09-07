@@ -8,28 +8,27 @@ function initMap(){
           center: {lat: 34.05223, lng: -118.243683},
           zoom: 10
         });
-  //needed to update map
   directionDisplay.setMap(map);
 }
 /**
-* The route will accept an array
+* This will be how we calculate our routes, will display the trip as well as return an array of objects with the DISTANCE and DURATION of each leg of the trip
+* @param {Array} routeArr - An array of coordinates, should be at least 2 but no more than 10 (the top-limit is something to do on google's side)
+* @param {String} method - Determines how the journey should be done... default is "DRIVING", also accepts "WALKING" for now, will consider adding "TRANSIT"
+* @param {Boolean} efficientTravel - Turn on optimization to auto-organize the in-between part of the trip.
 */
-function calcRoute(routArr, method){
-  //we need to process the array given to us...
+function calcRoute(routArr, method, efficientTravel){
   let startPoint;
   let endPoint;
   let waypts = [];
   let tMethod = "DRIVING";
+  let journey = [];
   for(let i =0; i < routArr.length; i++){
-    //if the index is the first item, it becomes the startPoint
     if(i === 0){
       startPoint = routArr[i];
     }
-    //if the index is the last item it bcomes the endPoint
     else if (i === routArr.length-1){
       endPoint = routArr[i];
     }
-    //for all other cases well push it into "waypoints" as a location in a waypoints object
     else{
       waypts.push({location: routArr[i]});
     }
@@ -37,24 +36,33 @@ function calcRoute(routArr, method){
   if(method === "WALKING"){
     tMethod = method;
   }
-  //we'll define our request here.
   let request = {
     origin: startPoint,
     destination: endPoint,
     waypoints: waypts,
     travelMode: tMethod
   };
+  if (efficientTravel === true){
+    request.optimizeWaypoints = true;
+  }
   directionService.route(request, function(response, status){
     if (status === "OK"){
       console.log(response);
-      console.log(response.routes[0].legs[0].distance.text);
-        console.log(response.routes[0].legs[0].duration.text);
+      for(let i = 0; i < response.routes[0].legs.length; i++){
+        journey.push({
+          distance: response.routes[0].legs[i].distance.text,
+          duration: response.routes[0].legs[i].duration.text
+        });
+      }
       directionDisplay.setDirections(response);
+      console.log(journey);
+      return journey;
     }
   });
 }
 
-let destinArr = ["34.05223,-118.243683","34.153351,-118.165794","34.142509,-118.255074"];
+//this is test code, will eventually be deleted.
+let destinArr = ["34.05223,-118.243683","34.153351,-118.165794","34.136120,-117.865341","34.142509,-118.255074"];
 $("#test").on("click",function(){
-  calcRoute(destinArr,"WALKING");
+  calcRoute(destinArr,"WALKING",true);
 });
