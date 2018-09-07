@@ -12,7 +12,7 @@
 
   <!-- CONTAINER ONE -->
   <div class="container" id="containerOne">
-    <div class="row">   
+    <div class="row">
         <div class="col-md-12" id="title">Where are you going?</div>
     </div>
     <div class="row">
@@ -25,7 +25,7 @@
         <div class="col-md-4">
           <div class="input-group mb-3">
               <input type="text" class="form-control" placeholder="Destination" aria-label="Destination" aria-describedby="basic-addon1" id="destinationInput">
-<!-- Destination input, with "destinationInput" ID 
+<!-- Destination input, with "destinationInput" ID
 ---- the user has to type the destination and that will connect it with the API key for flights and things to do/see/eat -->
             </div>
         </div>
@@ -44,7 +44,7 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Start date" aria-label="Start date" aria-describedby="basic-addon1" id="startDateInput">
               </div>
-<!-- Start date input, with "startDateInput" ID 
+<!-- Start date input, with "startDateInput" ID
 ----- the user will type the start date and this will connect with the flights API-->
         </div>
         <div class="col-md-2"></div>
@@ -52,7 +52,7 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="End date" aria-label="End date" aria-describedby="basic-addon1" id="endDateInput">
               </div>
-<!-- End date input, with "endDateInput" ID 
+<!-- End date input, with "endDateInput" ID
 ----- the user will type the start date and this will connect with the flights API and to see how many days the user will be at the destination -->
         </div>
     </div>
@@ -136,9 +136,18 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+
+<div id="map"></div>
+<button id="test">Button</button>
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
 <script src="assets/javascript/globalVar.js"></script>
 <script src="assets/javascript/app.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAF1UgxUH_4QsFZUkqJI3_ks0LfHDBvY8o&callback=initMap"
+   async defer></script>
 
 </body>
 </html>

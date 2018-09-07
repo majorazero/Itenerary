@@ -9,7 +9,7 @@
     font-size: 50px;
     text-align: center;
 }
- 
+
 #containerTxt {
     font-size: 30px;
     margin-left: 35px;
@@ -44,4 +44,12 @@
 
 #topContainerThree {
     margin-bottom: 50px;
+}
+/* googleMaps  */
+body {
+  height: 500px;
+}
+
+#map {
+  height: 100%;
 }
