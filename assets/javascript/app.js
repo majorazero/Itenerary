@@ -10,6 +10,7 @@ $("#submitButton").click(function(){
     $("#containerOne").hide();
     $("#containerTwo").hide();
     $("#containerThree").show();
+});
 /**
 * Required to initialize the google maps object
 */
@@ -77,5 +78,4 @@ function calcRoute(routArr, method, efficientTravel){
 let destinArr = ["34.05223,-118.243683","34.153351,-118.165794","34.136120,-117.865341","34.142509,-118.255074"];
 $("#test").on("click",function(){
   calcRoute(destinArr,"WALKING",true);
-
 });
