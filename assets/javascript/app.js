@@ -1,3 +1,23 @@
+/////////////////////////////////////////////
+///// Database
+/////////////////////////////////////////////
+ let config = {
+   apiKey: "AIzaSyDv_zM8h9A6Oko14vD1d_KdWg6oV1MtkCQ",
+   authDomain: "project1travel-itenerary-app.firebaseapp.com",
+   databaseURL: "https://project1travel-itenerary-app.firebaseio.com",
+   projectId: "project1travel-itenerary-app",
+   storageBucket: "",
+   messagingSenderId: "136977891330"
+ };
+ firebase.initializeApp(config);
+ console.log(3);
+ const firestore = firebase.firestore();
+ const settings = {/* your settings... */ timestampsInSnapshots: true};
+ firestore.settings(settings);
+ console.log(4);
+
+
+
 $("#submitBtn").click(function(){
 
     $("#containerOne").hide();
@@ -11,6 +31,7 @@ $("#submitButton").click(function(){
     $("#containerTwo").hide();
     $("#containerThree").show();
 });
+
 /**
 * Required to initialize the google maps object
 */
@@ -79,3 +100,65 @@ let destinArr = ["34.05223,-118.243683","34.153351,-118.165794","34.136120,-117.
 $("#test").on("click",function(){
   calcRoute(destinArr,"WALKING",true);
 });
+
+
+/**
+* This will either create new user data, or save existing user data.
+* @param {String} userName - String that is the username the user wants to either add to or update
+* @param {String} pass - String that is the password, needed for new users and/or to update existing files
+* @param {Object} saveObject - Object that contains all the data our page needs.
+*/
+function saveUserData(userName, pass, saveObject){
+  if (saveObject === undefined){
+    saveObject = {};
+  }
+  firestore.collection("user").where("name","==",userName).get().then(function(response){
+    if(response.docs.length > 0){
+      console.log("User found!");
+      if(pass === response.docs[0].data().password){
+        console.log("Updating...");
+        firestore.collection("user").doc(userName).set({
+          name: userName,
+          password: pass,
+          data: saveObject
+        });
+      }
+      else{
+        console.log("Wrong password.");
+      }
+    }
+    else {
+      console.log("Doesn't exist!");
+      console.log("Creating new user...");
+      firestore.collection("user").doc(userName).set({
+        name: userName,
+        password: pass,
+        data: saveObject
+      });
+    }
+  });
+}
+/**
+* Will load user data based on their usernname and password
+* @param {String} userName - String that is the username the user wants to load
+* @param {String} pass - String that is the password, needed for new users to load existing files
+*/
+function loadUserData(userName, pass){
+  firestore.collection("user").where("name","==",userName).get().then(function(response){
+    if(response.docs.length > 0) {
+      let doc = response.docs[0].data();
+      if(pass !== doc.password){
+        console.log("Incorrect password");
+      }
+      else{
+        console.log("Access granted");
+        return doc.data;
+      }
+    }
+    else{
+      console.log("User does not exist.");
+    }
+  });
+}
+saveUserData("blue","womp",{hello: false, what: 3});
+loadUserData("blue","womp");
