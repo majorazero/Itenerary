@@ -15,35 +15,36 @@
  const settings = {/* your settings... */ timestampsInSnapshots: true};
  firestore.settings(settings);
  console.log(4);
-
-
-
+ /////////////////////////////////////////////
+ ///// Intialization
+ /////////////////////////////////////////////
+ /**
+ * Required to initialize the google maps object
+ */
+ function initMap(){
+   directionService = new google.maps.DirectionsService();
+   directionDisplay = new google.maps.DirectionsRenderer();
+   map = new google.maps.Map(document.getElementById('map'), {
+           center: {lat: 34.05223, lng: -118.243683},
+           zoom: 10
+         });
+   directionDisplay.setMap(map);
+ }
+ /////////////////////////////////////////////
+ ///// Event Functions
+ /////////////////////////////////////////////
 $("#submitBtn").click(function(){
-
     $("#containerOne").hide();
     $("#containerTwo").show();
-
 });
-
 $("#submitButton").click(function(){
-
     $("#containerOne").hide();
     $("#containerTwo").hide();
     $("#containerThree").show();
 });
-
-/**
-* Required to initialize the google maps object
-*/
-function initMap(){
-  directionService = new google.maps.DirectionsService();
-  directionDisplay = new google.maps.DirectionsRenderer();
-  map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 34.05223, lng: -118.243683},
-          zoom: 10
-        });
-  directionDisplay.setMap(map);
-}
+/////////////////////////////////////////////
+///// Functions
+/////////////////////////////////////////////
 /**
 * This will be how we calculate our routes, will display the trip as well as return an array of objects with the DISTANCE and DURATION of each leg of the trip
 * @param {Array} routeArr - An array of coordinates, should be at least 2 but no more than 10 (the top-limit is something to do on google's side)
@@ -94,14 +95,6 @@ function calcRoute(routArr, method, efficientTravel){
     }
   });
 }
-
-//this is test code, will eventually be deleted.
-let destinArr = ["34.05223,-118.243683","34.153351,-118.165794","34.136120,-117.865341","34.142509,-118.255074"];
-$("#test").on("click",function(){
-  calcRoute(destinArr,"WALKING",true);
-});
-
-
 /**
 * This will either create new user data, or save existing user data.
 * @param {String} userName - String that is the username the user wants to either add to or update
@@ -160,5 +153,11 @@ function loadUserData(userName, pass){
     }
   });
 }
-saveUserData("blue","womp",{hello: false, what: 3});
-loadUserData("blue","womp");
+/////////////////////////////////////////////
+///// Testing Junk
+/////////////////////////////////////////////
+//this is test code, will eventually be deleted.
+let destinArr = ["34.05223,-118.243683","34.153351,-118.165794","34.136120,-117.865341","34.142509,-118.255074"];
+$("#test").on("click",function(){
+  calcRoute(destinArr,"WALKING",true);
+});
