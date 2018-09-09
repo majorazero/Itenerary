@@ -92,7 +92,6 @@ function calcRoute(routArr, method, efficientTravel){
   }
   directionService.route(request, function(response, status){
     if (status === "OK"){
-      console.log(response);
       for(let i = 0; i < response.routes[0].legs.length; i++){
         journey.push({
           distance: response.routes[0].legs[i].distance.text,
@@ -197,11 +196,13 @@ function iteBoxRender(){
         let deleteButton = $("<button>").text("Delete");
         deleteButton.on("click",function(){
           //removes data from trip
-          trip[currentDay-1].splice($(this).parent().attr("data-pos"),1);
+          currentDayIte.splice($(this).parent().attr("data-pos"),1);
           //update route
-          calcRoute(latLongParser(trip[currentDay-1]));
+          calcRoute(latLongParser(currentDayIte));
           //visually remove this from the parent
           $(this).parent().remove();
+          //call the render function again to re-render
+          iteBoxRender();
         });
         let moveUp = $("<button>").text("Move Up");
         moveUp.on("click",function(){
