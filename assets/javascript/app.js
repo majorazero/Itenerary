@@ -2,7 +2,7 @@
 ///// Database
 /////////////////////////////////////////////
  let config = {
-   apiKey: "AIzaSyDv_zM8h9A6Oko14vD1d_KdWg6oV1MtkCQ",
+   apiKey: apiKeyGoogle,
    authDomain: "project1travel-itenerary-app.firebaseapp.com",
    databaseURL: "https://project1travel-itenerary-app.firebaseio.com",
    projectId: "project1travel-itenerary-app",
@@ -56,9 +56,106 @@ $("#submitButton").click(function(){
     $("#containerTwo").hide();
     $("#containerThree").show();
 });
+/**
+* On click function for next day of the itinerary box
+*/
+$("#iteButNextDay").on("click",function(){
+  if(trip !== undefined && currentDay !== trip.length){
+    $("#iteContent").empty();
+    currentDay++;
+    //update route
+    calcRoute(latLongParser(trip[currentDay-1]));
+    iteBoxRender();
+  }
+});
+/**
+* On click function for previous day of the itinerary box
+*/
+$("#iteButPrevDay").on("click",function(){
+  if(currentDay !== 1){
+    $("#iteContent").empty();
+    currentDay--;
+    //update route
+    calcRoute(latLongParser(trip[currentDay-1]));
+    iteBoxRender();
+  }
+});
 /////////////////////////////////////////////
 ///// Functions
 /////////////////////////////////////////////
+/**
+* This renders all the functionalities of the itineraryBox
+*/
+function iteBoxRender(){
+  if(trip !== undefined){
+    $("#iteDay").text(currentDay+"/"+trip.length);
+    //current day itinerary to display
+    let currentDayIte = trip[currentDay-1];
+    //we'll clear previous displays of iteContent
+    $("#iteContent").empty();
+    //we'll display the map around the Hotel, which should always by the initial point.
+    for(let i = 0; i < currentDayIte.length; i++){
+      let iteDiv = $("<div>").addClass("iteDiv");
+      $(iteDiv).append(currentDayIte[i].loc);
+      iteDiv.attr("data-pos",i);
+      //first and last element should not be able to be move so we won't add an edit button for them
+      if (i !== 0 && i !== currentDayIte.length-1){
+        let deleteButton = $("<button>").text("Delete");
+        deleteButton.on("click",function(){
+          //removes data from trip
+          currentDayIte.splice($(this).parent().attr("data-pos"),1);
+          //update route
+          calcRoute(latLongParser(currentDayIte));
+          //visually remove this from the parent
+          $(this).parent().remove();
+          //call the render function again to re-render
+          iteBoxRender();
+        });
+        let moveUp = $("<button>").text("Move Up");
+        moveUp.on("click",function(){
+          //can't move element past 1st index
+          if(i !== 1){
+            let currentPoint = trip[currentDay-1].splice($(this).parent().attr("data-pos"),1);
+            let newPos = parseInt($(this).parent().attr("data-pos"))-1;
+            trip[currentDay-1].splice(newPos,0,currentPoint[0]);
+            //update route
+            calcRoute(latLongParser(currentDayIte));
+            //call the render function again to re-render
+            iteBoxRender();
+          }
+        });
+        let moveDown = $("<button>").text("Move Down");
+        moveDown.on("click",function(){
+          //can't move element past 1st index
+          if(i !== currentDayIte.length-2){
+            let currentPoint = trip[currentDay-1].splice($(this).parent().attr("data-pos"),1);
+            let newPos = parseInt($(this).parent().attr("data-pos"))+1;
+            trip[currentDay-1].splice(newPos,0,currentPoint[0]);
+            //update route
+            calcRoute(latLongParser(currentDayIte));
+            console.log(dayJourney);
+            //call the render function again to re-render
+            iteBoxRender();
+          }
+        });
+        $(iteDiv).append(deleteButton);
+        $(iteDiv).append(moveUp);
+        $(iteDiv).append(moveDown);
+      }
+      //if its not the last array piece, we'll add a journey block
+      //timeout is required since ajaxcalls take time... this is hardcoded for now
+      setTimeout(function(){
+        $("#iteContent").append(iteDiv);
+        if(i !== currentDayIte.length-1 && dayJourney !== undefined){
+          let journeyDiv = $("<div>").addClass("journeyBlock");
+          $(journeyDiv).append("Distance: "+dayJourney[i].distance+"  ");
+          $(journeyDiv).append("Duration: "+dayJourney[i].duration);
+          $("#iteContent").append(journeyDiv);
+        }
+      },100);
+    }
+  }
+}
 /**
 * This will be how we calculate our routes, will display the trip as well as return an array of objects with the DISTANCE and DURATION of each leg of the trip
 * @param {Array} routeArr - An array of coordinates, should be at least 2 but no more than 10 (the top-limit is something to do on google's side)
@@ -167,6 +264,17 @@ function loadUserData(userName, pass){
     }
   });
 }
+/**
+* This extracts latitude and longitude out of the object, and produces an array compatible with calcRoute()
+* @param {Array} arr - Array of Objects that represent trip locations.
+*/
+function latLongParser(arr){
+  let parsedArr = [];
+  for(let i = 0; i < arr.length; i++){
+    parsedArr.push(arr[i].lat+","+arr[i].long);
+  }
+  return parsedArr;
+}
 /////////////////////////////////////////////
 ///// Testing Junk
 /////////////////////////////////////////////
@@ -176,111 +284,13 @@ $("#test").on("click",function(){
   calcRoute(destinArr,"WALKING",true);
 });
 //each array is the itenerary for the day.
+//this is mock data
 trip = [
   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.141133",long:"-118.224108", loc: "Point B"},{lat: "34.143721",long:"-118.256334", loc: "Point C"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 ];
-currentDay = 1;
+//Might not be needed since there are previous interfaces we will be interacting with.
 setTimeout(function(){
   iteBoxRender();
 },700);
-
-//we'll use this to render the itinerary box info
-function iteBoxRender(){
-  if(trip !== undefined){
-    $("#iteDay").text(currentDay+"/"+trip.length);
-    //current day itinerary to display
-    let currentDayIte = trip[currentDay-1];
-    //we'll clear previous displays of iteContent
-    $("#iteContent").empty();
-    //we'll display the map around the Hotel, which should always by the initial point.
-    for(let i = 0; i < currentDayIte.length; i++){
-      let iteDiv = $("<div>").addClass("iteDiv");
-      $(iteDiv).append(currentDayIte[i].loc);
-      iteDiv.attr("data-pos",i);
-      //first and last element should not be able to be move so we won't add an edit button for them
-      if (i !== 0 && i !== currentDayIte.length-1){
-        let deleteButton = $("<button>").text("Delete");
-        deleteButton.on("click",function(){
-          //removes data from trip
-          currentDayIte.splice($(this).parent().attr("data-pos"),1);
-          //update route
-          calcRoute(latLongParser(currentDayIte));
-          //visually remove this from the parent
-          $(this).parent().remove();
-          //call the render function again to re-render
-          iteBoxRender();
-        });
-        let moveUp = $("<button>").text("Move Up");
-        moveUp.on("click",function(){
-          //can't move element past 1st index
-          if(i !== 1){
-            let currentPoint = trip[currentDay-1].splice($(this).parent().attr("data-pos"),1);
-            let newPos = parseInt($(this).parent().attr("data-pos"))-1;
-            trip[currentDay-1].splice(newPos,0,currentPoint[0]);
-            //update route
-            calcRoute(latLongParser(currentDayIte));
-            //call the render function again to re-render
-            iteBoxRender();
-          }
-        });
-        let moveDown = $("<button>").text("Move Down");
-        moveDown.on("click",function(){
-          //can't move element past 1st index
-          if(i !== currentDayIte.length-2){
-            let currentPoint = trip[currentDay-1].splice($(this).parent().attr("data-pos"),1);
-            let newPos = parseInt($(this).parent().attr("data-pos"))+1;
-            trip[currentDay-1].splice(newPos,0,currentPoint[0]);
-            //update route
-            calcRoute(latLongParser(currentDayIte));
-            console.log(dayJourney);
-            //call the render function again to re-render
-            iteBoxRender();
-          }
-        });
-        $(iteDiv).append(deleteButton);
-        $(iteDiv).append(moveUp);
-        $(iteDiv).append(moveDown);
-      }
-
-      //if its not the last array piece, we'll add a journey block
-      setTimeout(function(){
-        $("#iteContent").append(iteDiv);
-        if(i !== currentDayIte.length-1 && dayJourney !== undefined){
-          let journeyDiv = $("<div>").addClass("journeyBlock");
-          $(journeyDiv).append("Distance: "+dayJourney[i].distance+"  ");
-          $(journeyDiv).append("Duration: "+dayJourney[i].duration);
-          $("#iteContent").append(journeyDiv);
-        }
-      },100);
-    }
-  }
-}
-//written to extract trip itenerary for an array of objects
-function latLongParser(arr){
-  let parsedArr = [];
-  for(let i = 0; i < arr.length; i++){
-    parsedArr.push(arr[i].lat+","+arr[i].long);
-  }
-  return parsedArr;
-}
-//set up day event functions
-$("#iteButNextDay").on("click",function(){
-  if(trip !== undefined && currentDay !== trip.length){
-    $("#iteContent").empty();
-    currentDay++;
-    //update route
-    calcRoute(latLongParser(trip[currentDay-1]));
-    iteBoxRender();
-  }
-});
-$("#iteButPrevDay").on("click",function(){
-  if(currentDay !== 1){
-    $("#iteContent").empty();
-    currentDay--;
-    //update route
-    calcRoute(latLongParser(trip[currentDay-1]));
-    iteBoxRender();
-  }
-});

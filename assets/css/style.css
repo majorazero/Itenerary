@@ -1,9 +1,21 @@
+/* hides scrollbar */
+::-webkit-scrollbar {
+display: none;
+}
 .container {
     background-color: lightblue;
     margin-bottom: 50px;
     height: 800px;
 }
-
+.iteDiv {
+  height: 50px;
+  background-color: tan;
+  margin: 2px;
+}
+.journeyBlock{
+  background-color: lightblue;
+  margin: 2px;
+}
 #containerText {
     margin-top: 30px;
     font-size: 50px;
@@ -14,7 +26,21 @@
     font-size: 30px;
     margin-left: 35px;
 }
-
+#iteBox{
+  background-color: green;
+  height:auto;
+  margin: 5px;
+  padding: 10px;
+}
+#iteContent {
+  background-color: blue;
+  height: 200px;
+  margin: 10px;
+}
+#iteHeader {
+  background-color: red;
+  margin: 10px;
+}
 #title {
     font-size: 100px;
     text-align: center;
@@ -48,34 +74,4 @@
 
 #map {
   height: 500px;
-}
-
-/* test css */
-/* hides scrollbar */
-::-webkit-scrollbar {
-display: none;
-}
-.iteDiv {
-  height: 50px;
-  background-color: tan;
-  margin: 2px;
-}
-.journeyBlock{
-  background-color: lightblue;
-  margin: 2px;
-}
-#iteBox{
-  background-color: green;
-  height:auto;
-  margin: 5px;
-  padding: 10px;
-}
-#iteHeader {
-  background-color: red;
-  margin: 10px;
-}
-#iteContent {
-  background-color: blue;
-  height: 200px;
-  margin: 10px;
 }

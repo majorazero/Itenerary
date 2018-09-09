@@ -5,5 +5,5 @@ let map;
 let directionService;
 let directionDisplay;
 let trip;
-let currentDay;
+let currentDay = 1;
 let dayJourney;
