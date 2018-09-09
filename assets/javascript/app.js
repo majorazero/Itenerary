@@ -159,18 +159,26 @@ let destinArr = ["34.05223,-118.243683","34.153351,-118.165794","34.136120,-117.
 $("#test").on("click",function(){
   calcRoute(destinArr,"WALKING",true);
 });
-
-let day = new Array(10);
-let currentDay = 4;
-console.log(day.length);
+//each array is the itenerary for the day.
+let trip = [
+  ["a","b","c"],
+  ["d","e","f"],
+  ["g","h","i"]
+];
+let currentDay = 1;
+console.log(trip.length);
 iteBoxRender();
 //we'll use this to render the itinerary box info
 function iteBoxRender(){
-  $("#iteDay").text(currentDay+"/"+day.length);
+  $("#iteDay").text(currentDay+"/"+trip.length);
+  //current day itinerary to display
+  let currentDayIte = trip[currentDay-1];
+  console.log(currentDayIte);
+  $("#iteContent").text(currentDayIte);
 }
 //set up day event functions
 $("#iteButNextDay").on("click",function(){
-  if(currentDay !== 10){
+  if(currentDay !== trip.length){
     currentDay++;
     iteBoxRender();
   }
