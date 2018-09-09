@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <!-- modal -->
+  <!-- load modal -->
   <div class="modal fade" id="loadPrompt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered"role="document">
       <div class="modal-content">
@@ -29,13 +29,44 @@
               <small>Everything is case-sensitive</small>
             </div>
           </form>
+          <button id="placeholderButton">Go to Last Page</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- save modal -->
+  <div class="modal fade" id="savePrompt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          Let's save your trip!
+        </div>
+        <div class="modal-body">
+          <button id="newUserSave">New User</button>
+          <button id="existUserSave">Existing User</button>
+          <form id="saveForm">
+            <div class="form-group">
+              <label for="userName">Username</label>
+              <input type="text" class="form-control" id="userNameInput" placeholder="username">
+              <small>Everything is case-sensitive</small>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" id="passInput" placeholder="password">
+              <small>Everything is case-sensitive</small>
+            </div>
+            <div class="form-group">
+              <label for="tripName">Trip</label>
+              <input type="text" class="form-control" id="tripInput" placeholder="Trip Name">
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
   <!-- CONTAINER ONE -->
   <div class="container" id="containerOne">
-    <!-- test save button -->
+    <!-- test load button -->
     <div class="row">
       <div class="col-md-12">
         <button class="btn btn-primary" data-toggle="modal" data-target="#loadPrompt">Returning User?</button>
@@ -181,6 +212,12 @@ the user will type the start date and this will connect with the flights API and
               </div>
             </div>
         </div>
+    </div>
+    <!-- test save button -->
+    <div class="row">
+      <div class="col-md-12">
+        <button id="saveButton" class="btn btn-primary" data-toggle="modal" data-target="#savePrompt">Save Trip?</button>
+      </div>
     </div>
 </div>
 

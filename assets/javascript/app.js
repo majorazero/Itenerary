@@ -303,3 +303,25 @@ trip = [
   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 ];
 //Might not be needed since there are previous interfaces we will be interacting with.
+
+$("#placeholderButton").on("click",function(){
+  $("#containerOne").hide();
+  $("#containerTwo").hide();
+  $("#containerThree").show();
+  $("#loadPrompt").modal("hide");
+});
+$("#saveButton").on("click",function(){
+  $("#newUserSave").show();
+  $("#existUserSave").show();
+  $("#saveForm").hide();
+});
+$("#newUserSave").on("click",function(){
+  $("#newUserSave").hide();
+  $("#existUserSave").hide();
+  $("#saveForm").show();
+});
+$("#existUserSave").on("click",function(){
+  $("#newUserSave").hide();
+  $("#existUserSave").hide();
+  $("#saveForm").show();
+});
