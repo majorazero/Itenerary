@@ -4,3 +4,6 @@ let corsAnywhereLink = "https://cors-anywhere.herokuapp.com/";
 let map;
 let directionService;
 let directionDisplay;
+let trip;
+let currentDay;
+let dayJourney;

@@ -39,6 +39,10 @@
        });
     }
    directionDisplay.setMap(map);
+   let listener1 = map.addListener("tilesloaded",function(){
+     calcRoute(latLongParser(trip[currentDay-1]));
+     google.maps.event.removeListener(listener1);
+   });
  }
  /////////////////////////////////////////////
  ///// Event Functions
@@ -97,10 +101,11 @@ function calcRoute(routArr, method, efficientTravel){
           distance: response.routes[0].legs[i].distance.text,
           duration: response.routes[0].legs[i].duration.text
         });
+        if(i === response.routes[0].legs.length-1){
+          dayJourney = journey;
+        }
       }
       directionDisplay.setDirections(response);
-      console.log(journey);
-      return journey;
     }
   });
 }
@@ -171,13 +176,16 @@ $("#test").on("click",function(){
   calcRoute(destinArr,"WALKING",true);
 });
 //each array is the itenerary for the day.
-let trip = [
+trip = [
   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.141133",long:"-118.224108", loc: "Point B"},{lat: "34.143721",long:"-118.256334", loc: "Point C"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 ];
-let currentDay = 1;
-iteBoxRender();
+currentDay = 1;
+setTimeout(function(){
+  iteBoxRender();
+},700);
+
 //we'll use this to render the itinerary box info
 function iteBoxRender(){
   if(trip !== undefined){
@@ -212,7 +220,7 @@ function iteBoxRender(){
             let newPos = parseInt($(this).parent().attr("data-pos"))-1;
             trip[currentDay-1].splice(newPos,0,currentPoint[0]);
             //update route
-            calcRoute(latLongParser(trip[currentDay-1]));
+            calcRoute(latLongParser(currentDayIte));
             //call the render function again to re-render
             iteBoxRender();
           }
@@ -225,7 +233,8 @@ function iteBoxRender(){
             let newPos = parseInt($(this).parent().attr("data-pos"))+1;
             trip[currentDay-1].splice(newPos,0,currentPoint[0]);
             //update route
-            calcRoute(latLongParser(trip[currentDay-1]));
+            calcRoute(latLongParser(currentDayIte));
+            console.log(dayJourney);
             //call the render function again to re-render
             iteBoxRender();
           }
@@ -234,7 +243,17 @@ function iteBoxRender(){
         $(iteDiv).append(moveUp);
         $(iteDiv).append(moveDown);
       }
-      $("#iteContent").append(iteDiv);
+
+      //if its not the last array piece, we'll add a journey block
+      setTimeout(function(){
+        $("#iteContent").append(iteDiv);
+        if(i !== currentDayIte.length-1 && dayJourney !== undefined){
+          let journeyDiv = $("<div>").addClass("journeyBlock");
+          $(journeyDiv).append(dayJourney[i].distance);
+          $(journeyDiv).append(dayJourney[i].duration);
+          $("#iteContent").append(journeyDiv);
+        }
+      },100);
     }
   }
 }
@@ -265,7 +284,3 @@ $("#iteButPrevDay").on("click",function(){
     iteBoxRender();
   }
 });
-$("#mapRender").on("click",function(){
-  initMap(parseFloat(trip[currentDay-1][0].lat),parseFloat(trip[currentDay-1][0].long),14,true);
-  calcRoute(latLongParser(trip[currentDay-1]));
-})
