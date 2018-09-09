@@ -249,8 +249,8 @@ function iteBoxRender(){
         $("#iteContent").append(iteDiv);
         if(i !== currentDayIte.length-1 && dayJourney !== undefined){
           let journeyDiv = $("<div>").addClass("journeyBlock");
-          $(journeyDiv).append(dayJourney[i].distance);
-          $(journeyDiv).append(dayJourney[i].duration);
+          $(journeyDiv).append("Distance: "+dayJourney[i].distance+"  ");
+          $(journeyDiv).append("Duration: "+dayJourney[i].duration);
           $("#iteContent").append(journeyDiv);
         }
       },100);

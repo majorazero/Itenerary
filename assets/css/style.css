@@ -60,6 +60,10 @@ display: none;
   background-color: tan;
   margin: 2px;
 }
+.journeyBlock{
+  background-color: lightblue;
+  margin: 2px;
+}
 #iteBox{
   background-color: green;
   height:auto;
