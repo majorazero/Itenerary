@@ -67,13 +67,11 @@ display: none;
 #iteBox{
   background-color: green;
   height:auto;
-  width: 350px;
   margin: 5px;
   padding: 10px;
 }
 #iteHeader {
   background-color: red;
-  width:300px;
   margin: 10px;
 }
 #iteContent {

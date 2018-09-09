@@ -9,31 +9,6 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <!-- test container -->
-  <div class="container">
-    <div class="row">
-      <div class="col-md-7" id="map">maps go here
-        <!-- The maps from the API goes here -->
-      </div>
-    </div>
-    <!-- test box -->
-    <div id="iteBox"class="row">
-      <div col="col-md-12">
-        <!-- box header -->
-        <div class="row">
-          <div id="iteHeader"class="col-md-12">
-            <h3>Itinerary</h3>
-            <h3>Day: <span id="iteDay"></span></h3>
-            <button id="iteButPrevDay"><</button> <button id="iteButNextDay">></button>
-          </div>
-        </div>
-        <!-- box content -->
-        <div class="row">
-          <div id="iteContent" class="col-md-12 pre-scrollable"></div>
-        </div>
-      </div>
-    </div>
-  </div>
   <!-- CONTAINER ONE -->
   <div class="container" id="containerOne">
     <div class="row">
@@ -157,11 +132,26 @@ the user will type the start date and this will connect with the flights API and
             <div class="row">
                 <div class="col-md-12">restaurants</div>
             </div>
+            <!-- ite box -->
+            <div id="iteBox"class="row">
+              <div col="col-md-12">
+                <!-- box header -->
+                <div class="row">
+                  <div id="iteHeader"class="col-md-12">
+                    <h3>Itinerary</h3>
+                    <h3>Day: <span id="iteDay"></span></h3>
+                    <button id="iteButPrevDay"><</button> <button id="iteButNextDay">></button>
+                  </div>
+                </div>
+                <!-- box content -->
+                <div class="row">
+                  <div id="iteContent" class="col-md-12 pre-scrollable"></div>
+                </div>
+              </div>
+            </div>
         </div>
     </div>
 </div>
-
-<button id="test">Button</button>
 
 <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
 <script
