@@ -161,7 +161,7 @@ $("#test").on("click",function(){
 });
 //each array is the itenerary for the day.
 let trip = [
-  [{lat: "0", long: "0", loc: "Home"},{lat: "0", long: "0", loc: "Home3"},{lat: "0", long: "0", loc: "Home6"},{lat: "0", long: "0", loc: "Home6"},{lat: "0", long: "0", loc: "Home6"}],
+  [{lat: "0", long: "0", loc: "Home"},{lat: "0", long: "0", loc: "Home3"},{lat: "0", long: "0", loc: "Home6"},{lat: "0", long: "0", loc: "Home7"},{lat: "0", long: "0", loc: "Home8"}],
   [{lat: "0", long: "0", loc: "Home1"},{lat: "0", long: "0", loc: "Home4"},{lat: "0", long: "0", loc: "Home7"}],
   [{lat: "0", long: "0", loc: "Home2"},{lat: "0", long: "0", loc: "Home5"},{lat: "0", long: "0", loc: "Home8"}]
 ];
@@ -174,7 +174,6 @@ function iteBoxRender(){
     $("#iteDay").text(currentDay+"/"+trip.length);
     //current day itinerary to display
     let currentDayIte = trip[currentDay-1];
-    console.log(currentDayIte);
     //we'll clear previous displays of iteContent
     $("#iteContent").empty();
     for(let i = 0; i < currentDayIte.length; i++){
@@ -195,13 +194,23 @@ function iteBoxRender(){
           //can't move element past 1st index
           if(i !== 1){
             let currentPoint = trip[currentDay-1].splice($(this).parent().attr("data-pos"),1);
-            let newPos = $(this).parent().attr("data-pos")-1;
+            let newPos = parseInt($(this).parent().attr("data-pos"))-1;
             trip[currentDay-1].splice(newPos,0,currentPoint[0]);
             //call the render function again to re-render
             iteBoxRender();
           }
         });
         let moveDown = $("<button>").text("Move Down");
+        moveDown.on("click",function(){
+          //can't move element past 1st index
+          if(i !== currentDayIte.length-2){
+            let currentPoint = trip[currentDay-1].splice($(this).parent().attr("data-pos"),1);
+            let newPos = parseInt($(this).parent().attr("data-pos"))+1;
+            trip[currentDay-1].splice(newPos,0,currentPoint[0]);
+            //call the render function again to re-render
+            iteBoxRender();
+          }
+        });
         $(iteDiv).append(deleteButton);
         $(iteDiv).append(moveUp);
         $(iteDiv).append(moveDown);
