@@ -163,22 +163,28 @@ $("#test").on("click",function(){
 let trip = [
   ["a","b","c"],
   ["d","e","f"],
-  ["g","h","i"]
+  ["g","h","i"],
+  ["g1","h","i"],
+  ["g2","h","i"],
+  ["g3","h","i"],
+  ["g4","h","i"]
 ];
+
 let currentDay = 1;
-console.log(trip.length);
 iteBoxRender();
 //we'll use this to render the itinerary box info
 function iteBoxRender(){
-  $("#iteDay").text(currentDay+"/"+trip.length);
-  //current day itinerary to display
-  let currentDayIte = trip[currentDay-1];
-  console.log(currentDayIte);
-  $("#iteContent").text(currentDayIte);
+  if(trip !== undefined){
+    $("#iteDay").text(currentDay+"/"+trip.length);
+    //current day itinerary to display
+    let currentDayIte = trip[currentDay-1];
+    console.log(currentDayIte);
+    $("#iteContent").text(currentDayIte);
+  }
 }
 //set up day event functions
 $("#iteButNextDay").on("click",function(){
-  if(currentDay !== trip.length){
+  if(trip !== undefined && currentDay !== trip.length){
     currentDay++;
     iteBoxRender();
   }
