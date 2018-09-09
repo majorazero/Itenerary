@@ -175,9 +175,37 @@ function iteBoxRender(){
     //current day itinerary to display
     let currentDayIte = trip[currentDay-1];
     console.log(currentDayIte);
+    //we'll clear previous displays of iteContent
+    $("#iteContent").empty();
     for(let i = 0; i < currentDayIte.length; i++){
       let iteDiv = $("<div>").addClass("iteDiv");
       $(iteDiv).append(currentDayIte[i].loc);
+      iteDiv.attr("data-pos",i);
+      //first and last element should not be able to be move so we won't add an edit button for them
+      if (i !== 0 && i !== currentDayIte.length-1){
+        let deleteButton = $("<button>").text("Delete");
+        deleteButton.on("click",function(){
+          //removes data from trip
+          trip[currentDay-1].splice($(this).parent().attr("data-pos"),1);
+          //visually remove this from the parent
+          $(this).parent().remove();
+        });
+        let moveUp = $("<button>").text("Move Up");
+        moveUp.on("click",function(){
+          //can't move element past 1st index
+          if(i !== 1){
+            let currentPoint = trip[currentDay-1].splice($(this).parent().attr("data-pos"),1);
+            let newPos = $(this).parent().attr("data-pos")-1;
+            trip[currentDay-1].splice(newPos,0,currentPoint[0]);
+            //call the render function again to re-render
+            iteBoxRender();
+          }
+        });
+        let moveDown = $("<button>").text("Move Down");
+        $(iteDiv).append(deleteButton);
+        $(iteDiv).append(moveUp);
+        $(iteDiv).append(moveDown);
+      }
       $("#iteContent").append(iteDiv);
     }
   }
