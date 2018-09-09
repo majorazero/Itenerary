@@ -40,7 +40,7 @@
     }
    directionDisplay.setMap(map);
    let listener1 = map.addListener("tilesloaded",function(){
-     calcRoute(latLongParser(trip[currentDay-1]));
+     calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
      google.maps.event.removeListener(listener1);
    });
  }
@@ -64,7 +64,7 @@ $("#iteButNextDay").on("click",function(){
     $("#iteContent").empty();
     currentDay++;
     //update route
-    calcRoute(latLongParser(trip[currentDay-1]));
+    calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
     iteBoxRender();
   }
 });
@@ -76,7 +76,7 @@ $("#iteButPrevDay").on("click",function(){
     $("#iteContent").empty();
     currentDay--;
     //update route
-    calcRoute(latLongParser(trip[currentDay-1]));
+    calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
     iteBoxRender();
   }
 });
@@ -105,7 +105,7 @@ function iteBoxRender(){
           //removes data from trip
           currentDayIte.splice($(this).parent().attr("data-pos"),1);
           //update route
-          calcRoute(latLongParser(currentDayIte));
+          calcRoute(latLongParser(currentDayIte),travelMethod);
           //visually remove this from the parent
           $(this).parent().remove();
           //call the render function again to re-render
@@ -119,7 +119,7 @@ function iteBoxRender(){
             let newPos = parseInt($(this).parent().attr("data-pos"))-1;
             trip[currentDay-1].splice(newPos,0,currentPoint[0]);
             //update route
-            calcRoute(latLongParser(currentDayIte));
+            calcRoute(latLongParser(currentDayIte),travelMethod);
             //call the render function again to re-render
             iteBoxRender();
           }
@@ -132,7 +132,7 @@ function iteBoxRender(){
             let newPos = parseInt($(this).parent().attr("data-pos"))+1;
             trip[currentDay-1].splice(newPos,0,currentPoint[0]);
             //update route
-            calcRoute(latLongParser(currentDayIte));
+            calcRoute(latLongParser(currentDayIte),travelMethod);
             console.log(dayJourney);
             //call the render function again to re-render
             iteBoxRender();
@@ -278,11 +278,7 @@ function latLongParser(arr){
 /////////////////////////////////////////////
 ///// Testing Junk
 /////////////////////////////////////////////
-//this is test code, will eventually be deleted.
-let destinArr = ["34.05223,-118.243683","34.153351,-118.165794","34.136120,-117.865341","34.142509,-118.255074"];
-$("#test").on("click",function(){
-  calcRoute(destinArr,"WALKING",true);
-});
+
 //each array is the itenerary for the day.
 //this is mock data
 trip = [
@@ -294,3 +290,14 @@ trip = [
 setTimeout(function(){
   iteBoxRender();
 },700);
+
+$("#methodSwitch").on("click",function(){
+  if(travelMethod === "DRIVING"){
+    travelMethod = "WALKING";
+  }
+  else {
+    travelMethod = "DRIVING";
+  }
+  calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
+  iteBoxRender();
+});

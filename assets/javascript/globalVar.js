@@ -7,3 +7,4 @@ let directionDisplay;
 let trip;
 let currentDay = 1;
 let dayJourney;
+let travelMethod = "DRIVING";
