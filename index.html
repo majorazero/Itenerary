@@ -9,15 +9,28 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-
-  <!-- CONTAINER ONE -->
-  <div class="container" id="containerOne">
+  <!-- test container -->
+  <div class="container">
     <!-- test box -->
-    <div class="row">
+    <div id="iteBox"class="row">
       <div col="col-md-12">
-        <div id="iteneraryBox"></div>
+        <!-- box header -->
+        <div class="row">
+          <div id="iteHeader"class="col-md-12">
+            <h3>Itinerary</h3>
+            <h3>Day: <span id="iteDay"></span></h3>
+            <button id="iteButPrevDay"><</button> <button id="iteButNextDay">></button>
+          </div>
+        </div>
+        <!-- box content -->
+        <div class="row">
+          <div id="iteContent" class="col-md-12"></div>
+        </div>
       </div>
     </div>
+  </div>
+  <!-- CONTAINER ONE -->
+  <div class="container" id="containerOne">
     <div class="row">
         <div class="col-md-12" id="title">Where are you going?</div>
     </div>

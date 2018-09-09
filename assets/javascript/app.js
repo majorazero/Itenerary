@@ -10,11 +10,9 @@
    messagingSenderId: "136977891330"
  };
  firebase.initializeApp(config);
- console.log(3);
  const firestore = firebase.firestore();
  const settings = {/* your settings... */ timestampsInSnapshots: true};
  firestore.settings(settings);
- console.log(4);
  /////////////////////////////////////////////
  ///// Intialization
  /////////////////////////////////////////////
@@ -160,4 +158,26 @@ function loadUserData(userName, pass){
 let destinArr = ["34.05223,-118.243683","34.153351,-118.165794","34.136120,-117.865341","34.142509,-118.255074"];
 $("#test").on("click",function(){
   calcRoute(destinArr,"WALKING",true);
+});
+
+let day = new Array(10);
+let currentDay = 4;
+console.log(day.length);
+iteBoxRender();
+//we'll use this to render the itinerary box info
+function iteBoxRender(){
+  $("#iteDay").text(currentDay+"/"+day.length);
+}
+//set up day event functions
+$("#iteButNextDay").on("click",function(){
+  if(currentDay !== 10){
+    currentDay++;
+    iteBoxRender();
+  }
+});
+$("#iteButPrevDay").on("click",function(){
+  if(currentDay !== 1){
+    currentDay--;
+    iteBoxRender();
+  }
 });

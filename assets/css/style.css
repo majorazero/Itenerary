@@ -49,3 +49,23 @@
 #map {
   height: 500px;
 }
+
+/* test css */
+
+#iteBox{
+  background-color: green;
+  height:auto;
+  width: 350px;
+  margin: 5px;
+  padding: 10px;
+}
+#iteHeader {
+  background-color: red;
+  width:300px;
+  margin: 10px;
+}
+#iteContent {
+  background-color: blue;
+  height: 200px;
+  margin: 10px;
+}
