@@ -83,6 +83,19 @@ $("#iteButPrevDay").on("click",function(){
     iteBoxRender();
   }
 });
+/**
+* This runs the travel method button.
+*/
+$("#methodSwitch").on("click",function(){
+  if(travelMethod === "DRIVING"){
+    travelMethod = "WALKING";
+  }
+  else {
+    travelMethod = "DRIVING";
+  }
+  calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
+  iteBoxRender();
+});
 /////////////////////////////////////////////
 ///// Functions
 /////////////////////////////////////////////
@@ -290,17 +303,3 @@ trip = [
   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 ];
 //Might not be needed since there are previous interfaces we will be interacting with.
-// setTimeout(function(){
-//   iteBoxRender();
-// },700);
-
-$("#methodSwitch").on("click",function(){
-  if(travelMethod === "DRIVING"){
-    travelMethod = "WALKING";
-  }
-  else {
-    travelMethod = "DRIVING";
-  }
-  calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-  iteBoxRender();
-});
