@@ -51,7 +51,15 @@
 }
 
 /* test css */
-
+/* hides scrollbar */
+::-webkit-scrollbar {
+display: none;
+}
+.iteDiv {
+  height: 50px;
+  background-color: tan;
+  margin: 2px;
+}
 #iteBox{
   background-color: green;
   height:auto;

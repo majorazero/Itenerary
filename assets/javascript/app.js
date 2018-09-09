@@ -161,13 +161,9 @@ $("#test").on("click",function(){
 });
 //each array is the itenerary for the day.
 let trip = [
-  ["a","b","c"],
-  ["d","e","f"],
-  ["g","h","i"],
-  ["g1","h","i"],
-  ["g2","h","i"],
-  ["g3","h","i"],
-  ["g4","h","i"]
+  [{lat: "0", long: "0", loc: "Home"},{lat: "0", long: "0", loc: "Home3"},{lat: "0", long: "0", loc: "Home6"},{lat: "0", long: "0", loc: "Home6"},{lat: "0", long: "0", loc: "Home6"}],
+  [{lat: "0", long: "0", loc: "Home1"},{lat: "0", long: "0", loc: "Home4"},{lat: "0", long: "0", loc: "Home7"}],
+  [{lat: "0", long: "0", loc: "Home2"},{lat: "0", long: "0", loc: "Home5"},{lat: "0", long: "0", loc: "Home8"}]
 ];
 
 let currentDay = 1;
@@ -179,18 +175,24 @@ function iteBoxRender(){
     //current day itinerary to display
     let currentDayIte = trip[currentDay-1];
     console.log(currentDayIte);
-    $("#iteContent").text(currentDayIte);
+    for(let i = 0; i < currentDayIte.length; i++){
+      let iteDiv = $("<div>").addClass("iteDiv");
+      $(iteDiv).append(currentDayIte[i].loc);
+      $("#iteContent").append(iteDiv);
+    }
   }
 }
 //set up day event functions
 $("#iteButNextDay").on("click",function(){
   if(trip !== undefined && currentDay !== trip.length){
+    $("#iteContent").empty();
     currentDay++;
     iteBoxRender();
   }
 });
 $("#iteButPrevDay").on("click",function(){
   if(currentDay !== 1){
+    $("#iteContent").empty();
     currentDay--;
     iteBoxRender();
   }
