@@ -19,13 +19,25 @@
  /**
  * Required to initialize the google maps object
  */
- function initMap(){
+ function initMap(lat,long,zoomLevel,setMarker){
    directionService = new google.maps.DirectionsService();
    directionDisplay = new google.maps.DirectionsRenderer();
-   map = new google.maps.Map(document.getElementById('map'), {
-           center: {lat: 34.05223, lng: -118.243683},
-           zoom: 10
-         });
+   if(lat === undefined && long === undefined){
+     lat = 34.05223;
+     long = -118.243683;
+     zoomLevel = 10;
+    }
+    map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: lat, lng: long},
+            zoom: zoomLevel
+          });
+    if (setMarker === true){
+      var marker = new google.maps.Marker({
+         position: {lat: lat, lng: long},
+         map: map,
+         title: 'Home Base'
+       });
+    }
    directionDisplay.setMap(map);
  }
  /////////////////////////////////////////////
@@ -161,11 +173,10 @@ $("#test").on("click",function(){
 });
 //each array is the itenerary for the day.
 let trip = [
-  [{lat: "0", long: "0", loc: "Home"},{lat: "0", long: "0", loc: "Home3"},{lat: "0", long: "0", loc: "Home6"},{lat: "0", long: "0", loc: "Home7"},{lat: "0", long: "0", loc: "Home8"}],
-  [{lat: "0", long: "0", loc: "Home1"},{lat: "0", long: "0", loc: "Home4"},{lat: "0", long: "0", loc: "Home7"}],
-  [{lat: "0", long: "0", loc: "Home2"},{lat: "0", long: "0", loc: "Home5"},{lat: "0", long: "0", loc: "Home8"}]
+  [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.141133",long:"-118.224108", loc: "Point B"},{lat: "34.143721",long:"-118.256334", loc: "Point C"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
+  [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
+  [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 ];
-
 let currentDay = 1;
 iteBoxRender();
 //we'll use this to render the itinerary box info
@@ -176,6 +187,7 @@ function iteBoxRender(){
     let currentDayIte = trip[currentDay-1];
     //we'll clear previous displays of iteContent
     $("#iteContent").empty();
+    //we'll display the map around the Hotel, which should always by the initial point.
     for(let i = 0; i < currentDayIte.length; i++){
       let iteDiv = $("<div>").addClass("iteDiv");
       $(iteDiv).append(currentDayIte[i].loc);
@@ -186,6 +198,8 @@ function iteBoxRender(){
         deleteButton.on("click",function(){
           //removes data from trip
           trip[currentDay-1].splice($(this).parent().attr("data-pos"),1);
+          //update route
+          calcRoute(latLongParser(trip[currentDay-1]));
           //visually remove this from the parent
           $(this).parent().remove();
         });
@@ -196,6 +210,8 @@ function iteBoxRender(){
             let currentPoint = trip[currentDay-1].splice($(this).parent().attr("data-pos"),1);
             let newPos = parseInt($(this).parent().attr("data-pos"))-1;
             trip[currentDay-1].splice(newPos,0,currentPoint[0]);
+            //update route
+            calcRoute(latLongParser(trip[currentDay-1]));
             //call the render function again to re-render
             iteBoxRender();
           }
@@ -207,6 +223,8 @@ function iteBoxRender(){
             let currentPoint = trip[currentDay-1].splice($(this).parent().attr("data-pos"),1);
             let newPos = parseInt($(this).parent().attr("data-pos"))+1;
             trip[currentDay-1].splice(newPos,0,currentPoint[0]);
+            //update route
+            calcRoute(latLongParser(trip[currentDay-1]));
             //call the render function again to re-render
             iteBoxRender();
           }
@@ -219,11 +237,21 @@ function iteBoxRender(){
     }
   }
 }
+//written to extract trip itenerary for an array of objects
+function latLongParser(arr){
+  let parsedArr = [];
+  for(let i = 0; i < arr.length; i++){
+    parsedArr.push(arr[i].lat+","+arr[i].long);
+  }
+  return parsedArr;
+}
 //set up day event functions
 $("#iteButNextDay").on("click",function(){
   if(trip !== undefined && currentDay !== trip.length){
     $("#iteContent").empty();
     currentDay++;
+    //update route
+    calcRoute(latLongParser(trip[currentDay-1]));
     iteBoxRender();
   }
 });
@@ -231,6 +259,12 @@ $("#iteButPrevDay").on("click",function(){
   if(currentDay !== 1){
     $("#iteContent").empty();
     currentDay--;
+    //update route
+    calcRoute(latLongParser(trip[currentDay-1]));
     iteBoxRender();
   }
 });
+$("#mapRender").on("click",function(){
+  initMap(parseFloat(trip[currentDay-1][0].lat),parseFloat(trip[currentDay-1][0].long),14,true);
+  calcRoute(latLongParser(trip[currentDay-1]));
+})
