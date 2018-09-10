@@ -304,11 +304,35 @@ trip = [
 ];
 //Might not be needed since there are previous interfaces we will be interacting with.
 
-$("#placeholderButton").on("click",function(){
-  $("#containerOne").hide();
-  $("#containerTwo").hide();
-  $("#containerThree").show();
-  $("#loadPrompt").modal("hide");
+$("#login").on("submit",function(event){
+  event.preventDefault();
+  userName = $(this)[0][0].value;
+  passWord = $(this)[0][1].value;
+  console.log(userName,passWord);
+  loadUserData(userName,passWord);
+  setTimeout(function(){
+    $("#login").hide();
+    tripObj = JSON.parse(currentData);
+    for(let i = 0; i < tripObj.length; i++){
+      let tripSelectDiv = $("<div>").addClass("tripButtons");
+      let button = $("<button>").text(tripObj[i].tripName).addClass("btn btn-primary");
+      $(button).on("click",function(){
+        let tripObj = JSON.parse(currentData);
+        for(let i = 0; i < tripObj.length; i++){
+          if($(this).text() === tripObj[i].tripName){
+            trip = tripObj[i].trip;
+            break;
+          }
+        }
+        $("#containerOne").hide();
+        $("#containerTwo").hide();
+        $("#containerThree").show();
+        $("#loadPrompt").modal("hide");
+      });
+      $(tripSelectDiv).append(button);
+      $("#loadBody").append(tripSelectDiv);
+    }
+  },500);
 });
 $("#saveButton").on("click",function(){
   $("#newUserSave").show();

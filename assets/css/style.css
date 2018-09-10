@@ -80,3 +80,6 @@ display: none;
 #saveForm {
   display: none;
 }
+.tripButtons{
+  margin: 2px;
+}
