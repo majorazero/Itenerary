@@ -393,7 +393,7 @@ trip = [
 
 
 
-function restaurantSearch(location,term){
+function yelpSearch(location,term){
     //terms should only equal resturants or attractions
     $.ajax({
         url: corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term="+term+"&location="+location,
@@ -402,9 +402,15 @@ function restaurantSearch(location,term){
         Authorization : "Bearer TxSJ8z1klgIhuCb6UUsaQ35YjBgp7ZUMyktzsEeW3HdM3D7cu0qspdXjNBziwKIe_6WL5PjW7k1EF4rCL4DD-8cXPvU156T2feTri3g6jHMp3Aw4Xs3IFXAJ7o60WnYx"
         }
     }).then(function(response) {
-        console.log(response);
-        for (var i = 0; i < response.businesses.length; i++){
-        var newRow = $("<div>").addClass("row restCard");
+      console.log(response);
+      for (var i = 0; i < response.businesses.length; i++){
+        var newRow = $("<div>").addClass("row");
+        if(term === "restaurants"){
+          newRow.addClass("restCard");
+        }
+        else if (term === "attractions"){
+          newRow.addClass("attrCard")
+        }
         newRow.attr("lat",response.businesses[i].coordinates.latitude);
         newRow.attr("long",response.businesses[i].coordinates.longitude);
         newRow.attr("locName",response.businesses[i].name);
@@ -434,59 +440,16 @@ function restaurantSearch(location,term){
         $(newDiv).append(rating);
         $(newRow).append(imageDiv);
         $(newRow).append(newDiv);
-        $("#place").append(newRow);
+        if(term === "restaurants"){
+          $("#place").append(newRow);
         }
-
-
-    })
-}
-
-function attractionSearch(location){
-    $.ajax({
-        url: corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term=attractions&location=" + location,
-        method: "GET",
-        headers: {
-        Authorization : "Bearer TxSJ8z1klgIhuCb6UUsaQ35YjBgp7ZUMyktzsEeW3HdM3D7cu0qspdXjNBziwKIe_6WL5PjW7k1EF4rCL4DD-8cXPvU156T2feTri3g6jHMp3Aw4Xs3IFXAJ7o60WnYx"
-        }
-    }).then(function(response) {
-        console.log(response);
-        for (var i = 0; i < response.businesses.length; i++){
-          var newRow = $("<div>").addClass("row attrCard");
-          newRow.attr("lat",response.businesses[i].coordinates.latitude);
-          newRow.attr("long",response.businesses[i].coordinates.longitude);
-          newRow.attr("locName",response.businesses[i].name);
-          newRow.attr("imgUrl",response.businesses[i].image_url);
-          var newDiv = $("<div>").addClass("col-md-8 infoCard");
-          var imageDiv = $("<div>").addClass("col-md-4");
-          var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
-          var name = $("<p>").text(response.businesses[i].name).addClass("topInfo");
-          var city = $("<p>").text(response.businesses[i].location.city);
-          var address = $("<p>").text(response.businesses[i].location.address1);
-          var price = $("<p>").text(response.businesses[i].price);
-          var rating = $("<p>").text(response.businesses[i].rating);
-          $(newRow).on("click",function(){
-            //we'll push to the end of the trip of the current day
-            let currentTrip = trip[currentDay-1];
-            currentTrip.splice(currentTrip.length-1,0,{
-              lat: $(this).attr("lat"),
-              long: $(this).attr("long"),
-              loc: $(this).attr("locName")});
-            calcRoute(latLongParser(currentTrip,travelMethod));
-          });
-          $(imageDiv).append(placeImage);
-          $(newDiv).append(name);
-          $(newDiv).append(city);
-          $(newDiv).append(address);
-          $(newDiv).append(price);
-          $(newDiv).append(rating);
-          $(newRow).append(imageDiv);
-          $(newRow).append(newDiv);
+        else if (term === "attractions"){
           $("#attraction").append(newRow);
         }
-
-
-    })
+      }
+    });
 }
+
 /**
 * Deals with front page transition.
 */
@@ -502,8 +465,8 @@ $("#submitBtn").on("click", function(event) {
         tripInit(dayStaying);
         $("#containerOne").hide();
         $("#containerTwo").show();
-        restaurantSearch(inputDestination,"restuarants");
-        attractionSearch(inputDestination);
+        yelpSearch(inputDestination,"restaurants");
+        yelpSearch(inputDestination,"attractions");
       }
       else{
         console.log("You didn't input a location!");
