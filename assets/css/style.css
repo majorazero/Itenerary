@@ -1,3 +1,7 @@
+.hotelRow:hover {
+  background-color: #ffa9ac;
+}
+
 /* hides scrollbar */
 
 button {

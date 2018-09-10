@@ -450,7 +450,7 @@ function myHotel(location) {
     }
   }).then(function(response) {
     for (var i = 0; i < response.businesses.length; i++) {
-      var hotelRow = $("<div>").addClass("row");
+      var hotelRow = $("<div>").addClass("row hotelRow");
       hotelRow.attr("lat",response.businesses[i].coordinates.latitude);
       hotelRow.attr("long",response.businesses[i].coordinates.longitude);
       hotelRow.on("click",function(){
