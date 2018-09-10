@@ -325,3 +325,11 @@ $("#existUserSave").on("click",function(){
   $("#existUserSave").hide();
   $("#saveForm").show();
 });
+$("#saveForm").on("submit",function(event){
+  $("#savePrompt").modal("hide");
+  event.preventDefault();
+  userName = $(this)[0][0].value;
+  passWord = $(this)[0][1].value;
+  tripName = $(this)[0][2].value;
+  console.log(userName,passWord,tripName);
+});
