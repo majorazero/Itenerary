@@ -50,13 +50,7 @@
  /////////////////////////////////////////////
  ///// Event Functions
  /////////////////////////////////////////////
-/**
-* First page to 2nd Page.
-*/
-$("#submitBtn").click(function(){
-    $("#containerOne").hide();
-    $("#containerTwo").show();
-});
+
 /**
 * 2nd page to 3rd Page.
 */
@@ -427,6 +421,9 @@ function restaurantSearch(location){
         var address = $("<p>").text(response.businesses[i].location.address1);
         var price = $("<p>").text(response.businesses[i].price);
         var rating = $("<p>").text(response.businesses[i].rating);
+        $(newRow).on("click",function(){
+          console.log("restaurant!");
+        });
         $(imageDiv).append(placeImage);
         $(newDiv).append(name);
         $(newDiv).append(city);
@@ -461,6 +458,9 @@ function attractionSearch(location){
         var address = $("<p>").text(response.businesses[i].location.address1);
         var price = $("<p>").text(response.businesses[i].price);
         var rating = $("<p>").text(response.businesses[i].rating);
+        $(newRow).on("click",function(){
+          console.log("attraction!");
+        });
         $(imageDiv).append(placeImage);
         $(newDiv).append(name);
         $(newDiv).append(city);
@@ -480,7 +480,13 @@ $("#submitBtn").on("click", function(event) {
     event.preventDefault();
 
     var inputDestination = $("#destinationInput").val().trim();
-
-    restaurantSearch(inputDestination);
-    attractionSearch(inputDestination);
+    if(inputDestination !== ""){
+      $("#containerOne").hide();
+      $("#containerTwo").show();
+      restaurantSearch(inputDestination);
+      attractionSearch(inputDestination);
+    }
+    else{
+      console.log("You didn't input a location!");
+    }
   });
