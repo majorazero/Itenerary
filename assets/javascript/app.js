@@ -413,7 +413,9 @@ function restaurantSearch(location){
         console.log(response);
         for (var i = 0; i < response.businesses.length; i++){
         var newRow = $("<div>").addClass("row restCard");
-        newRow.attr("coord",response.businesses[i].coordinates.latitude+","+response.businesses[i].coordinates.longitude);
+        newRow.attr("lat",response.businesses[i].coordinates.latitude);
+        newRow.attr("long",response.businesses[i].coordinates.longitude);
+        newRow.attr("locName",response.businesses[i].name);
         var newDiv = $("<div>").addClass("col-md-8 infoCard");
         var imageDiv = $("<div>").addClass("col-md-4");
         var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
@@ -423,7 +425,14 @@ function restaurantSearch(location){
         var price = $("<p>").text(response.businesses[i].price);
         var rating = $("<p>").text(response.businesses[i].rating);
         $(newRow).on("click",function(){
-          console.log("restaurant!");
+          //we'll push to the end of the trip of the current day
+          let currentTrip = trip[currentDay-1];
+          currentTrip.splice(currentTrip.length-1,0,{
+            lat: $(this).attr("lat"),
+            long: $(this).attr("long"),
+            loc: $(this).attr("locName")});
+          calcRoute(latLongParser(currentTrip,travelMethod));
+          setTimeout(iteBoxRender,500);
         });
         $(imageDiv).append(placeImage);
         $(newDiv).append(name);
@@ -451,7 +460,9 @@ function attractionSearch(location){
         console.log(response);
         for (var i = 0; i < response.businesses.length; i++){
           var newRow = $("<div>").addClass("row attrCard");
-          newRow.attr("coord",response.businesses[i].coordinates.latitude+","+response.businesses[i].coordinates.longitude);
+          newRow.attr("lat",response.businesses[i].coordinates.latitude);
+          newRow.attr("long",response.businesses[i].coordinates.longitude);
+          newRow.attr("locName",response.businesses[i].name);
           var newDiv = $("<div>").addClass("col-md-8 infoCard");
           var imageDiv = $("<div>").addClass("col-md-4");
           var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
@@ -461,7 +472,14 @@ function attractionSearch(location){
           var price = $("<p>").text(response.businesses[i].price);
           var rating = $("<p>").text(response.businesses[i].rating);
           $(newRow).on("click",function(){
-            console.log($(this).attr("coord"));
+            //we'll push to the end of the trip of the current day
+            let currentTrip = trip[currentDay-1];
+            currentTrip.splice(currentTrip.length-1,0,{
+              lat: $(this).attr("lat"),
+              long: $(this).attr("long"),
+              loc: $(this).attr("locName")});
+            calcRoute(latLongParser(currentTrip,travelMethod));
+            setTimeout(iteBoxRender,500);
           });
           $(imageDiv).append(placeImage);
           $(newDiv).append(name);
