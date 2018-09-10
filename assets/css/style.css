@@ -85,6 +85,10 @@ display: none;
   display: none;
   color: red;
 }
+#wrongPass2 {
+  display: none;
+  color: red;
+}
 .tripButtons{
   margin: 2px;
 }

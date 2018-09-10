@@ -75,6 +75,7 @@ $("#login").on("submit",function(event){
   loadUserData(userName,passWord);
   setTimeout(function(){
     if(isPass === true){
+      $("#wrongPass").hide();
       $("#login").hide();
       tripObj = JSON.parse(currentData);
       for(let i = 0; i < tripObj.length; i++){
@@ -117,33 +118,37 @@ $("#saveButton").on("click",function(){
 * Handles how the data is actually saved.
 */
 $("#saveForm").on("submit",function(event){
-  $("#savePrompt").modal("hide");
   event.preventDefault();
   userName = $(this)[0][0].value;
   passWord = $(this)[0][1].value;
   tripName = $(this)[0][2].value;
-  $(this)[0][0].value = "";
   $(this)[0][1].value = "";
-  $(this)[0][2].value = "";
   let tripObj;
   if(newUser === false){ //since the user exists we need to load the data and manipulate it.
     loadUserData(userName,passWord);
     setTimeout(function(){
-      tripObj = JSON.parse(currentData);
-      console.log(tripObj);
-      // check if trip already exists
-      for(let i = 0; i<tripObj.length; i++){
-        if(tripObj[i].tripName === tripName){ //it does exist
-          tripObj[i].trip = trip;
-          saveUserData(userName,passWord,JSON.stringify(tripObj));
-          return;
+      if(isPass === true){
+        $("#wrongPass2").hide();
+        $("#savePrompt").modal("hide");
+        tripObj = JSON.parse(currentData);
+        console.log(tripObj);
+        // check if trip already exists
+        for(let i = 0; i<tripObj.length; i++){
+          if(tripObj[i].tripName === tripName){ //it does exist
+            tripObj[i].trip = trip;
+            saveUserData(userName,passWord,JSON.stringify(tripObj));
+            return;
+          }
         }
+        tripObj.push({
+          tripName: tripName,
+          trip: trip
+        });
+        saveUserData(userName,passWord,JSON.stringify(tripObj));
       }
-      tripObj.push({
-        tripName: tripName,
-        trip: trip
-      });
-      saveUserData(userName,passWord,JSON.stringify(tripObj));
+      else {
+        $("#wrongPass2").show();
+      }
     },500);
   }
   else{
