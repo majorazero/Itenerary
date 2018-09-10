@@ -416,6 +416,7 @@ function restaurantSearch(location){
         newRow.attr("lat",response.businesses[i].coordinates.latitude);
         newRow.attr("long",response.businesses[i].coordinates.longitude);
         newRow.attr("locName",response.businesses[i].name);
+        newRow.attr("imgUrl",response.businesses[i].image_url);
         var newDiv = $("<div>").addClass("col-md-8 infoCard");
         var imageDiv = $("<div>").addClass("col-md-4");
         var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
@@ -463,6 +464,7 @@ function attractionSearch(location){
           newRow.attr("lat",response.businesses[i].coordinates.latitude);
           newRow.attr("long",response.businesses[i].coordinates.longitude);
           newRow.attr("locName",response.businesses[i].name);
+          newRow.attr("imgUrl",response.businesses[i].image_url);
           var newDiv = $("<div>").addClass("col-md-8 infoCard");
           var imageDiv = $("<div>").addClass("col-md-4");
           var placeImage = $("<img>").attr("src", response.businesses[i].image_url);

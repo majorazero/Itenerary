@@ -130,3 +130,6 @@ p {
   background-color: tan;
   margin: 2px;
 }
+.restBox, .attrBox {
+  height:50%;
+}
