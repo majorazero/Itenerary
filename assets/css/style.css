@@ -93,10 +93,14 @@ display: none;
 }
 
 #submitButton {
+<<<<<<< HEAD
     margin-top: 400px;
     background-color: #262960;
     color: white;
     font-family: "josefin slab";
+=======
+    margin-top: inherit;
+>>>>>>> e0fb236f9180e53fffb7a03c5323c6969c62fd54
 }
 
 
