@@ -133,3 +133,7 @@ p {
 .restBox, .attrBox {
   height:50%;
 }
+
+#startDateInput, #endDateInput {
+  width: auto;
+}

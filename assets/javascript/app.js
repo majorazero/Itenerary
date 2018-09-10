@@ -497,18 +497,35 @@ function attractionSearch(location){
 
     })
 }
+/**
+* Deals with front page transition.
+*/
 $("#submitBtn").on("click", function(event) {
-
     event.preventDefault();
-
     var inputDestination = $("#destinationInput").val().trim();
-    if(inputDestination !== ""){
-      $("#containerOne").hide();
-      $("#containerTwo").show();
-      restaurantSearch(inputDestination);
-      attractionSearch(inputDestination);
+    let inputStartDate =$("#startDateInput").val();
+    let inputEndDate =$("#endDateInput").val();
+    let dayStaying = dayOutputter(inputStartDate,inputEndDate);
+    if(dayStaying <= 0){
+      console.log("You can't go back in time.");
     }
     else{
-      console.log("You didn't input a location!");
+      if(inputDestination !== ""){
+        $("#containerOne").hide();
+        $("#containerTwo").show();
+        restaurantSearch(inputDestination);
+        attractionSearch(inputDestination);
+      }
+      else{
+        console.log("You didn't input a location!");
+      }
     }
   });
+
+  function dayOutputter(startTime,endTime){
+    let startDate = new Date(startTime);
+    let endDate = new Date(endTime);
+    let timeDiff = endDate.getTime()-startDate.getTime();
+    let dayDiff = Math.ceil(timeDiff/(1000*3600*24));
+    return dayDiff;
+  }
