@@ -211,9 +211,12 @@ function iteBoxRender(){
       let iteDiv = $("<div>").addClass("iteDiv");
       $(iteDiv).append(currentDayIte[i].loc);
       iteDiv.attr("data-pos",i);
+      if(i === 0 || i === currentDayIte.length-1){
+        iteDiv.attr("id","homeBase")
+      }
       //first and last element should not be able to be move so we won't add an edit button for them
       if (i !== 0 && i !== currentDayIte.length-1){
-        let deleteButton = $("<button>").text("Delete");
+        let deleteButton = $("<button>").text("Delete").attr("id", "itButton");
         deleteButton.on("click",function(){
           //removes data from trip
           currentDayIte.splice($(this).parent().attr("data-pos"),1);
@@ -223,7 +226,7 @@ function iteBoxRender(){
           //update route
           calcRoute(latLongParser(currentDayIte),travelMethod);
         });
-        let moveUp = $("<button>").text("Move Up");
+        let moveUp = $("<button>").text("Move Up").attr("id", "itButton");
         moveUp.on("click",function(){
           //can't move element past 1st index
           if(i !== 1){
@@ -234,7 +237,7 @@ function iteBoxRender(){
             calcRoute(latLongParser(currentDayIte),travelMethod);
           }
         });
-        let moveDown = $("<button>").text("Move Down");
+        let moveDown = $("<button>").text("Move Down").attr("id", "itButton");
         moveDown.on("click",function(){
           //can't move element past 1st index
           if(i !== currentDayIte.length-2){
@@ -401,10 +404,10 @@ function yelpSearch(location,term){
         newRow.attr("long",response.businesses[i].coordinates.longitude);
         newRow.attr("locName",response.businesses[i].name);
         newRow.attr("imgUrl",response.businesses[i].image_url);
-        var newDiv = $("<div>").addClass("col-md-8 infoCard");
-        var imageDiv = $("<div>").addClass("col-md-4");
+        var newDiv = $("<div>").addClass("col-md-8 col-sm-8 col-8 infoCard");
+        var imageDiv = $("<div>").addClass("col-md-4 col-sm-4 col-4 imageCard");
         var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
-        var name = $("<p>").text(response.businesses[i].name).addClass("topInfo");
+        var name = $("<p>").text(response.businesses[i].name).addClass("topInfo").attr("id", "titleName");
         var city = $("<p>").text(response.businesses[i].location.city);
         var address = $("<p>").text(response.businesses[i].location.address1);
         var price = $("<p>").text(response.businesses[i].price);
