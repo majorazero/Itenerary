@@ -1,4 +1,5 @@
 /* hides scrollbar */
+
 button {
     background-color:#262960;
     color: white;
@@ -28,6 +29,7 @@ display: none;
 
 #homeBase {
     height: 30px;
+    margin-top: 10px;
 }
 .journeyBlock{
   background-color: lightblue;
@@ -136,6 +138,11 @@ img {
 
 }
 
+#saveButton {
+    background-color: #262960;
+    border: none;
+}
+
 
 p {
     margin: -5px;
@@ -164,7 +171,7 @@ p {
   height:50%;
 }
 
-#restName {
+#titleName {
     font-weight: bolder;
 }
 
@@ -188,4 +195,41 @@ p {
     #iteHeader {
         width: 200px;
     }
+    img {
+        height: 80px;
+        width: 80px;
+    }
+    p {
+    font-size: 12px;
+    }
+
+    #containerText {
+        font-size: 37px;
+    }
+}
+
+@media screen and (max-width: 768px){
+    #startDateInput {
+        margin-top: -125px;    
+    }
+    #containerText {
+        margin-bottom: 20px;
+    }
+    #endDateInput {
+        margin-top: -38px;
+    }
+    #destinationInput {
+        margin-top: -25px;
+    }
+    img {
+        height: 120px;
+        width: 120px;
+    }
+    #iteHeader {
+        width: 490px;
+    }
+    #place p {
+        margin: 0px;
+    }
+
 }
