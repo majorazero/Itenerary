@@ -1,16 +1,33 @@
 /* hides scrollbar */
+button {
+    background-color:#262960;
+    color: white;
+    border: none;
+    margin: 2px;
+}
+
+body {
+    background-color: #87dbee;
+}
 ::-webkit-scrollbar {
 display: none;
 }
 .container {
-    background-color: lightblue;
+    background-color: #87dbee;
+    animation-name: introBack;
+    animation-duration: 5s;
     margin-bottom: 50px;
     height: auto;
 }
 .iteDiv {
-  height: 50px;
-  background-color: tan;
+  height: 130px;
+  background-color: #ffa9ac;
   margin: 2px;
+}
+
+
+#homeBase {
+    height: 30px;
 }
 .journeyBlock{
   background-color: lightblue;
@@ -20,6 +37,7 @@ display: none;
     margin-top: 30px;
     font-size: 50px;
     text-align: center;
+    font-family: "yeseva one"
 }
 
 #containerTxt {
@@ -27,23 +45,27 @@ display: none;
     margin-left: 35px;
 }
 #iteBox{
-  background-color: green;
+  background-color: #ff575c;
   height:auto;
   margin: 5px;
   padding: 10px;
 }
 #iteContent {
-  background-color: blue;
+  background-color: #ff575c;
   height: 200px;
   margin: 10px;
 }
 #iteHeader {
-  background-color: red;
+  background-color:#ffa9ac;
   margin: 10px;
+  height: 130px;
+  padding: 7px;
+  width: 595px;
 }
 #title {
     font-size: 100px;
     text-align: center;
+    font-family: "yeseva one"
 }
 
 #titleMust {
@@ -52,16 +74,31 @@ display: none;
 }
 
 #submitBtn {
-    background-color: #565656;
-    margin-top: 250px;
+    margin-top: 150px;
+    background-color: #262960;
+    color: white;
+    font-family: "josefin slab";
+    font-size: 25px;
+
+}
+
+#returnBtn {
+    background-color: #262960;
+    color: white;
+    font-family: "josefin slab";
+    font-size: 25px;
+    border: none;
 }
 
 #submitButton {
     margin-top: 400px;
+    background-color: #262960;
+    color: white;
+    font-family: "josefin slab";
+
 }
 
-#containerOne {
-}
+
 
 #containerTwo {
     display: none;
@@ -99,12 +136,6 @@ img {
 
 }
 
-#restaurantInfo {
-    background-color: aquamarine;
-}
-#restaurantInfoTwo {
-    background-color: purple;
-}
 
 p {
     margin: -5px;
@@ -116,20 +147,45 @@ p {
 
 /* working on it */
 #place, #attraction {
-  border-radius: 10px;
-  background-color: red;
+  background-color: #ff575c;
 }
 #place p, #attraction p {
   margin: 2px;
 }
 .restCard {
-  background-color: lightgreen;
-  margin: 2px;
+  background-color: #ffa9ac;
+  margin: 3px;
 }
 .attrCard {
-  background-color: tan;
-  margin: 2px;
+  background-color: #ffa9ac;
+  margin: 3px;
 }
 .restBox, .attrBox {
   height:50%;
+}
+
+#restName {
+    font-weight: bolder;
+}
+
+.journeyBlock {
+    background-color: #ff575c;
+    color: #262960;
+    font-size: 18px;
+}
+
+#itButton {
+    float: right;
+}
+
+@media screen and (max-width: 1200px){
+    #iteHeader {
+        width: 490px;
+    }
+}
+
+@media screen and (max-width: 990px){
+    #iteHeader {
+        width: 200px;
+    }
 }
