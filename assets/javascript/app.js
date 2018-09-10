@@ -43,15 +43,6 @@
  /////////////////////////////////////////////
  ///// Event Functions
  /////////////////////////////////////////////
-
-/**
-* 2nd page to 3rd Page.
-*/
-$("#submitButton").click(function(){
-    $("#containerOne").hide();
-    $("#containerTwo").hide();
-    $("#containerThree").show();
-});
 /**
 * Handles login events.
 */
@@ -396,7 +387,6 @@ function yelpSearch(location,term){
         Authorization : "Bearer TxSJ8z1klgIhuCb6UUsaQ35YjBgp7ZUMyktzsEeW3HdM3D7cu0qspdXjNBziwKIe_6WL5PjW7k1EF4rCL4DD-8cXPvU156T2feTri3g6jHMp3Aw4Xs3IFXAJ7o60WnYx"
         }
     }).then(function(response) {
-      console.log(response);
       for (var i = 0; i < response.businesses.length; i++){
         var newRow = $("<div>").addClass("row");
         if(term === "restaurants"){
@@ -462,8 +452,7 @@ $("#submitBtn").on("click", function(event) {
       if(inputDestination !== ""){
         $("#containerOne").hide();
         $("#containerTwo").show();
-        yelpSearch(inputDestination,"restaurants");
-        yelpSearch(inputDestination,"attractions");
+        myHotel(inputDestination);
       }
       else{
         console.log("You didn't input a location!");
@@ -485,7 +474,6 @@ function tripInit(dayStaying,long,lat){
     trip[i].push(baseLoc);
   }
   calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-  console.log(trip);
 }
 function dayOutputter(startTime,endTime){
   let startDate = new Date(startTime);
@@ -499,18 +487,25 @@ function dayOutputter(startTime,endTime){
 // .. ajax the api shit ..//
 function myHotel(location) {
     $.ajax({
-    "url": "http://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=hotels&limit=4&location= " + location,
+    "url": corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term=hotels&limit=4&location= " + location,
     "method": "GET",
     "headers": {
       "Authorization": "Bearer DnFZKNqaKHmAOQ2-KzI-F0wsEHmH1HrT-k7U7IILrqGNlqL0J3nz1EM5KaSOu3o6ljzjy8UUPRyAifAu5_yM38LMc3oIUizj_Tp6rNVK0LakJK850r8lAtViWXWRW3Yx",
     }
   })
   .then(function(response) {
-    console.log(response);
-
     for (var i = 0; i < response.businesses.length; i++) {
-
       var hotelRow = $("<div>").addClass("row");
+      hotelRow.attr("lat",response.businesses[i].coordinates.latitude);
+      hotelRow.attr("long",response.businesses[i].coordinates.longitude);
+      hotelRow.on("click",function(){
+        tripInit(dayStaying,$(this).attr("long"),$(this).attr("lat"));
+        yelpSearch($(this).attr("lat")+","+$(this).attr("long"),"restaurants");
+        yelpSearch($(this).attr("lat")+","+$(this).attr("long"),"attractions");
+        $("#containerOne").hide();
+        $("#containerTwo").hide();
+        $("#containerThree").show();
+      });
       var hotelDiv = $("<div>").addClass("col-sm-9");
       var hotelImage =$("<div>").addClass("col-sm-3");
       var hotelPic =$("<img>").attr("src", response.businesses[i].image_url);
@@ -527,21 +522,6 @@ function myHotel(location) {
       $(hotelRow).append(hotelDiv);
       $(hotelRow).append(hotelImage);
       $("#insert").append(hotelRow);
-
-
-      console.log(response.businesses[i].coordinates);
-      console.log(response.businesses[i].name);
-
     }
-
   })
-
 }
-
-
-
-$("#submitBtn").on("click", function(event) {
-  event.preventDefault();
-  var inputDestination = $("#destinationInput").val().trim();
-  myHotel(inputDestination);
-});
