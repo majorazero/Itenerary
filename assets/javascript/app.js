@@ -413,6 +413,7 @@ function restaurantSearch(location){
         console.log(response);
         for (var i = 0; i < response.businesses.length; i++){
         var newRow = $("<div>").addClass("row restCard");
+        newRow.attr("coord",response.businesses[i].coordinates.latitude+","+response.businesses[i].coordinates.longitude);
         var newDiv = $("<div>").addClass("col-md-8 infoCard");
         var imageDiv = $("<div>").addClass("col-md-4");
         var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
@@ -449,27 +450,28 @@ function attractionSearch(location){
     }).then(function(response) {
         console.log(response);
         for (var i = 0; i < response.businesses.length; i++){
-        var newRow = $("<div>").addClass("row attrCard");
-        var newDiv = $("<div>").addClass("col-md-8 infoCard");
-        var imageDiv = $("<div>").addClass("col-md-4");
-        var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
-        var name = $("<p>").text(response.businesses[i].name).addClass("topInfo");
-        var city = $("<p>").text(response.businesses[i].location.city);
-        var address = $("<p>").text(response.businesses[i].location.address1);
-        var price = $("<p>").text(response.businesses[i].price);
-        var rating = $("<p>").text(response.businesses[i].rating);
-        $(newRow).on("click",function(){
-          console.log("attraction!");
-        });
-        $(imageDiv).append(placeImage);
-        $(newDiv).append(name);
-        $(newDiv).append(city);
-        $(newDiv).append(address);
-        $(newDiv).append(price);
-        $(newDiv).append(rating);
-        $(newRow).append(imageDiv);
-        $(newRow).append(newDiv);
-        $("#attraction").append(newRow);
+          var newRow = $("<div>").addClass("row attrCard");
+          newRow.attr("coord",response.businesses[i].coordinates.latitude+","+response.businesses[i].coordinates.longitude);
+          var newDiv = $("<div>").addClass("col-md-8 infoCard");
+          var imageDiv = $("<div>").addClass("col-md-4");
+          var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
+          var name = $("<p>").text(response.businesses[i].name).addClass("topInfo");
+          var city = $("<p>").text(response.businesses[i].location.city);
+          var address = $("<p>").text(response.businesses[i].location.address1);
+          var price = $("<p>").text(response.businesses[i].price);
+          var rating = $("<p>").text(response.businesses[i].rating);
+          $(newRow).on("click",function(){
+            console.log($(this).attr("coord"));
+          });
+          $(imageDiv).append(placeImage);
+          $(newDiv).append(name);
+          $(newDiv).append(city);
+          $(newDiv).append(address);
+          $(newDiv).append(price);
+          $(newDiv).append(rating);
+          $(newRow).append(imageDiv);
+          $(newRow).append(newDiv);
+          $("#attraction").append(newRow);
         }
 
 
