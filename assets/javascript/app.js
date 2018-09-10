@@ -31,7 +31,6 @@
             center: {lat: lat, lng: long},
             zoom: zoomLevel
           });
-    console.log(3);
     if (setMarker === true){
       var marker = new google.maps.Marker({
          position: {lat: lat, lng: long},
