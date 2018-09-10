@@ -230,7 +230,7 @@ function calcRoute(routArr, method, efficientTravel){
 */
 function saveUserData(user, pass, saveObject){
   if (saveObject === undefined){
-    saveObject = {};
+    saveObject = [];
   }
   firestore.collection("user").where("name","==",user).get().then(function(response){
     if(response.docs.length > 0){
@@ -333,13 +333,37 @@ $("#saveForm").on("submit",function(event){
   userName = $(this)[0][0].value;
   passWord = $(this)[0][1].value;
   tripName = $(this)[0][2].value;
+  let tripObj;
   if(newUser === false){ //since the user exists we need to load the data and manipulate it.
     loadUserData(userName,passWord);
-    setTimeout(function(){console.log(currentData);},500);
+    setTimeout(function(){
+      tripObj = JSON.parse(currentData);
+      console.log(tripObj);
+      // check if trip already exists
+      for(let i = 0; i<tripObj.length; i++){
+        if(tripObj[i].tripName === tripName){ //it does exist
+          tripObj[i].trip = trip;
+          saveUserData(userName,passWord,JSON.stringify(tripObj));
+          return;
+        }
+      }
+      tripObj.push({
+        tripName: tripName,
+        trip: trip
+      });
+      saveUserData(userName,passWord,JSON.stringify(tripObj));
+    },500);
   }
-  let tripObj = [{
-    tripName: tripName,
-    trip: trip
-  }];
-  saveUserData(userName,passWord,JSON.stringify(tripObj));
+  else{
+    saveUserData(userName,passWord,JSON.stringify([{
+      tripName: tripName,
+      trip: trip
+    }]));
+  }
 });
+setTimeout(function(){
+  // saveUserData("dummy","dummy",JSON.stringify([{
+  //   tripName: "bling",
+  //   trip: trip
+  // }]));
+},1500);
