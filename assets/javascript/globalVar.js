@@ -14,3 +14,4 @@ let tripName = "";
 let newUser = true;
 let currentData;
 let isPass;
+var location;

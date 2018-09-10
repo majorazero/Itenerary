@@ -50,14 +50,108 @@
  /////////////////////////////////////////////
  ///// Event Functions
  /////////////////////////////////////////////
+/**
+* First page to 2nd Page.
+*/
 $("#submitBtn").click(function(){
     $("#containerOne").hide();
     $("#containerTwo").show();
 });
+/**
+* 2nd page to 3rd Page.
+*/
 $("#submitButton").click(function(){
     $("#containerOne").hide();
     $("#containerTwo").hide();
     $("#containerThree").show();
+});
+/**
+* Handles login events.
+*/
+$("#login").on("submit",function(event){
+  event.preventDefault();
+  userName = $(this)[0][0].value;
+  passWord = $(this)[0][1].value;
+  loadUserData(userName,passWord);
+  setTimeout(function(){
+    if(isPass === true){
+      $("#login").hide();
+      tripObj = JSON.parse(currentData);
+      for(let i = 0; i < tripObj.length; i++){
+        let tripSelectDiv = $("<div>").addClass("tripButtons");
+        let button = $("<button>").text(tripObj[i].tripName).addClass("btn btn-primary");
+        $(button).on("click",function(){
+          let tripObj = JSON.parse(currentData);
+          for(let i = 0; i < tripObj.length; i++){
+            if($(this).text() === tripObj[i].tripName){
+              trip = tripObj[i].trip;
+              tripName = tripObj[i].tripName;
+              newUser = false;
+              break;
+            }
+          }
+          $("#containerOne").hide();
+          $("#containerTwo").hide();
+          $("#containerThree").show();
+          $("#loadPrompt").modal("hide");
+        });
+        $(tripSelectDiv).append(button);
+        $("#loadBody").append(tripSelectDiv);
+      }
+    }
+    else{
+      $("#wrongPass").show();
+    }
+  },500);
+});
+/**
+* Handles how save button behaves on last page.
+*/
+$("#saveButton").on("click",function(){
+  if (newUser === false){
+    $("#userInput").val(userName);
+    $("#tripInput").val(tripName);
+  }
+});
+/**
+* Handles how the data is actually saved.
+*/
+$("#saveForm").on("submit",function(event){
+  $("#savePrompt").modal("hide");
+  event.preventDefault();
+  userName = $(this)[0][0].value;
+  passWord = $(this)[0][1].value;
+  tripName = $(this)[0][2].value;
+  $(this)[0][0].value = "";
+  $(this)[0][1].value = "";
+  $(this)[0][2].value = "";
+  let tripObj;
+  if(newUser === false){ //since the user exists we need to load the data and manipulate it.
+    loadUserData(userName,passWord);
+    setTimeout(function(){
+      tripObj = JSON.parse(currentData);
+      console.log(tripObj);
+      // check if trip already exists
+      for(let i = 0; i<tripObj.length; i++){
+        if(tripObj[i].tripName === tripName){ //it does exist
+          tripObj[i].trip = trip;
+          saveUserData(userName,passWord,JSON.stringify(tripObj));
+          return;
+        }
+      }
+      tripObj.push({
+        tripName: tripName,
+        trip: trip
+      });
+      saveUserData(userName,passWord,JSON.stringify(tripObj));
+    },500);
+  }
+  else{
+    saveUserData(userName,passWord,JSON.stringify([{
+      tripName: tripName,
+      trip: trip
+    }]));
+  }
 });
 /**
 * On click function for next day of the itinerary box
@@ -305,95 +399,9 @@ trip = [
   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 ];
-//Might not be needed since there are previous interfaces we will be interacting with.
 
-$("#login").on("submit",function(event){
-  event.preventDefault();
-  userName = $(this)[0][0].value;
-  passWord = $(this)[0][1].value;
-  loadUserData(userName,passWord);
-  setTimeout(function(){
-    if(isPass === true){
-      $("#login").hide();
-      tripObj = JSON.parse(currentData);
-      for(let i = 0; i < tripObj.length; i++){
-        let tripSelectDiv = $("<div>").addClass("tripButtons");
-        let button = $("<button>").text(tripObj[i].tripName).addClass("btn btn-primary");
-        $(button).on("click",function(){
-          let tripObj = JSON.parse(currentData);
-          for(let i = 0; i < tripObj.length; i++){
-            if($(this).text() === tripObj[i].tripName){
-              trip = tripObj[i].trip;
-              tripName = tripObj[i].tripName;
-              newUser = false;
-              break;
-            }
-          }
-          $("#containerOne").hide();
-          $("#containerTwo").hide();
-          $("#containerThree").show();
-          $("#loadPrompt").modal("hide");
-        });
-        $(tripSelectDiv).append(button);
-        $("#loadBody").append(tripSelectDiv);
-      }
-    }
-    else{
-      $("#wrongPass").show();
-    }
-  },500);
-});
-$("#saveButton").on("click",function(){
-  if (newUser === false){
-    $("#userInput").val(userName);
-    $("#tripInput").val(tripName);
-  }
-});
-$("#saveForm").on("submit",function(event){
-  $("#savePrompt").modal("hide");
-  event.preventDefault();
-  userName = $(this)[0][0].value;
-  passWord = $(this)[0][1].value;
-  tripName = $(this)[0][2].value;
-  $(this)[0][0].value = "";
-  $(this)[0][1].value = "";
-  $(this)[0][2].value = "";
-  let tripObj;
-  if(newUser === false){ //since the user exists we need to load the data and manipulate it.
-    loadUserData(userName,passWord);
-    setTimeout(function(){
-      tripObj = JSON.parse(currentData);
-      console.log(tripObj);
-      // check if trip already exists
-      for(let i = 0; i<tripObj.length; i++){
-        if(tripObj[i].tripName === tripName){ //it does exist
-          tripObj[i].trip = trip;
-          saveUserData(userName,passWord,JSON.stringify(tripObj));
-          return;
-        }
-      }
-      tripObj.push({
-        tripName: tripName,
-        trip: trip
-      });
-      saveUserData(userName,passWord,JSON.stringify(tripObj));
-    },500);
-  }
-  else{
-    saveUserData(userName,passWord,JSON.stringify([{
-      tripName: tripName,
-      trip: trip
-    }]));
-  }
-});
-setTimeout(function(){
-  // saveUserData("dummy","dummy",JSON.stringify([{
-  //   tripName: "bling",
-  //   trip: trip
-  // }]));
-},1500);
 
-var location;
+
 
 function restaurantSearch(location){
     $.ajax({
