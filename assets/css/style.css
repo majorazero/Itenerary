@@ -95,7 +95,7 @@ img {
     height: 120px;
     width: 120px;
     display: block;
-    margin: 10px;
+    margin: 3px;
 
 }
 
@@ -120,5 +120,13 @@ p {
   background-color: red;
 }
 #place p, #attraction p {
+  margin: 2px;
+}
+.restCard {
+  background-color: lightgreen;
+  margin: 2px;
+}
+.attrCard {
+  background-color: tan;
   margin: 2px;
 }

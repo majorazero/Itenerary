@@ -418,8 +418,8 @@ function restaurantSearch(location){
     }).then(function(response) {
         console.log(response);
         for (var i = 0; i < response.businesses.length; i++){
-        var newRow = $("<div>").addClass("row");
-        var newDiv = $("<div>").addClass("col-md-8");
+        var newRow = $("<div>").addClass("row restCard");
+        var newDiv = $("<div>").addClass("col-md-8 infoCard");
         var imageDiv = $("<div>").addClass("col-md-4");
         var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
         var name = $("<p>").text(response.businesses[i].name).addClass("topInfo");
@@ -452,8 +452,8 @@ function attractionSearch(location){
     }).then(function(response) {
         console.log(response);
         for (var i = 0; i < response.businesses.length; i++){
-        var newRow = $("<div>").addClass("row");
-        var newDiv = $("<div>").addClass("col-md-8");
+        var newRow = $("<div>").addClass("row attrCard");
+        var newDiv = $("<div>").addClass("col-md-8 infoCard");
         var imageDiv = $("<div>").addClass("col-md-4");
         var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
         var name = $("<p>").text(response.businesses[i].name).addClass("topInfo");
