@@ -79,8 +79,6 @@ display: none;
   height: 500px;
 }
 
-/* working on it */
-
 #wrongPass {
   display: none;
   color: red;
@@ -114,4 +112,13 @@ p {
 
 .topInfo {
     margin-top: 3px;
+}
+
+/* working on it */
+#place, #attraction {
+  border-radius: 10px;
+  background-color: red;
+}
+#place p, #attraction p {
+  margin: 2px;
 }
