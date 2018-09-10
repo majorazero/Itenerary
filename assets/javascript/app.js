@@ -503,7 +503,7 @@ function attractionSearch(location){
 $("#submitBtn").on("click", function(event) {
     event.preventDefault();
     var inputDestination = $("#destinationInput").val().trim();
-    let dayStaying = dayOutputter($("#startDateInput").val(),$("#endDateInput").val());
+    dayStaying = dayOutputter($("#startDateInput").val(),$("#endDateInput").val());
     if(dayStaying <= 0){
       console.log("You can't go back in time.");
     }
