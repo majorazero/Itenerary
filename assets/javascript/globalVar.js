@@ -13,3 +13,4 @@ let passWord = "";
 let tripName = "";
 let newUser = true;
 let currentData;
+let isPass;

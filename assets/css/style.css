@@ -80,6 +80,10 @@ display: none;
 #saveForm {
   display: none;
 }
+#wrongPass {
+  display: none;
+  color: red;
+}
 .tripButtons{
   margin: 2px;
 }

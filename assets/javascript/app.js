@@ -269,9 +269,11 @@ function loadUserData(userName, pass){
       let doc = response.docs[0].data();
       if(pass !== doc.password){
         console.log("Incorrect password");
+        isPass = false;
       }
       else{
         console.log("Access granted");
+        isPass = true;
         currentData = doc.data;
       }
     }
@@ -311,26 +313,31 @@ $("#login").on("submit",function(event){
   console.log(userName,passWord);
   loadUserData(userName,passWord);
   setTimeout(function(){
-    $("#login").hide();
-    tripObj = JSON.parse(currentData);
-    for(let i = 0; i < tripObj.length; i++){
-      let tripSelectDiv = $("<div>").addClass("tripButtons");
-      let button = $("<button>").text(tripObj[i].tripName).addClass("btn btn-primary");
-      $(button).on("click",function(){
-        let tripObj = JSON.parse(currentData);
-        for(let i = 0; i < tripObj.length; i++){
-          if($(this).text() === tripObj[i].tripName){
-            trip = tripObj[i].trip;
-            break;
+    if(isPass === true){
+      $("#login").hide();
+      tripObj = JSON.parse(currentData);
+      for(let i = 0; i < tripObj.length; i++){
+        let tripSelectDiv = $("<div>").addClass("tripButtons");
+        let button = $("<button>").text(tripObj[i].tripName).addClass("btn btn-primary");
+        $(button).on("click",function(){
+          let tripObj = JSON.parse(currentData);
+          for(let i = 0; i < tripObj.length; i++){
+            if($(this).text() === tripObj[i].tripName){
+              trip = tripObj[i].trip;
+              break;
+            }
           }
-        }
-        $("#containerOne").hide();
-        $("#containerTwo").hide();
-        $("#containerThree").show();
-        $("#loadPrompt").modal("hide");
-      });
-      $(tripSelectDiv).append(button);
-      $("#loadBody").append(tripSelectDiv);
+          $("#containerOne").hide();
+          $("#containerTwo").hide();
+          $("#containerThree").show();
+          $("#loadPrompt").modal("hide");
+        });
+        $(tripSelectDiv).append(button);
+        $("#loadBody").append(tripSelectDiv);
+      }
+    }
+    else{
+      $("#wrongPass").show();
     }
   },500);
 });
@@ -357,6 +364,9 @@ $("#saveForm").on("submit",function(event){
   userName = $(this)[0][0].value;
   passWord = $(this)[0][1].value;
   tripName = $(this)[0][2].value;
+  $(this)[0][0].value = "";
+  $(this)[0][1].value = "";
+  $(this)[0][2].value = "";
   let tripObj;
   if(newUser === false){ //since the user exists we need to load the data and manipulate it.
     loadUserData(userName,passWord);
