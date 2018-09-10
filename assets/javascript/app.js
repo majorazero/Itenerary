@@ -76,7 +76,7 @@ $("#login").on("submit",function(event){
     if(isPass === true){
       $("#wrongPass").hide();
       $("#login").hide();
-      tripObj = JSON.parse(currentData);
+      let tripObj = JSON.parse(currentData);
       for(let i = 0; i < tripObj.length; i++){
         let tripSelectDiv = $("<div>").addClass("tripButtons");
         let button = $("<button>").text(tripObj[i].tripName).addClass("btn btn-primary");
@@ -86,6 +86,9 @@ $("#login").on("submit",function(event){
             if($(this).text() === tripObj[i].tripName){
               trip = tripObj[i].trip;
               tripName = tripObj[i].tripName;
+              yelpSearch(trip[i].lat+","+trip[i].log,"restaurants");
+              yelpSearch(trip[i].lat+","+trip[i].log,"attractions");
+              calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
               newUser = false;
               break;
             }
@@ -102,7 +105,7 @@ $("#login").on("submit",function(event){
     else{
       $("#wrongPass").show();
     }
-  },500);
+  },1500);
 });
 /**
 * Handles how save button behaves on last page.
@@ -124,31 +127,7 @@ $("#saveForm").on("submit",function(event){
   $(this)[0][1].value = "";
   let tripObj;
   if(newUser === false){ //since the user exists we need to load the data and manipulate it.
-    loadUserData(userName,passWord);
-    setTimeout(function(){
-      if(isPass === true){
-        $("#wrongPass2").hide();
-        $("#savePrompt").modal("hide");
-        tripObj = JSON.parse(currentData);
-        console.log(tripObj);
-        // check if trip already exists
-        for(let i = 0; i<tripObj.length; i++){
-          if(tripObj[i].tripName === tripName){ //it does exist
-            tripObj[i].trip = trip;
-            saveUserData(userName,passWord,JSON.stringify(tripObj));
-            return;
-          }
-        }
-        tripObj.push({
-          tripName: tripName,
-          trip: trip
-        });
-        saveUserData(userName,passWord,JSON.stringify(tripObj));
-      }
-      else {
-        $("#wrongPass2").show();
-      }
-    },500);
+    loadUserData(userName,passWord,"login");
   }
   else{
     saveUserData(userName,passWord,JSON.stringify([{
@@ -359,7 +338,7 @@ function saveUserData(user, pass, saveObject){
 * @param {String} userName - String that is the username the user wants to load
 * @param {String} pass - String that is the password, needed for new users to load existing files
 */
-function loadUserData(user, pass){
+function loadUserData(user, pass, type){
   firestore.collection("user").where("name","==",user).get().then(function(response){
     if(response.docs.length > 0) {
       let doc = response.docs[0].data();
@@ -372,6 +351,9 @@ function loadUserData(user, pass){
         userName = user;
         isPass = true;
         currentData = doc.data;
+        if(type === "login"){
+          login();
+        }
       }
     }
     else{
@@ -536,3 +518,38 @@ function dayOutputter(startTime,endTime){
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 // ];
+
+function login(){
+  if(isPass === true){
+    $("#wrongPass").hide();
+    $("#login").hide();
+    let tripObj = JSON.parse(currentData);
+    for(let i = 0; i < tripObj.length; i++){
+      let tripSelectDiv = $("<div>").addClass("tripButtons");
+      let button = $("<button>").text(tripObj[i].tripName).addClass("btn btn-primary");
+      $(button).on("click",function(){
+        let tripObj = JSON.parse(currentData);
+        for(let i = 0; i < tripObj.length; i++){
+          if($(this).text() === tripObj[i].tripName){
+            trip = tripObj[i].trip;
+            tripName = tripObj[i].tripName;
+            yelpSearch(trip[i].lat+","+trip[i].log,"restaurants");
+            yelpSearch(trip[i].lat+","+trip[i].log,"attractions");
+            calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
+            newUser = false;
+            break;
+          }
+        }
+        $("#containerOne").hide();
+        $("#containerTwo").hide();
+        $("#containerThree").show();
+        $("#loadPrompt").modal("hide");
+      });
+      $(tripSelectDiv).append(button);
+      $("#loadBody").append(tripSelectDiv);
+    }
+  }
+  else{
+    $("#wrongPass").show();
+  }
+}
