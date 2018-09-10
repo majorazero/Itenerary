@@ -56,8 +56,8 @@
 */
 $("#submitButton").click(function(){
     $("#containerOne").hide();
-    $("#containerTwo").hide();
-    $("#containerThree").show();
+    $("#containerTwo").fadeOut();
+    $("#containerThree").fadeIn(3000);
 });
 /**
 * Handles login events.
@@ -503,8 +503,8 @@ $("#submitBtn").on("click", function(event) {
 
     var inputDestination = $("#destinationInput").val().trim();
     if(inputDestination !== ""){
-      $("#containerOne").hide();
-      $("#containerTwo").show();
+      $("#containerOne").fadeOut(2500);
+      $("#containerTwo").fadeIn(2500);
       restaurantSearch(inputDestination);
       attractionSearch(inputDestination);
     }
@@ -562,7 +562,7 @@ function myHotel(location) {
 
 
 $("#submitBtn").on("click", function(event) {
-
+  
   event.preventDefault();
 
   var inputDestination = $("#destinationInput").val().trim();
