@@ -97,7 +97,6 @@ display: none;
     background-color: #262960;
     color: white;
     font-family: "josefin slab";
-
 }
 
 
@@ -189,6 +188,10 @@ p {
     #iteHeader {
         width: 490px;
     }
+
+    #place p {
+        margin-left: 10px;
+    }
 }
 
 @media screen and (max-width: 990px){
@@ -231,5 +234,24 @@ p {
     #place p {
         margin: 0px;
     }
+
+    p {
+        font-size: 16px;
+    }
+
+    #iteHeader {
+        width: 475px;
+    }
+
+    @media screen and (max-width: 530px){
+        #iteHeader {
+            width: 345px;
+        }
+
+        #place p {
+            margin-left: 10px;
+        }
+    }
+
 
 }

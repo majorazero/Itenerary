@@ -420,8 +420,8 @@ function restaurantSearch(location){
         newRow.attr("long",response.businesses[i].coordinates.longitude);
         newRow.attr("locName",response.businesses[i].name);
         newRow.attr("imgUrl",response.businesses[i].image_url);
-        var newDiv = $("<div>").addClass("col-md-8 infoCard");
-        var imageDiv = $("<div>").addClass("col-md-4 imageCard");
+        var newDiv = $("<div>").addClass("col-md-8 col-sm-8 col-8 infoCard");
+        var imageDiv = $("<div>").addClass("col-md-4 col-sm-4 col-4 imageCard");
         var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
         var name = $("<p>").text(response.businesses[i].name).addClass("topInfo").attr("id", "titleName");
         var city = $("<p>").text(response.businesses[i].location.city);
@@ -468,8 +468,8 @@ function attractionSearch(location){
           newRow.attr("long",response.businesses[i].coordinates.longitude);
           newRow.attr("locName",response.businesses[i].name);
           newRow.attr("imgUrl",response.businesses[i].image_url);
-          var newDiv = $("<div>").addClass("col-md-8 infoCard");
-          var imageDiv = $("<div>").addClass("col-md-4");
+          var newDiv = $("<div>").addClass("col-md-8 col-sm-8 col-8 infoCard");
+          var imageDiv = $("<div>").addClass("col-md-4 col-sm-4 col-4");
           var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
           var name = $("<p>").text(response.businesses[i].name).addClass("topInfo").attr("id", "titleName");;
           var city = $("<p>").text(response.businesses[i].location.city);
