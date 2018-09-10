@@ -60,6 +60,9 @@ display: none;
     margin-top: 400px;
 }
 
+#containerOne {
+}
+
 #containerTwo {
     display: none;
 }
@@ -74,4 +77,26 @@ display: none;
 
 #map {
   height: 500px;
+}
+img {
+    height: 120px;
+    width: 120px;
+    display: block;
+    margin: 10px;
+
+}
+
+#restaurantInfo {
+    background-color: aquamarine;
+}
+#restaurantInfoTwo {
+    background-color: purple;
+}
+
+p {
+    margin: -5px;
+}
+
+.topInfo {
+    margin-top: 3px;
 }
