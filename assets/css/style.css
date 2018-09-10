@@ -5,7 +5,7 @@ display: none;
 .container {
     background-color: lightblue;
     margin-bottom: 50px;
-    height: 800px;
+    height: auto;
 }
 .iteDiv {
   height: 50px;
