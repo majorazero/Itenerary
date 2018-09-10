@@ -77,9 +77,7 @@ display: none;
 }
 
 /* working on it */
-#saveForm {
-  display: none;
-}
+
 #wrongPass {
   display: none;
   color: red;

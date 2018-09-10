@@ -263,8 +263,8 @@ function saveUserData(user, pass, saveObject){
 * @param {String} userName - String that is the username the user wants to load
 * @param {String} pass - String that is the password, needed for new users to load existing files
 */
-function loadUserData(userName, pass){
-  firestore.collection("user").where("name","==",userName).get().then(function(response){
+function loadUserData(user, pass){
+  firestore.collection("user").where("name","==",user).get().then(function(response){
     if(response.docs.length > 0) {
       let doc = response.docs[0].data();
       if(pass !== doc.password){
@@ -273,6 +273,7 @@ function loadUserData(userName, pass){
       }
       else{
         console.log("Access granted");
+        userName = user;
         isPass = true;
         currentData = doc.data;
       }
@@ -310,7 +311,6 @@ $("#login").on("submit",function(event){
   event.preventDefault();
   userName = $(this)[0][0].value;
   passWord = $(this)[0][1].value;
-  console.log(userName,passWord);
   loadUserData(userName,passWord);
   setTimeout(function(){
     if(isPass === true){
@@ -324,6 +324,8 @@ $("#login").on("submit",function(event){
           for(let i = 0; i < tripObj.length; i++){
             if($(this).text() === tripObj[i].tripName){
               trip = tripObj[i].trip;
+              tripName = tripObj[i].tripName;
+              newUser = false;
               break;
             }
           }
@@ -342,21 +344,10 @@ $("#login").on("submit",function(event){
   },500);
 });
 $("#saveButton").on("click",function(){
-  $("#newUserSave").show();
-  $("#existUserSave").show();
-  $("#saveForm").hide();
-});
-$("#newUserSave").on("click",function(){
-  newUser = true;
-  $("#newUserSave").hide();
-  $("#existUserSave").hide();
-  $("#saveForm").show();
-});
-$("#existUserSave").on("click",function(){
-  newUser = false;
-  $("#newUserSave").hide();
-  $("#existUserSave").hide();
-  $("#saveForm").show();
+  if (newUser === false){
+    $("#userInput").val(userName);
+    $("#tripInput").val(tripName);
+  }
 });
 $("#saveForm").on("submit",function(event){
   $("#savePrompt").modal("hide");
