@@ -43,6 +43,27 @@
  /////////////////////////////////////////////
  ///// Event Functions
  /////////////////////////////////////////////
+ /**
+ * Deals with front page transition.
+ */
+ $("#submitBtn").on("click", function(event) {
+     event.preventDefault();
+     var inputDestination = $("#destinationInput").val().trim();
+     dayStaying = dayOutputter($("#startDateInput").val(),$("#endDateInput").val());
+     if(dayStaying <= 0){
+       console.log("You can't go back in time.");
+     }
+     else{
+       if(inputDestination !== ""){
+         $("#containerOne").hide();
+         $("#containerTwo").show();
+         myHotel(inputDestination);
+       }
+       else{
+         console.log("You didn't input a location!");
+       }
+     }
+ });
 /**
 * Handles login events.
 */
@@ -174,6 +195,7 @@ $("#methodSwitch").on("click",function(){
 /////////////////////////////////////////////
 ///// Functions
 /////////////////////////////////////////////
+
 /**
 * This renders all the functionalities of the itineraryBox
 */
@@ -355,29 +377,6 @@ function loadUserData(user, pass){
   });
 }
 /**
-* This extracts latitude and longitude out of the object, and produces an array compatible with calcRoute()
-* @param {Array} arr - Array of Objects that represent trip locations.
-*/
-function latLongParser(arr){
-  let parsedArr = [];
-  for(let i = 0; i < arr.length; i++){
-    parsedArr.push(arr[i].lat+","+arr[i].long);
-  }
-  return parsedArr;
-}
-/////////////////////////////////////////////
-///// Testing Junk
-/////////////////////////////////////////////
-
-//each array is the itenerary for the day.
-//this is mock data
-// trip = [
-//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.141133",long:"-118.224108", loc: "Point B"},{lat: "34.143721",long:"-118.256334", loc: "Point C"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
-//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
-//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
-// ];
-
-/**
 * This searches restaurants or attractions based on the term and appends the elements to their sections
 * @param {String} location - It's a string of either a coordinate or address that Yelp's API will interpret
 * @param {String} term - This is what we're looking for, either "restaurants" or "attractions"
@@ -435,62 +434,6 @@ function yelpSearch(location,term){
       }
     });
 }
-
-/**
-* Deals with front page transition.
-*/
-$("#submitBtn").on("click", function(event) {
-    event.preventDefault();
-    var inputDestination = $("#destinationInput").val().trim();
-    dayStaying = dayOutputter($("#startDateInput").val(),$("#endDateInput").val());
-    if(dayStaying <= 0){
-      console.log("You can't go back in time.");
-    }
-    else{
-      if(inputDestination !== ""){
-        $("#containerOne").hide();
-        $("#containerTwo").show();
-        myHotel(inputDestination);
-      }
-      else{
-        console.log("You didn't input a location!");
-      }
-    }
-});
-/**
-* Initialize the trip for new users.
-* @param {Integer} dayStaying - The length of user's trip.
-* @param {String} long - A string of the longitude of initial location.
-* @param {String} lat - A string of the latitude of initial location.
-*/
-function tripInit(dayStaying,long,lat){
-  //let's create our trip with length of day Staying
-  trip = new Array(dayStaying);
-  for(let i = 0; i < trip.length; i++){
-    //each day of the trip should have 2 locations (home) popped in
-    let baseLoc = {
-      lat: lat,
-      long: long,
-      loc: "Home"
-    };
-    trip[i] = [];
-    trip[i].push(baseLoc);
-    trip[i].push(baseLoc);
-  }
-  calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-}
-/**
-* Interprets the date inputs and return's the difference in days
-* @param {String} startTime - String input of the start date.
-* @param {String} endTime - String input of the end date.
-*/
-function dayOutputter(startTime,endTime){
-  let startDate = new Date(startTime);
-  let endDate = new Date(endTime);
-  let timeDiff = endDate.getTime()-startDate.getTime();
-  let dayDiff = Math.ceil(timeDiff/(1000*3600*24));
-  return dayDiff;
-}
 /**
 * Generates a list of hotels based on destination input that can be picked from and sets the initial trip
 * @param {String} location - A string of a location that Yelp API will interpret
@@ -534,3 +477,59 @@ function myHotel(location) {
     }
   });
 }
+/**
+* Initialize the trip for new users.
+* @param {Integer} dayStaying - The length of user's trip.
+* @param {String} long - A string of the longitude of initial location.
+* @param {String} lat - A string of the latitude of initial location.
+*/
+function tripInit(dayStaying,long,lat){
+  //let's create our trip with length of day Staying
+  trip = new Array(dayStaying);
+  for(let i = 0; i < trip.length; i++){
+    //each day of the trip should have 2 locations (home) popped in
+    let baseLoc = {
+      lat: lat,
+      long: long,
+      loc: "Home"
+    };
+    trip[i] = [];
+    trip[i].push(baseLoc);
+    trip[i].push(baseLoc);
+  }
+  calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
+}
+/**
+* This extracts latitude and longitude out of the object, and produces an array compatible with calcRoute()
+* @param {Array} arr - Array of Objects that represent trip locations.
+*/
+function latLongParser(arr){
+  let parsedArr = [];
+  for(let i = 0; i < arr.length; i++){
+    parsedArr.push(arr[i].lat+","+arr[i].long);
+  }
+  return parsedArr;
+}
+/**
+* Interprets the date inputs and return's the difference in days
+* @param {String} startTime - String input of the start date.
+* @param {String} endTime - String input of the end date.
+*/
+function dayOutputter(startTime,endTime){
+  let startDate = new Date(startTime);
+  let endDate = new Date(endTime);
+  let timeDiff = endDate.getTime()-startDate.getTime();
+  let dayDiff = Math.ceil(timeDiff/(1000*3600*24));
+  return dayDiff;
+}
+/////////////////////////////////////////////
+///// Testing Junk
+/////////////////////////////////////////////
+
+//each array is the itenerary for the day.
+//this is mock data
+// trip = [
+//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.141133",long:"-118.224108", loc: "Point B"},{lat: "34.143721",long:"-118.256334", loc: "Point C"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
+//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
+//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
+// ];
