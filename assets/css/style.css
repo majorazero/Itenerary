@@ -34,6 +34,9 @@
     margin-top: 400px;
 }
 
+#containerOne {
+}
+
 #containerTwo {
     display: none;
 }
@@ -44,4 +47,27 @@
 
 #topContainerThree {
     margin-bottom: 50px;
+}
+
+img {
+    height: 120px;
+    width: 120px;
+    display: block;
+    margin: 10px;
+    
+}
+
+#restaurantInfo {
+    background-color: aquamarine;
+}
+#restaurantInfoTwo {
+    background-color: purple;
+}
+
+p {
+    margin: -5px;
+}
+
+.topInfo {
+    margin-top: 3px;
 }
