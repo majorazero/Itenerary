@@ -41,9 +41,6 @@
    directionDisplay.setMap(map);
    let listener1 = map.addListener("tilesloaded",function(){
      calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-     setTimeout(function(){
-       iteBoxRender();
-     },50);
      google.maps.event.removeListener(listener1);
    });
  }
@@ -161,7 +158,7 @@ $("#iteButNextDay").on("click",function(){
     currentDay++;
     //update route
     calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-    iteBoxRender();
+    //teBoxRender();
   }
 });
 /**
@@ -173,7 +170,6 @@ $("#iteButPrevDay").on("click",function(){
     currentDay--;
     //update route
     calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-    iteBoxRender();
   }
 });
 /**
@@ -187,7 +183,6 @@ $("#methodSwitch").on("click",function(){
     travelMethod = "DRIVING";
   }
   calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-  iteBoxRender();
 });
 /////////////////////////////////////////////
 ///// Functions
@@ -213,12 +208,11 @@ function iteBoxRender(){
         deleteButton.on("click",function(){
           //removes data from trip
           currentDayIte.splice($(this).parent().attr("data-pos"),1);
-          //update route
-          calcRoute(latLongParser(currentDayIte),travelMethod);
           //visually remove this from the parent
           $(this).parent().remove();
           //call the render function again to re-render
-          iteBoxRender();
+          //update route
+          calcRoute(latLongParser(currentDayIte),travelMethod);
         });
         let moveUp = $("<button>").text("Move Up");
         moveUp.on("click",function(){
@@ -229,8 +223,6 @@ function iteBoxRender(){
             trip[currentDay-1].splice(newPos,0,currentPoint[0]);
             //update route
             calcRoute(latLongParser(currentDayIte),travelMethod);
-            //call the render function again to re-render
-            iteBoxRender();
           }
         });
         let moveDown = $("<button>").text("Move Down");
@@ -243,8 +235,6 @@ function iteBoxRender(){
             //update route
             calcRoute(latLongParser(currentDayIte),travelMethod);
             console.log(dayJourney);
-            //call the render function again to re-render
-            iteBoxRender();
           }
         });
         $(iteDiv).append(deleteButton);
@@ -313,6 +303,7 @@ function calcRoute(routArr, method, efficientTravel){
       }
       directionDisplay.setDirections(response);
     }
+    iteBoxRender();
   });
 }
 /**
@@ -402,9 +393,10 @@ trip = [
 
 
 
-function restaurantSearch(location){
+function restaurantSearch(location,term){
+    //terms should only equal resturants or attractions
     $.ajax({
-        url: corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term=restaurants&location=" + location,
+        url: corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term="+term+"&location="+location,
         method: "GET",
         headers: {
         Authorization : "Bearer TxSJ8z1klgIhuCb6UUsaQ35YjBgp7ZUMyktzsEeW3HdM3D7cu0qspdXjNBziwKIe_6WL5PjW7k1EF4rCL4DD-8cXPvU156T2feTri3g6jHMp3Aw4Xs3IFXAJ7o60WnYx"
@@ -433,7 +425,6 @@ function restaurantSearch(location){
             long: $(this).attr("long"),
             loc: $(this).attr("locName")});
           calcRoute(latLongParser(currentTrip,travelMethod));
-          setTimeout(iteBoxRender,500);
         });
         $(imageDiv).append(placeImage);
         $(newDiv).append(name);
@@ -481,7 +472,6 @@ function attractionSearch(location){
               long: $(this).attr("long"),
               loc: $(this).attr("locName")});
             calcRoute(latLongParser(currentTrip,travelMethod));
-            setTimeout(iteBoxRender,500);
           });
           $(imageDiv).append(placeImage);
           $(newDiv).append(name);
@@ -512,7 +502,7 @@ $("#submitBtn").on("click", function(event) {
         tripInit(dayStaying);
         $("#containerOne").hide();
         $("#containerTwo").show();
-        restaurantSearch(inputDestination);
+        restaurantSearch(inputDestination,"restuarants");
         attractionSearch(inputDestination);
       }
       else{
