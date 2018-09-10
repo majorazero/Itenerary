@@ -503,14 +503,13 @@ function attractionSearch(location){
 $("#submitBtn").on("click", function(event) {
     event.preventDefault();
     var inputDestination = $("#destinationInput").val().trim();
-    let inputStartDate =$("#startDateInput").val();
-    let inputEndDate =$("#endDateInput").val();
-    let dayStaying = dayOutputter(inputStartDate,inputEndDate);
+    let dayStaying = dayOutputter($("#startDateInput").val(),$("#endDateInput").val());
     if(dayStaying <= 0){
       console.log("You can't go back in time.");
     }
     else{
       if(inputDestination !== ""){
+        tripInit(dayStaying);
         $("#containerOne").hide();
         $("#containerTwo").show();
         restaurantSearch(inputDestination);
@@ -521,11 +520,26 @@ $("#submitBtn").on("click", function(event) {
       }
     }
   });
-
-  function dayOutputter(startTime,endTime){
-    let startDate = new Date(startTime);
-    let endDate = new Date(endTime);
-    let timeDiff = endDate.getTime()-startDate.getTime();
-    let dayDiff = Math.ceil(timeDiff/(1000*3600*24));
-    return dayDiff;
+function tripInit(dayStaying){
+  //let's create our trip with length of day Staying
+  trip = new Array(dayStaying);
+  for(let i = 0; i < trip.length; i++){
+    //each day of the trip should have 2 locations (home) popped in
+    let baseLoc = {
+      lat: "34.136379",
+      long: "-118.243752",
+      loc: "Home"
+    };
+    trip[i] = [];
+    trip[i].push(baseLoc);
+    trip[i].push(baseLoc);
   }
+  console.log(trip);
+}
+function dayOutputter(startTime,endTime){
+  let startDate = new Date(startTime);
+  let endDate = new Date(endTime);
+  let timeDiff = endDate.getTime()-startDate.getTime();
+  let dayDiff = Math.ceil(timeDiff/(1000*3600*24));
+  return dayDiff;
+}
