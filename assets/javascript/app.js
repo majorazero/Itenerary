@@ -228,17 +228,17 @@ function calcRoute(routArr, method, efficientTravel){
 * @param {String} pass - String that is the password, needed for new users and/or to update existing files
 * @param {Object} saveObject - Object that contains all the data our page needs.
 */
-function saveUserData(userName, pass, saveObject){
+function saveUserData(user, pass, saveObject){
   if (saveObject === undefined){
     saveObject = {};
   }
-  firestore.collection("user").where("name","==",userName).get().then(function(response){
+  firestore.collection("user").where("name","==",user).get().then(function(response){
     if(response.docs.length > 0){
       console.log("User found!");
       if(pass === response.docs[0].data().password){
         console.log("Updating...");
         firestore.collection("user").doc(userName).set({
-          name: userName,
+          name: user,
           password: pass,
           data: saveObject
         });
@@ -250,8 +250,8 @@ function saveUserData(userName, pass, saveObject){
     else {
       console.log("Doesn't exist!");
       console.log("Creating new user...");
-      firestore.collection("user").doc(userName).set({
-        name: userName,
+      firestore.collection("user").doc(user).set({
+        name: user,
         password: pass,
         data: saveObject
       });
@@ -272,7 +272,7 @@ function loadUserData(userName, pass){
       }
       else{
         console.log("Access granted");
-        return doc.data;
+        currentData = doc.data;
       }
     }
     else{
@@ -316,11 +316,13 @@ $("#saveButton").on("click",function(){
   $("#saveForm").hide();
 });
 $("#newUserSave").on("click",function(){
+  newUser = true;
   $("#newUserSave").hide();
   $("#existUserSave").hide();
   $("#saveForm").show();
 });
 $("#existUserSave").on("click",function(){
+  newUser = false;
   $("#newUserSave").hide();
   $("#existUserSave").hide();
   $("#saveForm").show();
@@ -331,5 +333,13 @@ $("#saveForm").on("submit",function(event){
   userName = $(this)[0][0].value;
   passWord = $(this)[0][1].value;
   tripName = $(this)[0][2].value;
-  console.log(userName,passWord,tripName);
+  if(newUser === false){ //since the user exists we need to load the data and manipulate it.
+    loadUserData(userName,passWord);
+    setTimeout(function(){console.log(currentData);},500);
+  }
+  let tripObj = [{
+    tripName: tripName,
+    trip: trip
+  }];
+  saveUserData(userName,passWord,JSON.stringify(tripObj));
 });

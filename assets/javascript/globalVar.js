@@ -11,3 +11,5 @@ let travelMethod = "DRIVING";
 let userName = "";
 let passWord = "";
 let tripName = "";
+let newUser = true;
+let currentData;
