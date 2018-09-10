@@ -377,9 +377,12 @@ function latLongParser(arr){
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 // ];
 
-
+/**
+* This searches restaurants or attractions based on the term and appends the elements to their sections
+* @param {String} location - It's a string of either a coordinate or address that Yelp's API will interpret
+* @param {String} term - This is what we're looking for, either "restaurants" or "attractions"
+*/
 function yelpSearch(location,term){
-    //terms should only equal resturants or attractions
     $.ajax({
         url: corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term="+term+"&location="+location,
         method: "GET",
@@ -408,7 +411,6 @@ function yelpSearch(location,term){
         var price = $("<p>").text(response.businesses[i].price);
         var rating = $("<p>").text(response.businesses[i].rating);
         $(newRow).on("click",function(){
-          //we'll push to the end of the trip of the current day
           let currentTrip = trip[currentDay-1];
           currentTrip.splice(currentTrip.length-1,0,{
             lat: $(this).attr("lat"),
@@ -430,10 +432,6 @@ function yelpSearch(location,term){
         else if (term === "attractions"){
           $("#attraction").append(newRow);
         }
-      }
-      //we'll initialze the trip here... since i need to know the center and i only want this to trigger ONCE.
-      if(trip === undefined){
-        tripInit(dayStaying,response.region.center.longitude,response.region.center.latitude);
       }
     });
 }
@@ -458,7 +456,13 @@ $("#submitBtn").on("click", function(event) {
         console.log("You didn't input a location!");
       }
     }
-  });
+});
+/**
+* Initialize the trip for new users.
+* @param {Integer} dayStaying - The length of user's trip.
+* @param {String} long - A string of the longitude of initial location.
+* @param {String} lat - A string of the latitude of initial location.
+*/
 function tripInit(dayStaying,long,lat){
   //let's create our trip with length of day Staying
   trip = new Array(dayStaying);
@@ -475,6 +479,11 @@ function tripInit(dayStaying,long,lat){
   }
   calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
 }
+/**
+* Interprets the date inputs and return's the difference in days
+* @param {String} startTime - String input of the start date.
+* @param {String} endTime - String input of the end date.
+*/
 function dayOutputter(startTime,endTime){
   let startDate = new Date(startTime);
   let endDate = new Date(endTime);
@@ -482,9 +491,10 @@ function dayOutputter(startTime,endTime){
   let dayDiff = Math.ceil(timeDiff/(1000*3600*24));
   return dayDiff;
 }
-
-
-// .. ajax the api shit ..//
+/**
+* Generates a list of hotels based on destination input that can be picked from and sets the initial trip
+* @param {String} location - A string of a location that Yelp API will interpret
+*/
 function myHotel(location) {
     $.ajax({
     "url": corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term=hotels&limit=4&location= " + location,
@@ -492,8 +502,7 @@ function myHotel(location) {
     "headers": {
       "Authorization": "Bearer DnFZKNqaKHmAOQ2-KzI-F0wsEHmH1HrT-k7U7IILrqGNlqL0J3nz1EM5KaSOu3o6ljzjy8UUPRyAifAu5_yM38LMc3oIUizj_Tp6rNVK0LakJK850r8lAtViWXWRW3Yx",
     }
-  })
-  .then(function(response) {
+  }).then(function(response) {
     for (var i = 0; i < response.businesses.length; i++) {
       var hotelRow = $("<div>").addClass("row");
       hotelRow.attr("lat",response.businesses[i].coordinates.latitude);
@@ -523,5 +532,5 @@ function myHotel(location) {
       $(hotelRow).append(hotelImage);
       $("#insert").append(hotelRow);
     }
-  })
+  });
 }
