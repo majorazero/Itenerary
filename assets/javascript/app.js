@@ -71,41 +71,7 @@ $("#login").on("submit",function(event){
   event.preventDefault();
   userName = $(this)[0][0].value;
   passWord = $(this)[0][1].value;
-  loadUserData(userName,passWord);
-  setTimeout(function(){
-    if(isPass === true){
-      $("#wrongPass").hide();
-      $("#login").hide();
-      let tripObj = JSON.parse(currentData);
-      for(let i = 0; i < tripObj.length; i++){
-        let tripSelectDiv = $("<div>").addClass("tripButtons");
-        let button = $("<button>").text(tripObj[i].tripName).addClass("btn btn-primary");
-        $(button).on("click",function(){
-          let tripObj = JSON.parse(currentData);
-          for(let i = 0; i < tripObj.length; i++){
-            if($(this).text() === tripObj[i].tripName){
-              trip = tripObj[i].trip;
-              tripName = tripObj[i].tripName;
-              yelpSearch(trip[i].lat+","+trip[i].log,"restaurants");
-              yelpSearch(trip[i].lat+","+trip[i].log,"attractions");
-              calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-              newUser = false;
-              break;
-            }
-          }
-          $("#containerOne").hide();
-          $("#containerTwo").hide();
-          $("#containerThree").show();
-          $("#loadPrompt").modal("hide");
-        });
-        $(tripSelectDiv).append(button);
-        $("#loadBody").append(tripSelectDiv);
-      }
-    }
-    else{
-      $("#wrongPass").show();
-    }
-  },1500);
+  loadUserData(userName,passWord,"login");
 });
 /**
 * Handles how save button behaves on last page.
@@ -128,6 +94,30 @@ $("#saveForm").on("submit",function(event){
   let tripObj;
   if(newUser === false){ //since the user exists we need to load the data and manipulate it.
     loadUserData(userName,passWord,"login");
+    setTimeout(function(){
+      if(isPass === true){
+        $("#wrongPass2").hide();
+        $("#savePrompt").modal("hide");
+        tripObj = JSON.parse(currentData);
+        console.log(tripObj);
+        // check if trip already exists
+        for(let i = 0; i<tripObj.length; i++){
+          if(tripObj[i].tripName === tripName){ //it does exist
+            tripObj[i].trip = trip;
+            saveUserData(userName,passWord,JSON.stringify(tripObj));
+            return;
+          }
+        }
+        tripObj.push({
+          tripName: tripName,
+          trip: trip
+        });
+        saveUserData(userName,passWord,JSON.stringify(tripObj));
+      }
+      else {
+        $("#wrongPass2").show();
+      }
+    },500);
   }
   else{
     saveUserData(userName,passWord,JSON.stringify([{
@@ -362,6 +352,43 @@ function loadUserData(user, pass, type){
   });
 }
 /**
+* Handles login event.
+*/
+function login(){
+  if(isPass === true){
+    $("#wrongPass").hide();
+    $("#login").hide();
+    let tripObj = JSON.parse(currentData);
+    for(let i = 0; i < tripObj.length; i++){
+      let tripSelectDiv = $("<div>").addClass("tripButtons");
+      let button = $("<button>").text(tripObj[i].tripName).addClass("btn btn-primary");
+      $(button).on("click",function(){
+        let tripObj = JSON.parse(currentData);
+        for(let i = 0; i < tripObj.length; i++){
+          if($(this).text() === tripObj[i].tripName){
+            trip = tripObj[i].trip;
+            tripName = tripObj[i].tripName;
+            yelpSearch(trip[i].lat+","+trip[i].log,"restaurants");
+            yelpSearch(trip[i].lat+","+trip[i].log,"attractions");
+            calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
+            newUser = false;
+            break;
+          }
+        }
+        $("#containerOne").hide();
+        $("#containerTwo").hide();
+        $("#containerThree").show();
+        $("#loadPrompt").modal("hide");
+      });
+      $(tripSelectDiv).append(button);
+      $("#loadBody").append(tripSelectDiv);
+    }
+  }
+  else{
+    $("#wrongPass").show();
+  }
+}
+/**
 * This searches restaurants or attractions based on the term and appends the elements to their sections
 * @param {String} location - It's a string of either a coordinate or address that Yelp's API will interpret
 * @param {String} term - This is what we're looking for, either "restaurants" or "attractions"
@@ -518,38 +545,3 @@ function dayOutputter(startTime,endTime){
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 // ];
-
-function login(){
-  if(isPass === true){
-    $("#wrongPass").hide();
-    $("#login").hide();
-    let tripObj = JSON.parse(currentData);
-    for(let i = 0; i < tripObj.length; i++){
-      let tripSelectDiv = $("<div>").addClass("tripButtons");
-      let button = $("<button>").text(tripObj[i].tripName).addClass("btn btn-primary");
-      $(button).on("click",function(){
-        let tripObj = JSON.parse(currentData);
-        for(let i = 0; i < tripObj.length; i++){
-          if($(this).text() === tripObj[i].tripName){
-            trip = tripObj[i].trip;
-            tripName = tripObj[i].tripName;
-            yelpSearch(trip[i].lat+","+trip[i].log,"restaurants");
-            yelpSearch(trip[i].lat+","+trip[i].log,"attractions");
-            calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-            newUser = false;
-            break;
-          }
-        }
-        $("#containerOne").hide();
-        $("#containerTwo").hide();
-        $("#containerThree").show();
-        $("#loadPrompt").modal("hide");
-      });
-      $(tripSelectDiv).append(button);
-      $("#loadBody").append(tripSelectDiv);
-    }
-  }
-  else{
-    $("#wrongPass").show();
-  }
-}
