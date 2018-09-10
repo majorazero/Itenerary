@@ -512,3 +512,61 @@ $("#submitBtn").on("click", function(event) {
       console.log("You didn't input a location!");
     }
   });
+
+  // .. info about hotel ..//
+
+var location;
+
+// .. ajax the api shit ..//
+function myHotel(location) {
+    $.ajax({
+    "url": "http://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=hotels&limit=4&location= " + location,
+    "method": "GET",
+    "headers": {
+      "Authorization": "Bearer DnFZKNqaKHmAOQ2-KzI-F0wsEHmH1HrT-k7U7IILrqGNlqL0J3nz1EM5KaSOu3o6ljzjy8UUPRyAifAu5_yM38LMc3oIUizj_Tp6rNVK0LakJK850r8lAtViWXWRW3Yx",
+    }
+  })
+  .then(function(response) {
+    console.log(response);
+
+    for (var i = 0; i < response.businesses.length; i++) {
+
+      var hotelRow = $("<div>").addClass("row");
+      var hotelDiv = $("<div>").addClass("col-sm-9");
+      var hotelImage =$("<div>").addClass("col-sm-3");
+      var hotelPic =$("<img>").attr("src", response.businesses[i].image_url);
+      var hotelName = $("<p>").text("Hotel Name : " +  response.businesses[i].name);
+      var hotelRating = $("<p>").text("Rating : " + response.businesses[i].rating);
+      var hotelPrice = $("<p>").text("Price : " + response.businesses[i].price);
+      var hotelPhone = $("<p>").text("Phone Number : " + response.businesses[i].display_phone);
+      var hotelCoordinates = $("<p>").text("Lat and Long :" + response.businesses[i].coordinates);
+      $(hotelDiv).append(hotelName);
+      $(hotelDiv).append(hotelRating);
+      $(hotelDiv).append(hotelPrice);
+      $(hotelDiv).append(hotelPhone);
+      $(hotelImage).append(hotelPic);
+      $(hotelRow).append(hotelDiv);
+      $(hotelRow).append(hotelImage);
+      $("#insert").append(hotelRow);
+
+      
+      console.log(response.businesses[i].coordinates);
+      console.log(response.businesses[i].name);
+
+    }
+  
+  })
+
+}
+
+
+
+$("#submitBtn").on("click", function(event) {
+
+  event.preventDefault();
+
+  var inputDestination = $("#destinationInput").val().trim();
+
+  myHotel(inputDestination);  
+
+});

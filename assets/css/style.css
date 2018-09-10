@@ -57,7 +57,7 @@ display: none;
 }
 
 #submitButton {
-    margin-top: 400px;
+    margin-top: inherit;
 }
 
 #containerOne {
