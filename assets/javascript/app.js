@@ -39,10 +39,6 @@
        });
     }
    directionDisplay.setMap(map);
-   let listener1 = map.addListener("tilesloaded",function(){
-     calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-     google.maps.event.removeListener(listener1);
-   });
  }
  /////////////////////////////////////////////
  ///// Event Functions
@@ -384,11 +380,11 @@ function latLongParser(arr){
 
 //each array is the itenerary for the day.
 //this is mock data
-trip = [
-  [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.141133",long:"-118.224108", loc: "Point B"},{lat: "34.143721",long:"-118.256334", loc: "Point C"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
-  [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
-  [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
-];
+// trip = [
+//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.141133",long:"-118.224108", loc: "Point B"},{lat: "34.143721",long:"-118.256334", loc: "Point C"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
+//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
+//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
+// ];
 
 
 function yelpSearch(location,term){
@@ -445,6 +441,10 @@ function yelpSearch(location,term){
           $("#attraction").append(newRow);
         }
       }
+      //we'll initialze the trip here... since i need to know the center and i only want this to trigger ONCE.
+      if(trip === undefined){
+        tripInit(dayStaying,response.region.center.longitude,response.region.center.latitude);
+      }
     });
 }
 
@@ -462,9 +462,6 @@ $("#submitBtn").on("click", function(event) {
       if(inputDestination !== ""){
         $("#containerOne").hide();
         $("#containerTwo").show();
-        //we'll initialze the trip here.
-        tripInit(dayStaying);
-        calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
         yelpSearch(inputDestination,"restaurants");
         yelpSearch(inputDestination,"attractions");
       }
@@ -473,21 +470,21 @@ $("#submitBtn").on("click", function(event) {
       }
     }
   });
-function tripInit(dayStaying){
+function tripInit(dayStaying,long,lat){
   //let's create our trip with length of day Staying
   trip = new Array(dayStaying);
   for(let i = 0; i < trip.length; i++){
     //each day of the trip should have 2 locations (home) popped in
     let baseLoc = {
-      lat: "34.136379",
-      long: "-118.243752",
+      lat: lat,
+      long: long,
       loc: "Home"
     };
     trip[i] = [];
     trip[i].push(baseLoc);
     trip[i].push(baseLoc);
   }
-  //calcRoute(trip[currentDay-1],travelMethod);
+  calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
   console.log(trip);
 }
 function dayOutputter(startTime,endTime){
