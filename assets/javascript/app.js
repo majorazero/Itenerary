@@ -391,8 +391,6 @@ trip = [
 ];
 
 
-
-
 function yelpSearch(location,term){
     //terms should only equal resturants or attractions
     $.ajax({
@@ -430,7 +428,7 @@ function yelpSearch(location,term){
             lat: $(this).attr("lat"),
             long: $(this).attr("long"),
             loc: $(this).attr("locName")});
-          calcRoute(latLongParser(currentTrip,travelMethod));
+          calcRoute(latLongParser(currentTrip),travelMethod);
         });
         $(imageDiv).append(placeImage);
         $(newDiv).append(name);
@@ -462,9 +460,11 @@ $("#submitBtn").on("click", function(event) {
     }
     else{
       if(inputDestination !== ""){
-        tripInit(dayStaying);
         $("#containerOne").hide();
         $("#containerTwo").show();
+        //we'll initialze the trip here.
+        tripInit(dayStaying);
+        calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
         yelpSearch(inputDestination,"restaurants");
         yelpSearch(inputDestination,"attractions");
       }
@@ -487,6 +487,7 @@ function tripInit(dayStaying){
     trip[i].push(baseLoc);
     trip[i].push(baseLoc);
   }
+  //calcRoute(trip[currentDay-1],travelMethod);
   console.log(trip);
 }
 function dayOutputter(startTime,endTime){
