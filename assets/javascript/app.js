@@ -474,7 +474,7 @@ function yelpSearch(location,term){
         var price = $("<p>").text(response.businesses[i].price);
         var rating = $("<p>").text(response.businesses[i].rating);
         $(newRow).on("click",function(){
-          $(this).animate({backgroundColor: "#8e9cb2"},500);
+          $(this).animate({backgroundColor: "#ffa9ac"},500);
           let currentTrip = trip[currentDay-1];
           currentTrip.splice(currentTrip.length-1,0,{
             lat: $(this).attr("lat"),

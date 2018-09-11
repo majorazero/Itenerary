@@ -19,13 +19,14 @@ body {
 display: none;
 }
 .container {
-    background-color: #87dbee;
+    background-color: #8fc1e3;
     margin-bottom: 50px;
     height: auto;
+    opacity: .85;
 }
 .iteDiv {
   height: 130px;
-  background-color: #ffa9ac;
+  background-color: rgb(99, 163, 202);
   margin: 2px;
 }
 
@@ -33,16 +34,19 @@ display: none;
 #homeBase {
     height: 30px;
     margin-top: 10px;
+    background-color: rgb(99, 163, 202);
 }
 .journeyBlock{
-  background-color: lightblue;
+  background-color: rgb(99, 163, 202);
   margin: 2px;
+  font-size: 18px;
+
 }
 #containerText {
     margin-top: 30px;
     font-size: 50px;
     text-align: center;
-    font-family: "yeseva one";
+    font-family: 'Cardo', serif;
 }
 
 #containerTxt {
@@ -50,18 +54,19 @@ display: none;
     margin-left: 35px;
 }
 #iteBox{
-  background-color: #ff575c;
+  background-color: #31708e;
   height:auto;
   margin: 5px;
   padding: 10px;
+  border-radius: 10px;
 }
 #iteContent {
-  background-color: #ff575c;
+  background-color: #31708e;
   height: 200px;
   margin: 10px;
 }
 #iteHeader {
-  background-color:#ffa9ac;
+  background-color:rgb(99, 163, 202);
   margin: 10px;
   height: 130px;
   padding: 7px;
@@ -70,7 +75,7 @@ display: none;
 #title {
     font-size: 100px;
     text-align: center;
-    font-family: "yeseva one"
+    font-family: 'Oswald', sans-serif;
 }
 
 #titleMust {
@@ -82,7 +87,7 @@ display: none;
     margin-top: 150px;
     background-color: #262960;
     color: white;
-    font-family: "josefin slab";
+    font-family: 'Oxygen', sans-serif;
     font-size: 25px;
 
 }
@@ -90,7 +95,7 @@ display: none;
 #returnBtn {
     background-color: #262960;
     color: white;
-    font-family: "josefin slab";
+    font-family: 'Oxygen', sans-serif;;
     font-size: 25px;
     border: none;
 }
@@ -99,7 +104,7 @@ display: none;
     margin-top: 400px;
     background-color: #262960;
     color: white;
-    font-family: "josefin slab";
+    font-family: 'Oxygen', sans-serif;;
 }
 
 
@@ -110,6 +115,7 @@ display: none;
 
 #containerThree {
     display: none;
+    opacity: 1;
 }
 
 #topContainerThree {
@@ -158,36 +164,34 @@ p {
 
 /* working on it */
 #place, #attraction {
-  background-color: #ff575c;
+  background-color: #31708e;
+    border-radius: 10px;
 }
 #place p, #attraction p {
   margin: 2px;
 }
 .restCard {
-  background-color: #ffa9ac;
+  background-color: rgb(99, 163, 202);
   margin: 3px;
 }
 .attrCard {
-  background-color: #ffa9ac;
+  background-color: rgb(99, 163, 202);
   margin: 3px;
 }
 .restBox, .attrBox {
   height:50%;
 }
-
-<<<<<<< HEAD
+/* 
+<<<<<<< HEAD */
 #startDateInput, #endDateInput {
   width: auto;
-=======
+/* ======= */
+}
 #titleName {
     font-weight: bolder;
 }
 
-.journeyBlock {
-    background-color: #ff575c;
-    color: #262960;
-    font-size: 18px;
-}
+
 
 #itButton {
     float: right;
