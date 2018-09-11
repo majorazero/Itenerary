@@ -22,14 +22,9 @@ button {
 }
 
 body {
-<<<<<<< HEAD
     background-image: url("https://cdn-image.travelandleisure.com/sites/default/files/styles/1600x1000/public/1496699939/hot-air-balloons-scenic-cappadocia-turkey-HOTAIR0605.jpg?itok=VtACp-RU"); 
     background-size: cover;
     
-=======
-    background-image: url("https://www.visitcalifornia.com/sites/default/files/styles/welcome_image/public/vc_oceanside_st_rm_829793708_1280x640.jpeg");
-
->>>>>>> 78754eb4ea185be67338d34b05de811722e5a156
 }
 ::-webkit-scrollbar {
 display: none;
