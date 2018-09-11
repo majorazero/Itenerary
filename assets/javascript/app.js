@@ -1,64 +1,70 @@
 /////////////////////////////////////////////
 ///// Database
 /////////////////////////////////////////////
- let config = {
-   apiKey: apiKeyGoogle,
-   authDomain: "project1travel-itenerary-app.firebaseapp.com",
-   databaseURL: "https://project1travel-itenerary-app.firebaseio.com",
-   projectId: "project1travel-itenerary-app",
-   storageBucket: "",
-   messagingSenderId: "136977891330"
- };
- firebase.initializeApp(config);
- const firestore = firebase.firestore();
- const settings = {/* your settings... */ timestampsInSnapshots: true};
- firestore.settings(settings);
+let config = {
+ apiKey: apiKeyGoogle,
+ authDomain: "project1travel-itenerary-app.firebaseapp.com",
+ databaseURL: "https://project1travel-itenerary-app.firebaseio.com",
+ projectId: "project1travel-itenerary-app",
+ storageBucket: "",
+ messagingSenderId: "136977891330"
+};
+firebase.initializeApp(config);
+const firestore = firebase.firestore();
+const settings = {/* your settings... */ timestampsInSnapshots: true};
+firestore.settings(settings);
  /////////////////////////////////////////////
  ///// Intialization
  /////////////////////////////////////////////
- /**
- * Required to initialize the google maps object
- */
- function initMap(lat,long,zoomLevel,setMarker){
-   directionService = new google.maps.DirectionsService();
-   directionDisplay = new google.maps.DirectionsRenderer();
-   if(lat === undefined && long === undefined){
-     lat = 34.05223;
-     long = -118.243683;
-     zoomLevel = 10;
-    }
-    map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: lat, lng: long},
-            zoom: zoomLevel
-          });
-    if (setMarker === true){
-      var marker = new google.maps.Marker({
-         position: {lat: lat, lng: long},
-         map: map,
-         title: 'Home Base'
-       });
-    }
-   directionDisplay.setMap(map);
-   let listener1 = map.addListener("tilesloaded",function(){
-     calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-     setTimeout(function(){
-       iteBoxRender();
-     },50);
-     google.maps.event.removeListener(listener1);
-   });
- }
+/**
+* Required to initialize the google maps object
+*/
+function initMap(lat,long,zoomLevel,setMarker){
+ directionService = new google.maps.DirectionsService();
+ directionDisplay = new google.maps.DirectionsRenderer();
+ if(lat === undefined && long === undefined){
+   lat = 34.05223;
+   long = -118.243683;
+   zoomLevel = 10;
+  }
+  map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: lat, lng: long},
+          zoom: zoomLevel
+        });
+
+ directionDisplay.setMap(map);
+}
  /////////////////////////////////////////////
  ///// Event Functions
  /////////////////////////////////////////////
-
-/**
-* 2nd page to 3rd Page.
-*/
-$("#submitButton").click(function(){
-    $("#containerOne").hide();
-    $("#containerTwo").hide();
-    $("#containerThree").show();
-});
+ /**
+ * Deals with front page transition.
+ */
+ $("#submitBtn").on("click", function(event) {
+     event.preventDefault();
+     var inputDestination = $("#destinationInput").val().trim();
+     dayStaying = dayOutputter($("#startDateInput").val(),$("#endDateInput").val());
+     if(dayStaying <= 0){
+       $("#errorModalMess").text("You can't go back in time.");
+       $("#submitErrorPrompt").modal("show");
+     }
+     else if (dayStaying === "badInput"){
+       $("#errorModalMess").text("Gotta fill in those dates!");
+       $("#submitErrorPrompt").modal("show");
+     }
+     else{
+       if(inputDestination !== ""){
+         $("#containerOne").hide();
+         $("#containerTwo").show();
+         myHotel(inputDestination);
+       }
+       else{
+         console.log("You didn't input a location!");
+         $("#errorModalMess").text("You didn't input a location!");
+         $("#submitErrorPrompt").modal("show");
+       }
+     }
+ });
 /**
 * Handles login events.
 */
@@ -66,38 +72,7 @@ $("#login").on("submit",function(event){
   event.preventDefault();
   userName = $(this)[0][0].value;
   passWord = $(this)[0][1].value;
-  loadUserData(userName,passWord);
-  setTimeout(function(){
-    if(isPass === true){
-      $("#wrongPass").hide();
-      $("#login").hide();
-      tripObj = JSON.parse(currentData);
-      for(let i = 0; i < tripObj.length; i++){
-        let tripSelectDiv = $("<div>").addClass("tripButtons");
-        let button = $("<button>").text(tripObj[i].tripName).addClass("btn btn-primary");
-        $(button).on("click",function(){
-          let tripObj = JSON.parse(currentData);
-          for(let i = 0; i < tripObj.length; i++){
-            if($(this).text() === tripObj[i].tripName){
-              trip = tripObj[i].trip;
-              tripName = tripObj[i].tripName;
-              newUser = false;
-              break;
-            }
-          }
-          $("#containerOne").hide();
-          $("#containerTwo").hide();
-          $("#containerThree").show();
-          $("#loadPrompt").modal("hide");
-        });
-        $(tripSelectDiv).append(button);
-        $("#loadBody").append(tripSelectDiv);
-      }
-    }
-    else{
-      $("#wrongPass").show();
-    }
-  },500);
+  loadUserData(userName,passWord,"login");
 });
 /**
 * Handles how save button behaves on last page.
@@ -117,40 +92,7 @@ $("#saveForm").on("submit",function(event){
   passWord = $(this)[0][1].value;
   tripName = $(this)[0][2].value;
   $(this)[0][1].value = "";
-  let tripObj;
-  if(newUser === false){ //since the user exists we need to load the data and manipulate it.
-    loadUserData(userName,passWord);
-    setTimeout(function(){
-      if(isPass === true){
-        $("#wrongPass2").hide();
-        $("#savePrompt").modal("hide");
-        tripObj = JSON.parse(currentData);
-        console.log(tripObj);
-        // check if trip already exists
-        for(let i = 0; i<tripObj.length; i++){
-          if(tripObj[i].tripName === tripName){ //it does exist
-            tripObj[i].trip = trip;
-            saveUserData(userName,passWord,JSON.stringify(tripObj));
-            return;
-          }
-        }
-        tripObj.push({
-          tripName: tripName,
-          trip: trip
-        });
-        saveUserData(userName,passWord,JSON.stringify(tripObj));
-      }
-      else {
-        $("#wrongPass2").show();
-      }
-    },500);
-  }
-  else{
-    saveUserData(userName,passWord,JSON.stringify([{
-      tripName: tripName,
-      trip: trip
-    }]));
-  }
+    loadUserData(userName,passWord,"save");
 });
 /**
 * On click function for next day of the itinerary box
@@ -161,7 +103,8 @@ $("#iteButNextDay").on("click",function(){
     currentDay++;
     //update route
     calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-    iteBoxRender();
+    yelpSearch(trip[0][0].lat+","+trip[0][0].long,"restaurants");
+    yelpSearch(trip[0][0].lat+","+trip[0][0].long,"attractions");
   }
 });
 /**
@@ -173,7 +116,8 @@ $("#iteButPrevDay").on("click",function(){
     currentDay--;
     //update route
     calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-    iteBoxRender();
+    yelpSearch(trip[0][0].lat+","+trip[0][0].long,"restaurants");
+    yelpSearch(trip[0][0].lat+","+trip[0][0].long,"attractions");
   }
 });
 /**
@@ -187,11 +131,17 @@ $("#methodSwitch").on("click",function(){
     travelMethod = "DRIVING";
   }
   calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-  iteBoxRender();
+});
+/**
+* This triggers route optimization.
+*/
+$("#optiTest").on("click",function(){
+  calcRoute(latLongParser(trip[currentDay-1]),travelMethod,true);
 });
 /////////////////////////////////////////////
 ///// Functions
 /////////////////////////////////////////////
+
 /**
 * This renders all the functionalities of the itineraryBox
 */
@@ -205,7 +155,9 @@ function iteBoxRender(){
     //we'll display the map around the Hotel, which should always by the initial point.
     for(let i = 0; i < currentDayIte.length; i++){
       let iteDiv = $("<div>").addClass("iteDiv");
+      iteDiv.attr("loc",currentDayIte[i].loc.replace(/\s+/g, ''));
       $(iteDiv).append(currentDayIte[i].loc);
+      //console.log(currentDayIte[i].loc);
       iteDiv.attr("data-pos",i);
       if(i === 0 || i === currentDayIte.length-1){
         iteDiv.attr("id","homeBase")
@@ -216,12 +168,20 @@ function iteBoxRender(){
         deleteButton.on("click",function(){
           //removes data from trip
           currentDayIte.splice($(this).parent().attr("data-pos"),1);
-          //update route
-          calcRoute(latLongParser(currentDayIte),travelMethod);
+          //lets check if it still exists
+          let counter = 0;
+          for(let i = 0; i<currentDayIte.length; i++){
+            if(trip[currentDay-1][i].loc.replace(/\s+/g, '') === $(this).parent().attr("loc")){
+              counter++;
+            }
+          }
+          if(counter === 0){
+            $("#"+$(this).parent().attr("loc")).animate({backgroundColor: "#ffa9ac"},500);
+          }
           //visually remove this from the parent
           $(this).parent().remove();
-          //call the render function again to re-render
-          iteBoxRender();
+          //update route
+          calcRoute(latLongParser(currentDayIte),travelMethod);
         });
         let moveUp = $("<button>").text("Move Up").attr("id", "itButton");
         moveUp.on("click",function(){
@@ -232,8 +192,6 @@ function iteBoxRender(){
             trip[currentDay-1].splice(newPos,0,currentPoint[0]);
             //update route
             calcRoute(latLongParser(currentDayIte),travelMethod);
-            //call the render function again to re-render
-            iteBoxRender();
           }
         });
         let moveDown = $("<button>").text("Move Down").attr("id", "itButton");
@@ -246,25 +204,19 @@ function iteBoxRender(){
             //update route
             calcRoute(latLongParser(currentDayIte),travelMethod);
             console.log(dayJourney);
-            //call the render function again to re-render
-            iteBoxRender();
           }
         });
         $(iteDiv).append(deleteButton);
         $(iteDiv).append(moveUp);
         $(iteDiv).append(moveDown);
       }
-      //if its not the last array piece, we'll add a journey block
-      //timeout is required since ajaxcalls take time... this is hardcoded for now
-      setTimeout(function(){
-        $("#iteContent").append(iteDiv);
-        if(i !== currentDayIte.length-1 && dayJourney !== undefined){
-          let journeyDiv = $("<div>").addClass("journeyBlock");
-          $(journeyDiv).append("Distance: "+dayJourney[i].distance+"  ");
-          $(journeyDiv).append("Duration: "+dayJourney[i].duration);
-          $("#iteContent").append(journeyDiv);
-        }
-      },100);
+      $("#iteContent").append(iteDiv);
+      if(i !== currentDayIte.length-1 && dayJourney !== undefined){
+        let journeyDiv = $("<div>").addClass("journeyBlock");
+        $(journeyDiv).append("Distance: "+dayJourney[i].distance+"  ");
+        $(journeyDiv).append("Duration: "+dayJourney[i].duration);
+        $("#iteContent").append(journeyDiv);
+      }
     }
   }
 }
@@ -314,9 +266,33 @@ function calcRoute(routArr, method, efficientTravel){
           dayJourney = journey;
         }
       }
+      if(efficientTravel === true){
+        optimizeTrip(response.routes[0].waypoint_order);
+      }
+      marker = new google.maps.Marker({
+            position: {lat: parseFloat(trip[currentDay-1][0].lat),lng: parseFloat(trip[currentDay-1][0].long)},
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 12,
+              strokeColor: "red"
+            },
+            map: map
+      });
       directionDisplay.setDirections(response);
     }
+    iteBoxRender();
   });
+}
+/**
+* This rearranges the trip array based on optimized route.
+* @param {Array} newWp - An array of the newly oranged index order generated by Google Routes
+*/
+function optimizeTrip(newWp){
+  let newTrip = [];
+  for(let j = 0; j < newWp.length; j++){
+    newTrip.push(trip[currentDay-1][newWp[j]+1]);
+  }
+  trip[currentDay-1].splice(1,newTrip.length,...newTrip);
 }
 /**
 * This will either create new user data, or save existing user data.
@@ -359,19 +335,32 @@ function saveUserData(user, pass, saveObject){
 * @param {String} userName - String that is the username the user wants to load
 * @param {String} pass - String that is the password, needed for new users to load existing files
 */
-function loadUserData(user, pass){
+function loadUserData(user, pass, type){
   firestore.collection("user").where("name","==",user).get().then(function(response){
     if(response.docs.length > 0) {
       let doc = response.docs[0].data();
       if(pass !== doc.password){
         console.log("Incorrect password");
         isPass = false;
+        if(type === "login"){
+          $("#loadPrompt").effect("shake");
+        }
+        else if (type == "save"){
+            $("#savePrompt").effect("shake");
+        }
+        $("#passInput").val("");
       }
       else{
         console.log("Access granted");
         userName = user;
         isPass = true;
         currentData = doc.data;
+        if(type === "login"){
+          login();
+        }
+        else if(type === "save"){
+          save();
+        }
       }
     }
     else{
@@ -380,45 +369,101 @@ function loadUserData(user, pass){
   });
 }
 /**
-* This extracts latitude and longitude out of the object, and produces an array compatible with calcRoute()
-* @param {Array} arr - Array of Objects that represent trip locations.
+* Handles login event.
 */
-function latLongParser(arr){
-  let parsedArr = [];
-  for(let i = 0; i < arr.length; i++){
-    parsedArr.push(arr[i].lat+","+arr[i].long);
+function login(){
+  if(isPass === true){
+    $("#wrongPass").hide();
+    $("#login").hide();
+    let tripObj = JSON.parse(currentData);
+    for(let i = 0; i < tripObj.length; i++){
+      let tripSelectDiv = $("<div>").addClass("tripButtons");
+      let button = $("<button>").text(tripObj[i].tripName).addClass("btn btn-primary");
+      $(button).on("click",function(){
+        let tripObj = JSON.parse(currentData);
+        for(let i = 0; i < tripObj.length; i++){
+          if($(this).text() === tripObj[i].tripName){
+            trip = tripObj[i].trip;
+            tripName = tripObj[i].tripName;
+            yelpSearch(trip[0][0].lat+","+trip[0][0].long,"restaurants");
+            yelpSearch(trip[0][0].lat+","+trip[0][0].long,"attractions");
+            calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
+            newUser = false;
+            break;
+          }
+        }
+        $("#containerOne").hide();
+        $("#containerTwo").hide();
+        $("#containerThree").show();
+        $("#loadPrompt").modal("hide");
+      });
+      $(tripSelectDiv).append(button);
+      $("#loadBody").append(tripSelectDiv);
+    }
   }
-  return parsedArr;
+  else{
+    $("#wrongPass").show();
+  }
 }
-/////////////////////////////////////////////
-///// Testing Junk
-/////////////////////////////////////////////
-
-//each array is the itenerary for the day.
-//this is mock data
-trip = [
-  [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.141133",long:"-118.224108", loc: "Point B"},{lat: "34.143721",long:"-118.256334", loc: "Point C"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
-  [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
-  [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
-];
-
-
-
-
-function restaurantSearch(location){
+/**
+* Handles save event.
+*/
+function save(){
+  if(isPass === true){
+    $("#wrongPass2").hide();
+    $("#savePrompt").modal("hide");
+    tripObj = JSON.parse(currentData);
+    console.log(tripObj);
+    // check if trip already exists
+    for(let i = 0; i<tripObj.length; i++){
+      if(tripObj[i].tripName === tripName){ //it does exist
+        tripObj[i].trip = trip;
+        saveUserData(userName,passWord,JSON.stringify(tripObj));
+      }
+    }
+    tripObj.push({
+      tripName: tripName,
+      trip: trip
+    });
+    console.log(tripObj);
+    saveUserData(userName,passWord,JSON.stringify(tripObj));
+  }
+  else {
+    $("#wrongPass2").show();
+  }
+}
+/**
+* This searches restaurants or attractions based on the term and appends the elements to their sections
+* @param {String} location - It's a string of either a coordinate or address that Yelp's API will interpret
+* @param {String} term - This is what we're looking for, either "restaurants" or "attractions"
+*/
+function yelpSearch(location,term){
+    $("#place").empty();
+    $("#attraction").empty();
     $.ajax({
-        url: corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term=restaurants&location=" + location,
+        url: corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term="+term+"&location="+location,
         method: "GET",
         headers: {
         Authorization : "Bearer TxSJ8z1klgIhuCb6UUsaQ35YjBgp7ZUMyktzsEeW3HdM3D7cu0qspdXjNBziwKIe_6WL5PjW7k1EF4rCL4DD-8cXPvU156T2feTri3g6jHMp3Aw4Xs3IFXAJ7o60WnYx"
         }
     }).then(function(response) {
-        console.log(response);
-        for (var i = 0; i < response.businesses.length; i++){
-        var newRow = $("<div>").addClass("row restCard");
+      for (var i = 0; i < response.businesses.length; i++){
+        var newRow = $("<div>").addClass("row");
+        if(term === "restaurants"){
+          newRow.addClass("restCard");
+        }
+        else if (term === "attractions"){
+          newRow.addClass("attrCard")
+        }
+        for(let j = 0; j < trip[currentDay-1].length; j++){
+          if(trip[currentDay-1][j].loc === response.businesses[i].name){
+            newRow.css("background-color","#8e9cb2");
+          }
+        }
         newRow.attr("lat",response.businesses[i].coordinates.latitude);
         newRow.attr("long",response.businesses[i].coordinates.longitude);
-        newRow.attr("locName",response.businesses[i].name);
+        newRow.attr("loc",response.businesses[i].name);
+        newRow.attr("id",response.businesses[i].name.replace(/\s+/g, ''));
         newRow.attr("imgUrl",response.businesses[i].image_url);
         var newDiv = $("<div>").addClass("col-md-8 col-sm-8 col-8 infoCard");
         var imageDiv = $("<div>").addClass("col-md-4 col-sm-4 col-4 imageCard");
@@ -429,14 +474,13 @@ function restaurantSearch(location){
         var price = $("<p>").text(response.businesses[i].price);
         var rating = $("<p>").text(response.businesses[i].rating);
         $(newRow).on("click",function(){
-          //we'll push to the end of the trip of the current day
+          $(this).animate({backgroundColor: "#8e9cb2"},500);
           let currentTrip = trip[currentDay-1];
           currentTrip.splice(currentTrip.length-1,0,{
             lat: $(this).attr("lat"),
             long: $(this).attr("long"),
-            loc: $(this).attr("locName")});
-          calcRoute(latLongParser(currentTrip,travelMethod));
-          setTimeout(iteBoxRender,500);
+            loc: $(this).attr("loc")});
+          calcRoute(latLongParser(currentTrip),travelMethod);
         });
         $(imageDiv).append(placeImage);
         $(newDiv).append(name);
@@ -446,95 +490,39 @@ function restaurantSearch(location){
         $(newDiv).append(rating);
         $(newRow).append(imageDiv);
         $(newRow).append(newDiv);
-        $("#place").append(newRow);
+        if(term === "restaurants"){
+          $("#place").append(newRow);
         }
-
-
-    })
-}
-
-function attractionSearch(location){
-    $.ajax({
-        url: corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term=attractions&location=" + location,
-        method: "GET",
-        headers: {
-        Authorization : "Bearer TxSJ8z1klgIhuCb6UUsaQ35YjBgp7ZUMyktzsEeW3HdM3D7cu0qspdXjNBziwKIe_6WL5PjW7k1EF4rCL4DD-8cXPvU156T2feTri3g6jHMp3Aw4Xs3IFXAJ7o60WnYx"
-        }
-    }).then(function(response) {
-        console.log(response);
-        for (var i = 0; i < response.businesses.length; i++){
-          var newRow = $("<div>").addClass("row attrCard");
-          newRow.attr("lat",response.businesses[i].coordinates.latitude);
-          newRow.attr("long",response.businesses[i].coordinates.longitude);
-          newRow.attr("locName",response.businesses[i].name);
-          newRow.attr("imgUrl",response.businesses[i].image_url);
-          var newDiv = $("<div>").addClass("col-md-8 col-sm-8 col-8 infoCard");
-          var imageDiv = $("<div>").addClass("col-md-4 col-sm-4 col-4");
-          var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
-          var name = $("<p>").text(response.businesses[i].name).addClass("topInfo").attr("id", "titleName");;
-          var city = $("<p>").text(response.businesses[i].location.city);
-          var address = $("<p>").text(response.businesses[i].location.address1);
-          var price = $("<p>").text(response.businesses[i].price);
-          var rating = $("<p>").text(response.businesses[i].rating);
-          $(newRow).on("click",function(){
-            //we'll push to the end of the trip of the current day
-            let currentTrip = trip[currentDay-1];
-            currentTrip.splice(currentTrip.length-1,0,{
-              lat: $(this).attr("lat"),
-              long: $(this).attr("long"),
-              loc: $(this).attr("locName")});
-            calcRoute(latLongParser(currentTrip,travelMethod));
-            setTimeout(iteBoxRender,500);
-          });
-          $(imageDiv).append(placeImage);
-          $(newDiv).append(name);
-          $(newDiv).append(city);
-          $(newDiv).append(address);
-          $(newDiv).append(price);
-          $(newDiv).append(rating);
-          $(newRow).append(imageDiv);
-          $(newRow).append(newDiv);
+        else if (term === "attractions"){
           $("#attraction").append(newRow);
         }
-
-
-    })
+      }
+    });
 }
-$("#submitBtn").on("click", function(event) {
-
-    event.preventDefault();
-
-    var inputDestination = $("#destinationInput").val().trim();
-    if(inputDestination !== ""){
-      $("#containerOne").hide();
-      $("#containerTwo").show();
-      restaurantSearch(inputDestination);
-      attractionSearch(inputDestination);
-    }
-    else{
-      console.log("You didn't input a location!");
-    }
-  });
-
-  // .. info about hotel ..//
-
-var location;
-
-// .. ajax the api shit ..//
+/**
+* Generates a list of hotels based on destination input that can be picked from and sets the initial trip
+* @param {String} location - A string of a location that Yelp API will interpret
+*/
 function myHotel(location) {
     $.ajax({
-    "url": "http://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=hotels&limit=4&location= " + location,
+    "url": corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term=hotels&limit=4&location= " + location,
     "method": "GET",
     "headers": {
       "Authorization": "Bearer DnFZKNqaKHmAOQ2-KzI-F0wsEHmH1HrT-k7U7IILrqGNlqL0J3nz1EM5KaSOu3o6ljzjy8UUPRyAifAu5_yM38LMc3oIUizj_Tp6rNVK0LakJK850r8lAtViWXWRW3Yx",
     }
-  })
-  .then(function(response) {
-    console.log(response);
-
+  }).then(function(response) {
     for (var i = 0; i < response.businesses.length; i++) {
-
-      var hotelRow = $("<div>").addClass("row");
+      var hotelRow = $("<div>").addClass("row hotelRow");
+      hotelRow.attr("lat",response.businesses[i].coordinates.latitude);
+      hotelRow.attr("long",response.businesses[i].coordinates.longitude);
+      hotelRow.on("click",function(){
+        tripInit(dayStaying,$(this).attr("long"),$(this).attr("lat"));
+        yelpSearch($(this).attr("lat")+","+$(this).attr("long"),"restaurants");
+        yelpSearch($(this).attr("lat")+","+$(this).attr("long"),"attractions");
+        $("#containerOne").hide();
+        $("#containerTwo").hide();
+        $("#containerThree").show();
+      });
       var hotelDiv = $("<div>").addClass("col-sm-9");
       var hotelImage =$("<div>").addClass("col-sm-3");
       var hotelPic =$("<img>").attr("src", response.businesses[i].image_url);
@@ -551,25 +539,67 @@ function myHotel(location) {
       $(hotelRow).append(hotelDiv);
       $(hotelRow).append(hotelImage);
       $("#insert").append(hotelRow);
-
-      
-      console.log(response.businesses[i].coordinates);
-      console.log(response.businesses[i].name);
-
     }
-  
-  })
-
+  });
 }
+/**
+* Initialize the trip for new users.
+* @param {Integer} dayStaying - The length of user's trip.
+* @param {String} long - A string of the longitude of initial location.
+* @param {String} lat - A string of the latitude of initial location.
+*/
+function tripInit(dayStaying,long,lat){
+  //let's create our trip with length of day Staying
+  trip = new Array(dayStaying);
+  for(let i = 0; i < trip.length; i++){
+    //each day of the trip should have 2 locations (home) popped in
+    let baseLoc = {
+      lat: lat,
+      long: long,
+      loc: "Home"
+    };
+    trip[i] = [];
+    trip[i].push(baseLoc);
+    trip[i].push(baseLoc);
+  }
+  calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
+}
+/**
+* This extracts latitude and longitude out of the object, and produces an array compatible with calcRoute()
+* @param {Array} arr - Array of Objects that represent trip locations.
+*/
+function latLongParser(arr){
+  let parsedArr = [];
+  for(let i = 0; i < arr.length; i++){
+    parsedArr.push(arr[i].lat+","+arr[i].long);
+  }
+  return parsedArr;
+}
+/**
+* Interprets the date inputs and return's the difference in days
+* @param {String} startTime - String input of the start date.
+* @param {String} endTime - String input of the end date.
+*/
+function dayOutputter(startTime,endTime){
+  if(startTime !== "" && endTime !== ""){
+    let startDate = new Date(startTime);
+    let endDate = new Date(endTime);
+    let timeDiff = endDate.getTime()-startDate.getTime();
+    let dayDiff = Math.ceil(timeDiff/(1000*3600*24));
+    return dayDiff;
+  }
+  else{
+    return "badInput";
+  }
+}
+/////////////////////////////////////////////
+///// Testing Junk
+/////////////////////////////////////////////
 
-
-
-$("#submitBtn").on("click", function(event) {
-
-  event.preventDefault();
-
-  var inputDestination = $("#destinationInput").val().trim();
-
-  myHotel(inputDestination);  
-
-});
+//each array is the itenerary for the day.
+//this is mock data
+// trip = [
+//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.141133",long:"-118.224108", loc: "Point B"},{lat: "34.143721",long:"-118.256334", loc: "Point C"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
+//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
+//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
+// ];

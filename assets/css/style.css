@@ -1,3 +1,7 @@
+.hotelRow:hover {
+  background-color: #ffa9ac;
+}
+
 /* hides scrollbar */
 
 button {
@@ -171,6 +175,10 @@ p {
   height:50%;
 }
 
+<<<<<<< HEAD
+#startDateInput, #endDateInput {
+  width: auto;
+=======
 #titleName {
     font-weight: bolder;
 }
@@ -214,7 +222,7 @@ p {
 
 @media screen and (max-width: 768px){
     #startDateInput {
-        margin-top: -125px;    
+        margin-top: -125px;
     }
     #containerText {
         margin-bottom: 20px;
@@ -253,6 +261,4 @@ p {
             margin-left: 10px;
         }
     }
-
-
 }

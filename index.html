@@ -9,6 +9,19 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+  <!-- submit error modal -->
+  <div class="modal fade" id="submitErrorPrompt" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          Oops!
+        </div>
+        <div class="modal-body">
+          <span id="errorModalMess">You didn't input a location!</span>
+        </div>
+      </div>
+    </div>
+</div>
   <!-- load modal -->
   <div class="modal fade" id="loadPrompt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered"role="document">
@@ -102,7 +115,7 @@ the user has to type the destination and that will connect it with the API key f
         <div class="col-md-2"></div>
         <div class="col-md-3">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Start date" aria-label="Start date" aria-describedby="basic-addon1" id="startDateInput">
+                <input type="date" class="form-control" placeholder="Start date" aria-label="Start date" aria-describedby="basic-addon1" id="startDateInput">
               </div>
 <!-- Start date input, with "startDateInput" ID
  the user will type the start date and this will connect with the flights API-->
@@ -110,7 +123,7 @@ the user has to type the destination and that will connect it with the API key f
         <div class="col-md-2"></div>
         <div class="col-md-3">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="End date" aria-label="End date" aria-describedby="basic-addon1" id="endDateInput">
+                <input type="date" class="form-control" placeholder="End date" aria-label="End date" aria-describedby="basic-addon1" id="endDateInput">
               </div>
 <!-- End date input, with "endDateInput" ID
 the user will type the start date and this will connect with the flights API and to see how many days the user will be at the destination -->
@@ -151,12 +164,6 @@ the user will type the start date and this will connect with the flights API and
 <!-- The API will show the flights to the destination, and back  -->
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <button type="button" class="btn btn-secondary btn-lg btn-block" id="submitButton">Submit</button>
-        </div>
-<!-- submit button with "submitButton" ID sends the user to the next page -->
-    </div>
 </div>
 
 <!-- CONTAINER THREE -->
@@ -181,7 +188,7 @@ the user will type the start date and this will connect with the flights API and
                 <div id="iteHeader"class="col-md-12">
                   <h3>Itinerary</h3>
                   <h3>Day: <span id="iteDay"></span></h3>
-                  <button id="iteButPrevDay"><</button> <button id="iteButNextDay">></button> <button id="methodSwitch">Drive/Walk</button>
+                  <button id="iteButPrevDay"><</button> <button id="iteButNextDay">></button> <button id="methodSwitch">Drive/Walk</button> <button id="optiTest">Optimize</button>
                 </div>
               </div>
               <!-- box content -->
@@ -225,6 +232,10 @@ the user will type the start date and this will connect with the flights API and
 <script
   src="https://code.jquery.com/jquery-3.3.1.js"
   integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+<script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
   crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script src="assets/javascript/globalVar.js"></script>
