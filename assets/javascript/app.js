@@ -91,32 +91,7 @@ $("#saveForm").on("submit",function(event){
   passWord = $(this)[0][1].value;
   tripName = $(this)[0][2].value;
   $(this)[0][1].value = "";
-    loadUserData(userName,passWord);
-    setTimeout(function(){
-      //let tripObj;
-      if(isPass === true){
-        $("#wrongPass2").hide();
-        $("#savePrompt").modal("hide");
-        tripObj = JSON.parse(currentData);
-        console.log(tripObj);
-        // check if trip already exists
-        for(let i = 0; i<tripObj.length; i++){
-          if(tripObj[i].tripName === tripName){ //it does exist
-            tripObj[i].trip = trip;
-            saveUserData(userName,passWord,JSON.stringify(tripObj));
-          }
-        }
-        tripObj.push({
-          tripName: tripName,
-          trip: trip
-        });
-        console.log(tripObj);
-        saveUserData(userName,passWord,JSON.stringify(tripObj));
-      }
-      else {
-        $("#wrongPass2").show();
-      }
-    },1500);
+    loadUserData(userName,passWord,"save");
 });
 /**
 * On click function for next day of the itinerary box
@@ -127,7 +102,6 @@ $("#iteButNextDay").on("click",function(){
     currentDay++;
     //update route
     calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
-    //teBoxRender();
   }
 });
 /**
@@ -171,6 +145,7 @@ function iteBoxRender(){
     for(let i = 0; i < currentDayIte.length; i++){
       let iteDiv = $("<div>").addClass("iteDiv");
       $(iteDiv).append(currentDayIte[i].loc);
+      //console.log(currentDayIte[i].loc);
       iteDiv.attr("data-pos",i);
       if(i === 0 || i === currentDayIte.length-1){
         iteDiv.attr("id","homeBase")
@@ -336,6 +311,9 @@ function loadUserData(user, pass, type){
         if(type === "login"){
           login();
         }
+        else if(type === "save"){
+          save();
+        }
       }
     }
     else{
@@ -378,6 +356,33 @@ function login(){
   }
   else{
     $("#wrongPass").show();
+  }
+}
+/**
+* Handles save event.
+*/
+function save(){
+  if(isPass === true){
+    $("#wrongPass2").hide();
+    $("#savePrompt").modal("hide");
+    tripObj = JSON.parse(currentData);
+    console.log(tripObj);
+    // check if trip already exists
+    for(let i = 0; i<tripObj.length; i++){
+      if(tripObj[i].tripName === tripName){ //it does exist
+        tripObj[i].trip = trip;
+        saveUserData(userName,passWord,JSON.stringify(tripObj));
+      }
+    }
+    tripObj.push({
+      tripName: tripName,
+      trip: trip
+    });
+    console.log(tripObj);
+    saveUserData(userName,passWord,JSON.stringify(tripObj));
+  }
+  else {
+    $("#wrongPass2").show();
   }
 }
 /**
