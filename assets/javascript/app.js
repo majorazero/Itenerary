@@ -61,6 +61,7 @@ function initMap(lat,long,zoomLevel,setMarker){
        }
        else{
          console.log("You didn't input a location!");
+         $("#submitErrorPrompt").modal("show");
        }
      }
  });
