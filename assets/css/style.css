@@ -270,8 +270,10 @@ p {
         width: 200px;
     }
     img {
-        height: 80px;
-        width: 80px;
+      width: 80px;
+    }
+    pImg{
+      height: 80px;
     }
     p {
     font-size: 12px;
@@ -310,8 +312,10 @@ p {
         margin-top: -25px;
     }
     img {
-        height: 120px;
-        width: 120px;
+      width: 120px;
+    }
+    pImg {
+      height: 120px;
     }
     #iteHeader {
         width: 490px;
@@ -362,4 +366,3 @@ p {
                 margin-left: 15px;
             }
     }
-
