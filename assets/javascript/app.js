@@ -457,7 +457,7 @@ function yelpSearch(location,term){
         }
         for(let j = 0; j < trip[currentDay-1].length; j++){
           if(trip[currentDay-1][j].loc === response.businesses[i].name){
-            newRow.css("background-color","#8e9cb2");
+            newRow.css("background-color","#ffa9ac");
           }
         }
         newRow.attr("lat",response.businesses[i].coordinates.latitude);

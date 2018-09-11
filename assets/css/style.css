@@ -2,6 +2,16 @@
   background-color: #ffa9ac;
 }
 
+.restCard:hover {
+    background-color: #ffa9ac;
+    opacity: .9;
+}
+
+.attrCard:hover {
+    background-color: #ffa9ac;
+    opacity: .9;
+}
+
 /* hides scrollbar */
 
 button {
