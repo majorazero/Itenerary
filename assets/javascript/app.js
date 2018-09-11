@@ -188,14 +188,14 @@ function iteBoxRender(){
     for(let i = 0; i < currentDayIte.length; i++){
       let iteDiv = $("<div>").addClass("iteDiv");
       iteDiv.attr("loc",currentDayIte[i].loc.replace(/\s+/g, ''));
-      $(iteDiv).append(currentDayIte[i].loc);
-      //console.log(currentDayIte[i].loc);
+      $(iteDiv).append("<h2>"+currentDayIte[i].loc+"</h2>");
       iteDiv.attr("data-pos",i);
       if(i === 0 || i === currentDayIte.length-1){
         iteDiv.attr("id","homeBase")
       }
       //first and last element should not be able to be move so we won't add an edit button for them
       if (i !== 0 && i !== currentDayIte.length-1){
+        $(iteDiv).append("<img class='iteImg' src='"+currentDayIte[i].img+"' />");
         let deleteButton = $("<button>").text("Delete").attr("id", "itButton");
         deleteButton.on("click",function(){
           //removes data from trip
@@ -397,6 +397,7 @@ function loadUserData(user, pass, type){
     }
     else{
       console.log("User does not exist.");
+      save();
     }
   });
 }
@@ -441,6 +442,7 @@ function login(){
 * Handles save event.
 */
 function save(){
+  let tripObj;
   if(isPass === true){
     $("#wrongPass2").hide();
     $("#savePrompt").modal("hide");
@@ -458,6 +460,14 @@ function save(){
       trip: trip
     });
     console.log(tripObj);
+    saveUserData(userName,passWord,JSON.stringify(tripObj));
+  }
+  else if (newUser === true){
+    $("#savePrompt").modal("hide");
+    tripObj = [{
+      tripName: tripName,
+      trip: trip
+    }];
     saveUserData(userName,passWord,JSON.stringify(tripObj));
   }
   else {
@@ -529,7 +539,8 @@ function yelpSearch(location,term,offset){
           currentTrip.splice(currentTrip.length-1,0,{
             lat: $(this).attr("lat"),
             long: $(this).attr("long"),
-            loc: $(this).attr("loc")});
+            loc: $(this).attr("loc"),
+            img: $(this).attr("imgUrl")});
           calcRoute(latLongParser(currentTrip),travelMethod);
         });
         $(imageDiv).append(placeImage);

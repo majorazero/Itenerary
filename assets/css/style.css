@@ -44,7 +44,7 @@ display: none;
 
 
 #homeBase {
-    height: 30px;
+    height: auto;
     margin-top: 10px;
     background-color: rgb(99, 163, 202);
 }
@@ -214,11 +214,17 @@ p {
   height:50%;
 }
 /*
-<<<<<<< HEAD */
 #startDateInput, #endDateInput {
   width: auto;
 /* ======= */
+
+.iteImg {
+  display: inline-block;
 }
+.iteDiv h2 {
+  padding: 2px;
+}
+
 #titleName {
     font-weight: bolder;
 }
