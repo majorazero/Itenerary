@@ -473,9 +473,12 @@ function save(){
 function yelpSearch(location,term,offset){
     if(term === "restaurants"){
       $("#place").empty();
+      $("#place").append('<img class="mx-auto img-fluid" src="assets/images/loading.gif" />');
+
     }
     else {
       $("#attraction").empty();
+      $("#attraction").append('<img class="mx-auto img-fluid" src="assets/images/loading.gif" />');
     }
     let url = corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term="+term+"&location="+location;
     if(offset !== undefined){
@@ -488,6 +491,12 @@ function yelpSearch(location,term,offset){
         Authorization : "Bearer TxSJ8z1klgIhuCb6UUsaQ35YjBgp7ZUMyktzsEeW3HdM3D7cu0qspdXjNBziwKIe_6WL5PjW7k1EF4rCL4DD-8cXPvU156T2feTri3g6jHMp3Aw4Xs3IFXAJ7o60WnYx"
         }
     }).then(function(response) {
+      if(term === "restaurants"){
+        $("#place").empty();
+      }
+      else {
+        $("#attraction").empty();
+      }
       for (var i = 0; i < response.businesses.length; i++){
         var newRow = $("<div>").addClass("row");
         if(term === "restaurants"){
@@ -552,6 +561,7 @@ function myHotel(location) {
       "Authorization": "Bearer DnFZKNqaKHmAOQ2-KzI-F0wsEHmH1HrT-k7U7IILrqGNlqL0J3nz1EM5KaSOu3o6ljzjy8UUPRyAifAu5_yM38LMc3oIUizj_Tp6rNVK0LakJK850r8lAtViWXWRW3Yx",
     }
   }).then(function(response) {
+    $("#insert").empty();
     for (var i = 0; i < response.businesses.length; i++) {
       var hotelRow = $("<div>").addClass("row hotelRow");
       hotelRow.attr("lat",response.businesses[i].coordinates.latitude);
