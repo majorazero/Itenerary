@@ -102,6 +102,8 @@ $("#iteButNextDay").on("click",function(){
     currentDay++;
     //update route
     calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
+    yelpSearch(trip[0][0].lat+","+trip[0][0].long,"restaurants");
+    yelpSearch(trip[0][0].lat+","+trip[0][0].long,"attractions");
   }
 });
 /**
@@ -113,6 +115,8 @@ $("#iteButPrevDay").on("click",function(){
     currentDay--;
     //update route
     calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
+    yelpSearch(trip[0][0].lat+","+trip[0][0].long,"restaurants");
+    yelpSearch(trip[0][0].lat+","+trip[0][0].long,"attractions");
   }
 });
 /**
@@ -397,7 +401,8 @@ function save(){
 * @param {String} term - This is what we're looking for, either "restaurants" or "attractions"
 */
 function yelpSearch(location,term){
-    console.log(location);
+    $("#place").empty();
+    $("#attraction").empty();
     $.ajax({
         url: corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term="+term+"&location="+location,
         method: "GET",
@@ -412,6 +417,12 @@ function yelpSearch(location,term){
         }
         else if (term === "attractions"){
           newRow.addClass("attrCard")
+        }
+        for(let j = 0; j < trip[currentDay-1].length; j++){
+          if(trip[currentDay-1][j].loc === response.businesses[i].name){
+            console.log(trip[currentDay-1][j].loc);
+            newRow.css("background-color","#8e9cb2");
+          }
         }
         newRow.attr("lat",response.businesses[i].coordinates.latitude);
         newRow.attr("long",response.businesses[i].coordinates.longitude);
