@@ -266,6 +266,9 @@ function calcRoute(routArr, method, efficientTravel){
           dayJourney = journey;
         }
       }
+      if(efficientTravel === true){
+        optimizeTrip(response.routes[0].waypoint_order);
+      }
       directionDisplay.setDirections(response);
     }
     iteBoxRender();
@@ -581,3 +584,15 @@ function dayOutputter(startTime,endTime){
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 // ];
+
+$("#optiTest").on("click",function(){
+  calcRoute(latLongParser(trip[currentDay-1]),travelMethod,true);
+});
+
+function optimizeTrip(newWp){
+  let newTrip = [];
+  for(let j = 0; j < newWp.length; j++){
+    newTrip.push(trip[currentDay-1][newWp[j]+1]);
+  }
+  trip[currentDay-1].splice(1,newTrip.length,...newTrip);
+}
