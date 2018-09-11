@@ -42,6 +42,7 @@ display: none;
 }
 
 
+
 #homeBase {
     height: 30px;
     margin-top: 10px;
@@ -224,8 +225,18 @@ p {
   display: inline-block;
 }
 
+#attrBoxHeader {
+    display: inline-block;
+}
+
 #itButton {
     float: right;
+}
+
+#attraction {
+    width: 240px;
+    margin-left: 15px;
+
 }
 
 @media screen and (max-width: 1200px){
@@ -245,6 +256,10 @@ p {
         margin-top: 30px;
         font-weight: bolder;
    
+    }
+    #attraction {
+        width: 165px;
+        margin-left: 15px;
     }
 }
 
@@ -273,6 +288,10 @@ p {
         font-weight: bolder;
    
     }
+    #attraction {
+        width: 65px;
+        margin-left: 15px;
+    }
 }
 
 @media screen and (max-width: 768px){
@@ -297,6 +316,13 @@ p {
     }
     #place p {
         margin: 0px;
+        font-size: 15px;
+        margin-left: 40px;
+    }
+    #attraction p {
+        margin: 0px;
+        font-size: 15px;
+        margin-left: 40px;
     }
 
     p {
@@ -311,6 +337,15 @@ p {
         height: 115px;
         width: 115px;
     }
+    #attraction {
+    width: 540px;
+        margin-left: 15px;
+    }
+
+    #attrBoxHeader {
+        margin-left: 15px;
+    }
+}
 
     @media screen and (max-width: 530px){
         #iteHeader {
@@ -320,5 +355,9 @@ p {
         #place p {
             margin-left: 10px;
         }
+        #attraction {
+            width: 530px;
+                margin-left: 15px;
+            }
     }
-}
+
