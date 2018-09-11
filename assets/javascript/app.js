@@ -31,13 +31,7 @@ function initMap(lat,long,zoomLevel,setMarker){
           center: {lat: lat, lng: long},
           zoom: zoomLevel
         });
-  if (setMarker === true){
-    var marker = new google.maps.Marker({
-       position: {lat: lat, lng: long},
-       map: map,
-       title: 'Home Base'
-     });
-  }
+
  directionDisplay.setMap(map);
 }
  /////////////////////////////////////////////
@@ -275,6 +269,15 @@ function calcRoute(routArr, method, efficientTravel){
       if(efficientTravel === true){
         optimizeTrip(response.routes[0].waypoint_order);
       }
+      marker = new google.maps.Marker({
+            position: {lat: parseFloat(trip[currentDay-1][0].lat),lng: parseFloat(trip[currentDay-1][0].long)},
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 12,
+              strokeColor: "red"
+            },
+            map: map
+      });
       directionDisplay.setDirections(response);
     }
     iteBoxRender();

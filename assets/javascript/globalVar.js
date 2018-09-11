@@ -15,3 +15,4 @@ let newUser = true;
 let currentData;
 let isPass;
 let dayStaying;
+let marker;
