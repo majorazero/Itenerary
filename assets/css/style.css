@@ -22,8 +22,8 @@ button {
 }
 
 body {
-    background-image: url("https://www.visitcalifornia.com/sites/default/files/styles/welcome_image/public/vc_oceanside_st_rm_829793708_1280x640.jpeg"); 
-    
+    background-image: url("https://www.visitcalifornia.com/sites/default/files/styles/welcome_image/public/vc_oceanside_st_rm_829793708_1280x640.jpeg");
+
 }
 ::-webkit-scrollbar {
 display: none;
@@ -191,7 +191,7 @@ p {
 .restBox, .attrBox {
   height:50%;
 }
-/* 
+/*
 <<<<<<< HEAD */
 #startDateInput, #endDateInput {
   width: auto;
@@ -201,7 +201,9 @@ p {
     font-weight: bolder;
 }
 
-
+#restBoxHeader {
+  display: inline-block;
+}
 
 #itButton {
     float: right;

@@ -138,6 +138,38 @@ $("#methodSwitch").on("click",function(){
 $("#optiTest").on("click",function(){
   calcRoute(latLongParser(trip[currentDay-1]),travelMethod,true);
 });
+/**
+* Load more restaurants
+*/
+$("#restNext").on("click",function(){
+  restOffset += 20;
+  yelpSearch(trip[0][0].lat+","+trip[0][0].long,"restaurants",restOffset);
+});
+/**
+* Load previous restaurants
+*/
+$("#restBack").on("click",function(){
+  if(restOffset !== 0){
+    restOffset -= 20;
+    yelpSearch(trip[0][0].lat+","+trip[0][0].long,"restaurants",restOffset);
+  }
+});
+/**
+* Load more attractions
+*/
+$("#attrNext").on("click",function(){
+  attrOffset += 20;
+  yelpSearch(trip[0][0].lat+","+trip[0][0].long,"attractions",attrOffset);
+});
+/**
+* Load previous attractions
+*/
+$("#attrBack").on("click",function(){
+  if(attrOffset !== 0){
+    attrOffset -= 20;
+    yelpSearch(trip[0][0].lat+","+trip[0][0].long,"attractions",attrOffset);
+  }
+});
 /////////////////////////////////////////////
 ///// Functions
 /////////////////////////////////////////////
@@ -436,12 +468,21 @@ function save(){
 * This searches restaurants or attractions based on the term and appends the elements to their sections
 * @param {String} location - It's a string of either a coordinate or address that Yelp's API will interpret
 * @param {String} term - This is what we're looking for, either "restaurants" or "attractions"
+* @param {Integer} offset - This is how we load new content by offsetting the Yelp query
 */
-function yelpSearch(location,term){
-    $("#place").empty();
-    $("#attraction").empty();
+function yelpSearch(location,term,offset){
+    if(term === "restaurants"){
+      $("#place").empty();
+    }
+    else {
+      $("#attraction").empty();
+    }
+    let url = corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term="+term+"&location="+location;
+    if(offset !== undefined){
+      url += "&offset="+offset;
+    }
     $.ajax({
-        url: corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term="+term+"&location="+location,
+        url: url,
         method: "GET",
         headers: {
         Authorization : "Bearer TxSJ8z1klgIhuCb6UUsaQ35YjBgp7ZUMyktzsEeW3HdM3D7cu0qspdXjNBziwKIe_6WL5PjW7k1EF4rCL4DD-8cXPvU156T2feTri3g6jHMp3Aw4Xs3IFXAJ7o60WnYx"

@@ -16,3 +16,5 @@ let currentData;
 let isPass;
 let dayStaying;
 let marker;
+let restOffset = 0;
+let attrOffset = 0;
