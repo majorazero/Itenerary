@@ -51,7 +51,12 @@ function initMap(lat,long,zoomLevel,setMarker){
      var inputDestination = $("#destinationInput").val().trim();
      dayStaying = dayOutputter($("#startDateInput").val(),$("#endDateInput").val());
      if(dayStaying <= 0){
-       console.log("You can't go back in time.");
+       $("#errorModalMess").text("You can't go back in time.");
+       $("#submitErrorPrompt").modal("show");
+     }
+     else if (dayStaying === "badInput"){
+       $("#errorModalMess").text("Gotta fill in those dates!");
+       $("#submitErrorPrompt").modal("show");
      }
      else{
        if(inputDestination !== ""){
@@ -61,6 +66,7 @@ function initMap(lat,long,zoomLevel,setMarker){
        }
        else{
          console.log("You didn't input a location!");
+         $("#errorModalMess").text("You didn't input a location!");
          $("#submitErrorPrompt").modal("show");
        }
      }
@@ -546,11 +552,16 @@ function latLongParser(arr){
 * @param {String} endTime - String input of the end date.
 */
 function dayOutputter(startTime,endTime){
-  let startDate = new Date(startTime);
-  let endDate = new Date(endTime);
-  let timeDiff = endDate.getTime()-startDate.getTime();
-  let dayDiff = Math.ceil(timeDiff/(1000*3600*24));
-  return dayDiff;
+  if(startTime !== "" && endTime !== ""){
+    let startDate = new Date(startTime);
+    let endDate = new Date(endTime);
+    let timeDiff = endDate.getTime()-startDate.getTime();
+    let dayDiff = Math.ceil(timeDiff/(1000*3600*24));
+    return dayDiff;
+  }
+  else{
+    return "badInput";
+  }
 }
 /////////////////////////////////////////////
 ///// Testing Junk
