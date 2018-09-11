@@ -189,17 +189,13 @@ function iteBoxRender(){
         $(iteDiv).append(moveUp);
         $(iteDiv).append(moveDown);
       }
-      //if its not the last array piece, we'll add a journey block
-      //timeout is required since ajaxcalls take time... this is hardcoded for now
-      setTimeout(function(){
-        $("#iteContent").append(iteDiv);
-        if(i !== currentDayIte.length-1 && dayJourney !== undefined){
-          let journeyDiv = $("<div>").addClass("journeyBlock");
-          $(journeyDiv).append("Distance: "+dayJourney[i].distance+"  ");
-          $(journeyDiv).append("Duration: "+dayJourney[i].duration);
-          $("#iteContent").append(journeyDiv);
-        }
-      },100);
+      $("#iteContent").append(iteDiv);
+      if(i !== currentDayIte.length-1 && dayJourney !== undefined){
+        let journeyDiv = $("<div>").addClass("journeyBlock");
+        $(journeyDiv).append("Distance: "+dayJourney[i].distance+"  ");
+        $(journeyDiv).append("Duration: "+dayJourney[i].duration);
+        $("#iteContent").append(journeyDiv);
+      }
     }
   }
 }
