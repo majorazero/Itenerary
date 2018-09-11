@@ -176,7 +176,7 @@ function iteBoxRender(){
             }
           }
           if(counter === 0){
-            $("#"+$(this).parent().attr("loc")).animate({backgroundColor: "#ffa9ac"},500);
+            $("#"+$(this).parent().attr("loc")).animate({backgroundColor: "#63a3ca"},500);
           }
           //visually remove this from the parent
           $(this).parent().remove();
