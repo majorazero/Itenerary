@@ -144,6 +144,7 @@ function iteBoxRender(){
     //we'll display the map around the Hotel, which should always by the initial point.
     for(let i = 0; i < currentDayIte.length; i++){
       let iteDiv = $("<div>").addClass("iteDiv");
+      iteDiv.attr("loc",currentDayIte[i].loc.replace(/\s+/g, ''));
       $(iteDiv).append(currentDayIte[i].loc);
       //console.log(currentDayIte[i].loc);
       iteDiv.attr("data-pos",i);
@@ -154,11 +155,12 @@ function iteBoxRender(){
       if (i !== 0 && i !== currentDayIte.length-1){
         let deleteButton = $("<button>").text("Delete").attr("id", "itButton");
         deleteButton.on("click",function(){
+          console.log($("#"+$(this).parent().attr("loc")));
+          $("#"+$(this).parent().attr("loc")).animate({backgroundColor: "#ffa9ac"},500);
           //removes data from trip
           currentDayIte.splice($(this).parent().attr("data-pos"),1);
           //visually remove this from the parent
           $(this).parent().remove();
-          //call the render function again to re-render
           //update route
           calcRoute(latLongParser(currentDayIte),travelMethod);
         });
@@ -334,7 +336,6 @@ function login(){
           if($(this).text() === tripObj[i].tripName){
             trip = tripObj[i].trip;
             tripName = tripObj[i].tripName;
-            console.log(trip[0],tripName);
             yelpSearch(trip[0][0].lat+","+trip[0][0].long,"restaurants");
             yelpSearch(trip[0][0].lat+","+trip[0][0].long,"attractions");
             calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
@@ -406,7 +407,8 @@ function yelpSearch(location,term){
         }
         newRow.attr("lat",response.businesses[i].coordinates.latitude);
         newRow.attr("long",response.businesses[i].coordinates.longitude);
-        newRow.attr("id",response.businesses[i].name);
+        newRow.attr("loc",response.businesses[i].name);
+        newRow.attr("id",response.businesses[i].name.replace(/\s+/g, ''));
         newRow.attr("imgUrl",response.businesses[i].image_url);
         var newDiv = $("<div>").addClass("col-md-8 col-sm-8 col-8 infoCard");
         var imageDiv = $("<div>").addClass("col-md-4 col-sm-4 col-4 imageCard");
@@ -417,11 +419,12 @@ function yelpSearch(location,term){
         var price = $("<p>").text(response.businesses[i].price);
         var rating = $("<p>").text(response.businesses[i].rating);
         $(newRow).on("click",function(){
+          $(this).animate({backgroundColor: "#8e9cb2"},500);
           let currentTrip = trip[currentDay-1];
           currentTrip.splice(currentTrip.length-1,0,{
             lat: $(this).attr("lat"),
             long: $(this).attr("long"),
-            loc: $(this).attr("id")});
+            loc: $(this).attr("loc")});
           calcRoute(latLongParser(currentTrip),travelMethod);
         });
         $(imageDiv).append(placeImage);
