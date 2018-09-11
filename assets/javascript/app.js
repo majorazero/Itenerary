@@ -319,6 +319,13 @@ function loadUserData(user, pass, type){
       if(pass !== doc.password){
         console.log("Incorrect password");
         isPass = false;
+        if(type === "login"){
+          $("#loadPrompt").effect("shake");
+        }
+        else if (type == "save"){
+            $("#savePrompt").effect("shake");
+        }
+        $("#passInput").val("");
       }
       else{
         console.log("Access granted");
