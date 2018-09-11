@@ -574,10 +574,10 @@ function myHotel(location) {
         $("#containerTwo").hide();
         $("#containerThree").show();
       });
-      var hotelDiv = $("<div>").addClass("col-sm-9");
-      var hotelImage =$("<div>").addClass("col-sm-3");
-      var hotelPic =$("<img>").attr("src", response.businesses[i].image_url);
-      var hotelName = $("<p>").text("Hotel Name : " +  response.businesses[i].name);
+      var hotelDiv = $("<div>").addClass("col-sm-9 col-9");
+      var hotelImage =$("<div>").addClass("col-sm-3 col-3 hotelImage");
+      var hotelPic =$("<img>").attr("src", response.businesses[i].image_url).attr("id", "hotelPic");
+      var hotelName = $("<p>").text("Hotel Name : " +  response.businesses[i].name).attr("id", "topName");
       var hotelRating = $("<p>").text("Rating : " + response.businesses[i].rating);
       var hotelPrice = $("<p>").text("Price : " + response.businesses[i].price);
       var hotelPhone = $("<p>").text("Phone Number : " + response.businesses[i].display_phone);
@@ -643,6 +643,7 @@ function dayOutputter(startTime,endTime){
     return "badInput";
   }
 }
+
 /////////////////////////////////////////////
 ///// Testing Junk
 /////////////////////////////////////////////
