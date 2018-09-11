@@ -589,7 +589,7 @@ function myHotel(location) {
       var hotelImage =$("<div>").addClass("col-sm-3 col-3 hotelImage");
       var hotelPic =$("<img>").attr("src", response.businesses[i].image_url).attr("id", "hotelPic");
       var hotelName = $("<p>").text("Hotel Name : " +  response.businesses[i].name).attr("id", "topName");
-      var hotelRating = $("<p>").text("Rating : " + response.businesses[i].rating);
+      var hotelRating = $("<p>").html("Rating: <img class='hotelStar' src='"+ yelpStar(response.businesses[i].rating)+"' />");
       var hotelPrice = $("<p>").text("Price : " + response.businesses[i].price);
       var hotelPhone = $("<p>").text("Phone Number : " + response.businesses[i].display_phone);
       var hotelCoordinates = $("<p>").text("Lat and Long :" + response.businesses[i].coordinates);

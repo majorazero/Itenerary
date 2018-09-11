@@ -36,13 +36,13 @@ display: none;
     opacity: .85;
 }
 .iteDiv {
-  height: 130px;
+  height: auto;
   background-color: rgb(99, 163, 202);
   margin: 2px;
 }
-
-
-
+.hotelStar {
+  display: inline-block;
+}
 #homeBase {
     height: auto;
     margin-top: 10px;
