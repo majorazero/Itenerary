@@ -8,15 +8,14 @@ button {
 }
 
 body {
-    background-color: #87dbee;
+    background-image: url("https://www.visitcalifornia.com/sites/default/files/styles/welcome_image/public/vc_oceanside_st_rm_829793708_1280x640.jpeg"); 
+    
 }
 ::-webkit-scrollbar {
 display: none;
 }
 .container {
     background-color: #87dbee;
-    animation-name: introBack;
-    animation-duration: 5s;
     margin-bottom: 50px;
     height: auto;
 }
@@ -39,7 +38,7 @@ display: none;
     margin-top: 30px;
     font-size: 50px;
     text-align: center;
-    font-family: "yeseva one"
+    font-family: "yeseva one";
 }
 
 #containerTxt {
@@ -93,14 +92,10 @@ display: none;
 }
 
 #submitButton {
-<<<<<<< HEAD
     margin-top: 400px;
     background-color: #262960;
     color: white;
     font-family: "josefin slab";
-=======
-    margin-top: inherit;
->>>>>>> e0fb236f9180e53fffb7a03c5323c6969c62fd54
 }
 
 
@@ -119,6 +114,8 @@ display: none;
 
 #map {
   height: 500px;
+  border: #ff575c;
+  border-width: 3px;
 }
 
 #wrongPass {
