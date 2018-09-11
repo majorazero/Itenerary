@@ -1,45 +1,45 @@
 /////////////////////////////////////////////
 ///// Database
 /////////////////////////////////////////////
- let config = {
-   apiKey: apiKeyGoogle,
-   authDomain: "project1travel-itenerary-app.firebaseapp.com",
-   databaseURL: "https://project1travel-itenerary-app.firebaseio.com",
-   projectId: "project1travel-itenerary-app",
-   storageBucket: "",
-   messagingSenderId: "136977891330"
- };
- firebase.initializeApp(config);
- const firestore = firebase.firestore();
- const settings = {/* your settings... */ timestampsInSnapshots: true};
- firestore.settings(settings);
+let config = {
+ apiKey: apiKeyGoogle,
+ authDomain: "project1travel-itenerary-app.firebaseapp.com",
+ databaseURL: "https://project1travel-itenerary-app.firebaseio.com",
+ projectId: "project1travel-itenerary-app",
+ storageBucket: "",
+ messagingSenderId: "136977891330"
+};
+firebase.initializeApp(config);
+const firestore = firebase.firestore();
+const settings = {/* your settings... */ timestampsInSnapshots: true};
+firestore.settings(settings);
  /////////////////////////////////////////////
  ///// Intialization
  /////////////////////////////////////////////
- /**
- * Required to initialize the google maps object
- */
- function initMap(lat,long,zoomLevel,setMarker){
-   directionService = new google.maps.DirectionsService();
-   directionDisplay = new google.maps.DirectionsRenderer();
-   if(lat === undefined && long === undefined){
-     lat = 34.05223;
-     long = -118.243683;
-     zoomLevel = 10;
-    }
-    map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: lat, lng: long},
-            zoom: zoomLevel
-          });
-    if (setMarker === true){
-      var marker = new google.maps.Marker({
-         position: {lat: lat, lng: long},
-         map: map,
-         title: 'Home Base'
-       });
-    }
-   directionDisplay.setMap(map);
- }
+/**
+* Required to initialize the google maps object
+*/
+function initMap(lat,long,zoomLevel,setMarker){
+ directionService = new google.maps.DirectionsService();
+ directionDisplay = new google.maps.DirectionsRenderer();
+ if(lat === undefined && long === undefined){
+   lat = 34.05223;
+   long = -118.243683;
+   zoomLevel = 10;
+  }
+  map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: lat, lng: long},
+          zoom: zoomLevel
+        });
+  if (setMarker === true){
+    var marker = new google.maps.Marker({
+       position: {lat: lat, lng: long},
+       map: map,
+       title: 'Home Base'
+     });
+  }
+ directionDisplay.setMap(map);
+}
  /////////////////////////////////////////////
  ///// Event Functions
  /////////////////////////////////////////////
@@ -334,8 +334,9 @@ function login(){
           if($(this).text() === tripObj[i].tripName){
             trip = tripObj[i].trip;
             tripName = tripObj[i].tripName;
-            yelpSearch(trip[i].lat+","+trip[i].log,"restaurants");
-            yelpSearch(trip[i].lat+","+trip[i].log,"attractions");
+            console.log(trip[0],tripName);
+            yelpSearch(trip[0][0].lat+","+trip[0][0].long,"restaurants");
+            yelpSearch(trip[0][0].lat+","+trip[0][0].long,"attractions");
             calcRoute(latLongParser(trip[currentDay-1]),travelMethod);
             newUser = false;
             break;
@@ -387,6 +388,7 @@ function save(){
 * @param {String} term - This is what we're looking for, either "restaurants" or "attractions"
 */
 function yelpSearch(location,term){
+    console.log(location);
     $.ajax({
         url: corsAnywhereLink+"https://api.yelp.com/v3/businesses/search?term="+term+"&location="+location,
         method: "GET",
@@ -404,7 +406,7 @@ function yelpSearch(location,term){
         }
         newRow.attr("lat",response.businesses[i].coordinates.latitude);
         newRow.attr("long",response.businesses[i].coordinates.longitude);
-        newRow.attr("locName",response.businesses[i].name);
+        newRow.attr("id",response.businesses[i].name);
         newRow.attr("imgUrl",response.businesses[i].image_url);
         var newDiv = $("<div>").addClass("col-md-8 col-sm-8 col-8 infoCard");
         var imageDiv = $("<div>").addClass("col-md-4 col-sm-4 col-4 imageCard");
@@ -419,7 +421,7 @@ function yelpSearch(location,term){
           currentTrip.splice(currentTrip.length-1,0,{
             lat: $(this).attr("lat"),
             long: $(this).attr("long"),
-            loc: $(this).attr("locName")});
+            loc: $(this).attr("id")});
           calcRoute(latLongParser(currentTrip),travelMethod);
         });
         $(imageDiv).append(placeImage);
