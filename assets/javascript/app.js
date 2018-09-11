@@ -155,10 +155,18 @@ function iteBoxRender(){
       if (i !== 0 && i !== currentDayIte.length-1){
         let deleteButton = $("<button>").text("Delete").attr("id", "itButton");
         deleteButton.on("click",function(){
-          console.log($("#"+$(this).parent().attr("loc")));
-          $("#"+$(this).parent().attr("loc")).animate({backgroundColor: "#ffa9ac"},500);
           //removes data from trip
           currentDayIte.splice($(this).parent().attr("data-pos"),1);
+          //lets check if it still exists
+          let counter = 0;
+          for(let i = 0; i<currentDayIte.length; i++){
+            if(trip[currentDay-1][i].loc.replace(/\s+/g, '') === $(this).parent().attr("loc")){
+              counter++;
+            }
+          }
+          if(counter === 0){
+            $("#"+$(this).parent().attr("loc")).animate({backgroundColor: "#ffa9ac"},500);
+          }
           //visually remove this from the parent
           $(this).parent().remove();
           //update route
