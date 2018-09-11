@@ -91,10 +91,9 @@ $("#saveForm").on("submit",function(event){
   passWord = $(this)[0][1].value;
   tripName = $(this)[0][2].value;
   $(this)[0][1].value = "";
-  let tripObj;
-  if(newUser === false){ //since the user exists we need to load the data and manipulate it.
-    loadUserData(userName,passWord,"login");
+    loadUserData(userName,passWord);
     setTimeout(function(){
+      //let tripObj;
       if(isPass === true){
         $("#wrongPass2").hide();
         $("#savePrompt").modal("hide");
@@ -105,26 +104,19 @@ $("#saveForm").on("submit",function(event){
           if(tripObj[i].tripName === tripName){ //it does exist
             tripObj[i].trip = trip;
             saveUserData(userName,passWord,JSON.stringify(tripObj));
-            return;
           }
         }
         tripObj.push({
           tripName: tripName,
           trip: trip
         });
+        console.log(tripObj);
         saveUserData(userName,passWord,JSON.stringify(tripObj));
       }
       else {
         $("#wrongPass2").show();
       }
-    },500);
-  }
-  else{
-    saveUserData(userName,passWord,JSON.stringify([{
-      tripName: tripName,
-      trip: trip
-    }]));
-  }
+    },1500);
 });
 /**
 * On click function for next day of the itinerary box
