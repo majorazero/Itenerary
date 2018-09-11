@@ -517,12 +517,12 @@ function yelpSearch(location,term,offset){
         newRow.attr("imgUrl",response.businesses[i].image_url);
         var newDiv = $("<div>").addClass("col-md-8 col-sm-8 col-8 infoCard");
         var imageDiv = $("<div>").addClass("col-md-4 col-sm-4 col-4 imageCard");
-        var placeImage = $("<img>").attr("src", response.businesses[i].image_url);
+        var placeImage = $("<img>").attr("src", response.businesses[i].image_url).addClass("pImg");
         var name = $("<p>").text(response.businesses[i].name).addClass("topInfo").attr("id", "titleName");
         var city = $("<p>").text(response.businesses[i].location.city);
         var address = $("<p>").text(response.businesses[i].location.address1);
         var price = $("<p>").text(response.businesses[i].price);
-        var rating = $("<p>").text(response.businesses[i].rating);
+        var rating = $("<img>").attr("src",yelpStar(response.businesses[i].rating));
         $(newRow).on("click",function(){
           $(this).animate({backgroundColor: "#ffa9ac"},500);
           let currentTrip = trip[currentDay-1];
@@ -655,3 +655,7 @@ function dayOutputter(startTime,endTime){
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 // ];
+
+function yelpStar(rating){
+  return "assets/images/small_"+rating+".png";
+}

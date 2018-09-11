@@ -22,9 +22,9 @@ button {
 }
 
 body {
-    background-image: url("https://cdn-image.travelandleisure.com/sites/default/files/styles/1600x1000/public/1496699939/hot-air-balloons-scenic-cappadocia-turkey-HOTAIR0605.jpg?itok=VtACp-RU"); 
+    background-image: url("https://cdn-image.travelandleisure.com/sites/default/files/styles/1600x1000/public/1496699939/hot-air-balloons-scenic-cappadocia-turkey-HOTAIR0605.jpg?itok=VtACp-RU");
     background-size: cover;
-    
+
 }
 ::-webkit-scrollbar {
 display: none;
@@ -152,11 +152,13 @@ display: none;
 }
 
 img {
-    height: 120px;
     width: 120px;
     display: block;
     margin: 3px;
+}
 
+.pImg{
+  height: 120px;
 }
 
 #saveButton {
@@ -244,7 +246,7 @@ p {
     #topName {
         margin-top: 30px;
         font-weight: bolder;
-   
+
     }
 }
 
@@ -271,7 +273,7 @@ p {
     #topName {
         margin-top: 25px;
         font-weight: bolder;
-   
+
     }
 }
 
