@@ -34,3 +34,7 @@ You can access the page with the following [link](https://majorazero.github.io/p
 - [Daniel Hsu](https://github.com/majorazero)
 - [Andrea Tamez](https://github.com/andreatmez)
 - [David Huh](https://github.com/davidmhuh)
+
+# Special Thanks
+- [Michael Reza Sanaiha](https://github.com/rezamike) -> Bug testing. (Instantly breaking my app.)
+- [Andy Roberson](https://github.com/andyroberson) -> Bug Testing.
