@@ -686,7 +686,13 @@ function dayOutputter(startTime,endTime){
     return "badInput";
   }
 }
-
+/**
+* This will return a img path based on the a rating between 1-5, with increments of .5
+* @param {String} rating - The rating of the yelp review.
+*/
+function yelpStar(rating){
+  return "assets/images/small_"+rating+".png";
+}
 /////////////////////////////////////////////
 ///// Testing Junk
 /////////////////////////////////////////////
@@ -698,7 +704,3 @@ function dayOutputter(startTime,endTime){
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 // ];
-
-function yelpStar(rating){
-  return "assets/images/small_"+rating+".png";
-}
