@@ -698,17 +698,10 @@ function dayOutputter(startTime,endTime){
 function yelpStar(rating){
   return "assets/images/small_"+rating+".png";
 }
-/////////////////////////////////////////////
-///// Testing Junk
-/////////////////////////////////////////////
-
-//each array is the itenerary for the day.
-//this is mock data
-// trip = [
-//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.141133",long:"-118.224108", loc: "Point B"},{lat: "34.143721",long:"-118.256334", loc: "Point C"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
-//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
-//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
-// ];
+/**
+* Normalizes wierd charcters into "-" because jQuery
+* @param {String} name - the string that's going to have their special characters removed.
+*/
 function idNormalize(name){
   let newName = "";
   for(let i = 0; i <name.length; i++){
@@ -721,3 +714,13 @@ function idNormalize(name){
   }
   return newName;
 }
+/////////////////////////////////////////////
+///// Testing Junk
+/////////////////////////////////////////////
+
+//each array is the itenerary for the day.
+//this is mock data
+// trip = [
+//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.141133",long:"-118.224108", loc: "Point B"},{lat: "34.143721",long:"-118.256334", loc: "Point C"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
+//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
+//   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
