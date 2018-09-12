@@ -507,55 +507,68 @@ function yelpSearch(location,term,offset){
       else {
         $("#attraction").empty();
       }
-      for (var i = 0; i < response.businesses.length; i++){
-        var newRow = $("<div>").addClass("row");
-        if(term === "restaurants"){
-          newRow.addClass("restCard");
-        }
-        else if (term === "attractions"){
-          newRow.addClass("attrCard")
-        }
-        for(let j = 0; j < trip[currentDay-1].length; j++){
-          if(trip[currentDay-1][j].loc === response.businesses[i].name){
-            newRow.css("background-color","#ffa9ac");
+      console.log(response);
+      if(response.businesses.length !== 0){
+        for (var i = 0; i < response.businesses.length; i++){
+          var newRow = $("<div>").addClass("row");
+          if(term === "restaurants"){
+            newRow.addClass("restCard");
+          }
+          else if (term === "attractions"){
+            newRow.addClass("attrCard")
+          }
+          for(let j = 0; j < trip[currentDay-1].length; j++){
+            if(trip[currentDay-1][j].loc === response.businesses[i].name){
+              newRow.css("background-color","#ffa9ac");
+            }
+          }
+          newRow.attr("lat",response.businesses[i].coordinates.latitude);
+          newRow.attr("long",response.businesses[i].coordinates.longitude);
+          newRow.attr("loc",response.businesses[i].name);
+          newRow.attr("id",response.businesses[i].name.replace(/\s+/g, ''));
+          newRow.attr("imgUrl",response.businesses[i].image_url);
+          var newDiv = $("<div>").addClass("col-md-8 col-sm-8 col-8 infoCard");
+          var imageDiv = $("<div>").addClass("col-md-4 col-sm-4 col-4 imageCard");
+          var placeImage = $("<img>").attr("src", response.businesses[i].image_url).addClass("pImg");
+          var name = $("<p>").text(response.businesses[i].name).addClass("topInfo").attr("id", "titleName");
+          var city = $("<p>").text(response.businesses[i].location.city);
+          var address = $("<p>").text(response.businesses[i].location.address1);
+          var price = $("<p>").text(response.businesses[i].price);
+          var rating = $("<img>").attr("src",yelpStar(response.businesses[i].rating));
+          $(newRow).on("click",function(){
+            $(this).animate({backgroundColor: "#ffa9ac"},500);
+            let currentTrip = trip[currentDay-1];
+            currentTrip.splice(currentTrip.length-1,0,{
+              lat: $(this).attr("lat"),
+              long: $(this).attr("long"),
+              loc: $(this).attr("loc"),
+              img: $(this).attr("imgUrl")});
+            calcRoute(latLongParser(currentTrip),travelMethod);
+          });
+          $(imageDiv).append(placeImage);
+          $(newDiv).append(name);
+          $(newDiv).append(city);
+          $(newDiv).append(address);
+          $(newDiv).append(price);
+          $(newDiv).append(rating);
+          $(newRow).append(imageDiv);
+          $(newRow).append(newDiv);
+          if(term === "restaurants"){
+            $("#place").append(newRow);
+          }
+          else if (term === "attractions"){
+            $("#attraction").append(newRow);
           }
         }
-        newRow.attr("lat",response.businesses[i].coordinates.latitude);
-        newRow.attr("long",response.businesses[i].coordinates.longitude);
-        newRow.attr("loc",response.businesses[i].name);
-        newRow.attr("id",response.businesses[i].name.replace(/\s+/g, ''));
-        newRow.attr("imgUrl",response.businesses[i].image_url);
-        var newDiv = $("<div>").addClass("col-md-8 col-sm-8 col-8 infoCard");
-        var imageDiv = $("<div>").addClass("col-md-4 col-sm-4 col-4 imageCard");
-        var placeImage = $("<img>").attr("src", response.businesses[i].image_url).addClass("pImg");
-        var name = $("<p>").text(response.businesses[i].name).addClass("topInfo").attr("id", "titleName");
-        var city = $("<p>").text(response.businesses[i].location.city);
-        var address = $("<p>").text(response.businesses[i].location.address1);
-        var price = $("<p>").text(response.businesses[i].price);
-        var rating = $("<img>").attr("src",yelpStar(response.businesses[i].rating));
-        $(newRow).on("click",function(){
-          $(this).animate({backgroundColor: "#ffa9ac"},500);
-          let currentTrip = trip[currentDay-1];
-          currentTrip.splice(currentTrip.length-1,0,{
-            lat: $(this).attr("lat"),
-            long: $(this).attr("long"),
-            loc: $(this).attr("loc"),
-            img: $(this).attr("imgUrl")});
-          calcRoute(latLongParser(currentTrip),travelMethod);
-        });
-        $(imageDiv).append(placeImage);
-        $(newDiv).append(name);
-        $(newDiv).append(city);
-        $(newDiv).append(address);
-        $(newDiv).append(price);
-        $(newDiv).append(rating);
-        $(newRow).append(imageDiv);
-        $(newRow).append(newDiv);
+      }
+      else {
         if(term === "restaurants"){
-          $("#place").append(newRow);
+          $("#place").append("<img class='outGif' src='assets/images/out.gif' />");
+          $("#place").append("<h2 class='text-center'>No more Restaurants!</h2>");
         }
         else if (term === "attractions"){
-          $("#attraction").append(newRow);
+          $("#attraction").append("<img class='outGif' src='assets/images/out.gif' />");
+          $("#attraction").append("<h2 class='text-center'>No more Attractions!</h2>");
         }
       }
     });
