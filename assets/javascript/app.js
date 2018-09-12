@@ -191,8 +191,11 @@ function iteBoxRender(){
       $(iteDiv).append("<h2>"+currentDayIte[i].loc+"</h2>");
       iteDiv.attr("data-pos",i);
       if(i === 0 || i === currentDayIte.length-1){
-        iteDiv.attr("id","homeBase")
+        iteDiv.attr("id","homeBase");
       }
+      // else {
+      //   iteDiv.attr("id",idNormalize(currentDayIte[i].loc.replace(/\s+/g, '')));
+      // }
       //first and last element should not be able to be move so we won't add an edit button for them
       if (i !== 0 && i !== currentDayIte.length-1){
         $(iteDiv).append("<img class='iteImg' src='"+currentDayIte[i].img+"' />");
@@ -208,7 +211,7 @@ function iteBoxRender(){
             }
           }
           if(counter === 0){
-            $("#"+$(this).parent().attr("loc")).animate({backgroundColor: "#63a3ca"},500);
+            $("#"+idNormalize($(this).parent().attr("loc"))).animate({backgroundColor: "#63a3ca"},500);
           }
           //visually remove this from the parent
           $(this).parent().remove();
@@ -453,6 +456,7 @@ function save(){
       if(tripObj[i].tripName === tripName){ //it does exist
         tripObj[i].trip = trip;
         saveUserData(userName,passWord,JSON.stringify(tripObj));
+        return;
       }
     }
     tripObj.push({
@@ -524,7 +528,8 @@ function yelpSearch(location,term,offset){
           newRow.attr("lat",response.businesses[i].coordinates.latitude);
           newRow.attr("long",response.businesses[i].coordinates.longitude);
           newRow.attr("loc",response.businesses[i].name);
-          newRow.attr("id",response.businesses[i].name.replace(/\s+/g, ''));
+          newRow.attr("id",idNormalize(response.businesses[i].name.replace(/\s+/g, '')));
+          //need to normalize idNames
           newRow.attr("imgUrl",response.businesses[i].image_url);
           var newDiv = $("<div>").addClass("col-md-8 col-sm-8 col-8 infoCard");
           var imageDiv = $("<div>").addClass("col-md-4 col-sm-4 col-4 imageCard");
@@ -541,6 +546,7 @@ function yelpSearch(location,term,offset){
               lat: $(this).attr("lat"),
               long: $(this).attr("long"),
               loc: $(this).attr("loc"),
+              id: $(this).attr("id"),
               img: $(this).attr("imgUrl")});
             calcRoute(latLongParser(currentTrip),travelMethod);
           });
@@ -703,3 +709,15 @@ function yelpStar(rating){
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}],
 //   [{lat: "34.136379", long: "-118.243752", loc: "Home"},{lat: "34.142979",long:"-118.255388", loc: "Point A"},{lat: "34.136379", long: "-118.243752", loc: "Home"}]
 // ];
+function idNormalize(name){
+  let newName = "";
+  for(let i = 0; i <name.length; i++){
+    if(name[i] === "&" || name[i] === "'"){
+      newName += "-";
+    }
+    else{
+      newName += name[i];
+    }
+  }
+  return newName;
+}
