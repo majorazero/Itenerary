@@ -24,9 +24,10 @@ You can access the page with the following [link](https://majorazero.github.io/p
 - [GitHub](https://github.com/)
 - [Dribbble](https://dribbble.com/) -> GIF Source
 
-# Limitations/Issues
+# Limitations/Issues/Future Feature
 - The trips that can be planned are limited by what Yelp has on their database, which can be surprisingly limiting. (Upon some testing, some Central American cities, China, Russia... Antartica.) The API will always do its best to fill your search instead of returning a bad request, so you might no always end up where you thought you wanted to go. (i.e. Moscow takes you to a middle of nowhere town in Oregon.)
-
+- You're limited to 4 hotels of our choosing, should give you an option to input a hotel of your choosing. 
+- Ideally we'd want a reset on the last page.
 # Version
 - 1.0.0
 
