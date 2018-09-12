@@ -380,7 +380,7 @@ function loadUserData(user, pass, type){
         else if (type == "save"){
             $("#savePrompt").effect("shake");
         }
-        $("#passInput").val("");
+        $(".passInput").val("");
       }
       else{
         console.log("Access granted");
@@ -507,7 +507,6 @@ function yelpSearch(location,term,offset){
       else {
         $("#attraction").empty();
       }
-      console.log(response);
       if(response.businesses.length !== 0){
         for (var i = 0; i < response.businesses.length; i++){
           var newRow = $("<div>").addClass("row");
