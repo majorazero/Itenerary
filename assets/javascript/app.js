@@ -584,38 +584,57 @@ function myHotel(location) {
     "headers": {
       "Authorization": "Bearer DnFZKNqaKHmAOQ2-KzI-F0wsEHmH1HrT-k7U7IILrqGNlqL0J3nz1EM5KaSOu3o6ljzjy8UUPRyAifAu5_yM38LMc3oIUizj_Tp6rNVK0LakJK850r8lAtViWXWRW3Yx",
     }
-  }).then(function(response) {
-    $("#insert").empty();
-    for (var i = 0; i < response.businesses.length; i++) {
-      var hotelRow = $("<div>").addClass("row hotelRow");
-      hotelRow.attr("lat",response.businesses[i].coordinates.latitude);
-      hotelRow.attr("long",response.businesses[i].coordinates.longitude);
-      hotelRow.on("click",function(){
-        tripInit(dayStaying,$(this).attr("long"),$(this).attr("lat"));
-        yelpSearch($(this).attr("lat")+","+$(this).attr("long"),"restaurants");
-        yelpSearch($(this).attr("lat")+","+$(this).attr("long"),"attractions");
-        $("#containerOne").hide();
+  }).then(function(response,status) {
+      console.log(status);
+      $("#insert").empty();
+      for (var i = 0; i < response.businesses.length; i++) {
+        var hotelRow = $("<div>").addClass("row hotelRow");
+        hotelRow.attr("lat",response.businesses[i].coordinates.latitude);
+        hotelRow.attr("long",response.businesses[i].coordinates.longitude);
+        hotelRow.on("click",function(){
+          tripInit(dayStaying,$(this).attr("long"),$(this).attr("lat"));
+          yelpSearch($(this).attr("lat")+","+$(this).attr("long"),"restaurants");
+          yelpSearch($(this).attr("lat")+","+$(this).attr("long"),"attractions");
+          $("#containerOne").hide();
+          $("#containerTwo").hide();
+          $("#containerThree").show();
+        });
+        var hotelDiv = $("<div>").addClass("col-sm-9 col-9");
+        var hotelImage =$("<div>").addClass("col-sm-3 col-3 hotelImage");
+        var hotelPic =$("<img>").attr("src", response.businesses[i].image_url).attr("id", "hotelPic");
+        var hotelName = $("<p>").text("Hotel Name : " +  response.businesses[i].name).attr("id", "topName");
+        var hotelRating = $("<p>").html("Rating: <img class='hotelStar' src='"+ yelpStar(response.businesses[i].rating)+"' />");
+        if(response.businesses[i].price !== undefined){
+          var hotelPrice = $("<p>").text("Price : " + response.businesses[i].price);
+        }
+        else {
+          var hotelPrice = $("<p>").text("Price : Sorry! No info!");
+        }
+        var hotelPhone = $("<p>").text("Phone Number : " + response.businesses[i].display_phone);
+        var hotelCoordinates = $("<p>").text("Lat and Long :" + response.businesses[i].coordinates);
+        $(hotelDiv).append(hotelName);
+        $(hotelDiv).append(hotelRating);
+        $(hotelDiv).append(hotelPrice);
+        $(hotelDiv).append(hotelPhone);
+        $(hotelImage).append(hotelPic);
+        $(hotelRow).append(hotelDiv);
+        $(hotelRow).append(hotelImage);
+        $("#insert").append(hotelRow);
+      }
+
+  }).catch(function(error){
+      $("#submitErrorPrompt").modal("show");
+      $("#errorModalMess").empty();
+      $("#errorModalMess").append("<div>Guess we don't know where that is! Try some place else?</div>");
+      let backButton = $("<button>").text("Go back?");
+      backButton.on("click",function(){
+        $("#containerOne").show();
         $("#containerTwo").hide();
-        $("#containerThree").show();
+        $("#submitErrorPrompt").modal("hide");
       });
-      var hotelDiv = $("<div>").addClass("col-sm-9 col-9");
-      var hotelImage =$("<div>").addClass("col-sm-3 col-3 hotelImage");
-      var hotelPic =$("<img>").attr("src", response.businesses[i].image_url).attr("id", "hotelPic");
-      var hotelName = $("<p>").text("Hotel Name : " +  response.businesses[i].name).attr("id", "topName");
-      var hotelRating = $("<p>").html("Rating: <img class='hotelStar' src='"+ yelpStar(response.businesses[i].rating)+"' />");
-      var hotelPrice = $("<p>").text("Price : " + response.businesses[i].price);
-      var hotelPhone = $("<p>").text("Phone Number : " + response.businesses[i].display_phone);
-      var hotelCoordinates = $("<p>").text("Lat and Long :" + response.businesses[i].coordinates);
-      $(hotelDiv).append(hotelName);
-      $(hotelDiv).append(hotelRating);
-      $(hotelDiv).append(hotelPrice);
-      $(hotelDiv).append(hotelPhone);
-      $(hotelImage).append(hotelPic);
-      $(hotelRow).append(hotelDiv);
-      $(hotelRow).append(hotelImage);
-      $("#insert").append(hotelRow);
+      $("#errorModalMess").append(backButton);
     }
-  });
+  );
 }
 /**
 * Initialize the trip for new users.
