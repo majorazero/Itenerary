@@ -6,7 +6,10 @@
     background-color: #ffa9ac;
     opacity: .9;
 }
-
+#tripError {
+  display:none;
+  color: red;
+}
 .attrCard:hover {
     background-color: #ffa9ac;
     opacity: .9;

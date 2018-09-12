@@ -467,14 +467,21 @@ function save(){
     saveUserData(userName,passWord,JSON.stringify(tripObj));
   }
   else if (newUser === true){
-    $("#savePrompt").modal("hide");
-    tripObj = [{
-      tripName: tripName,
-      trip: trip
-    }];
-    saveUserData(userName,passWord,JSON.stringify(tripObj));
+    if(tripName !== ""){
+      $("#savePrompt").modal("hide");
+      tripObj = [{
+        tripName: tripName,
+        trip: trip
+      }];
+      saveUserData(userName,passWord,JSON.stringify(tripObj));
+    }
+    else {
+      $("#savePrompt").effect("shake");
+      $("#tripError").show();
+    }
   }
   else {
+    //$("#savePrompt").effect("shake");
     $("#wrongPass2").show();
   }
 }
