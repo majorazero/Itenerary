@@ -1,4 +1,4 @@
-# project-1
+# Itenerary
 
 # Description
 This was collaborative effort to make a trip planning app. Given a destination and time of stay, the app will generate a selection of 4 hotels for the user to choose from. After the choice is made, the app will generate a list of restaurants and attractions the user can cycle through and add to their day by day itinerary. Trips can be edited, saved, and accessed for later use!
